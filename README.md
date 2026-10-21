@@ -17,6 +17,7 @@ shielded→shielded TRANSFER, and UNSHIELD — is confirmed on-chain
 | `CHIPNET.md` | Build record + on-chain demo: deployment, the SHIELD / TRANSFER / UNSHIELD worked examples, verifier patching, trusted setup |
 | `CIRCUIT-DESIGN.md` | The Circom / Groth16 joinsplit circuit (note commitments, nullifiers, Merkle tree) |
 | `COVENANT-DESIGN.md` | The CashScript pool covenant (state machine, action-hash binding) |
+| `GENERALIZED-SHIELDING.md` | Why "one assetCategory" is a deployment choice (not a circuit/contract limit) + the per-asset & multi-asset generalization paths |
 
 ## Main README
 

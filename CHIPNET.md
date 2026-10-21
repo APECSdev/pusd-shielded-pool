@@ -65,28 +65,35 @@ box; publish via a GitHub Release if external distribution is needed.
   (5 verifier inputs + pool covenant + public FT + sats) passes on the BCH 2026
   VM, both consensus and standard (relayable under default mempool policy).
 
-## Chipnet demo token (stand-in for PUSD, minted 2026-10-19)
+## Chipnet demo token (stand-in for PUSD)
 
 PUSD itself (`0x2469ac...2544`) is mainnet-only, so a stand-in CashToken was
 minted on chipnet for the demo pool (the covenant is asset-generic; pass this
-category as the `assetCategory` constructor arg at deploy time):
+category as the `assetCategory` constructor arg at deploy time).
 
-- **category (display/BE)**: `479aeebabc682ddb90a3671bffd2a0bd918737de13f19a92231ed36a8580cc11`
-- **category (on-chain/LE, as it appears in token prefixes)**: `11cc80856ad31e23929af113de378791bda0d2ff1b67a390db2d68bcbaee9a47`
-- genesis tx `4257dbfb68540cc9afcf569da8e651790c82d3951bdff88f5232a372760ba977`
-  (via the `chipnet.bch.ninja` faucet, PoW-gated `POST /api/challenge` + `/api/claim`),
-  confirmed in chipnet block 328616.
-- Minted payload: **100,000,000 fungible units + minting-capability NFT** (empty
-  commitment), consolidated into one UTXO by sweep tx
-  `be9a2911cf567f37821f777a073a9b59792b58791fa118a82925f66c67bb0ad8`
-  (output 0: 100,000 sats + full token payload; output 1: 899,000 sats change).
-- Mint key: HD wallet, path `m/44'/145'/0'/0/0`, address
-  `bchtest:qpt2lckk5ck5x7rwcnl6ucj6z0h9njm0pvy5nudg50`
-  (token-aware form `bchtest:zpt2lckk5ck5x7rwcnl6ucj6z0h9njm0pvr7qzrwtu`).
-  Mnemonic/private key live ONLY in the gitignored secret store
-  (`/Workspace/apecsdev/.secrets/pusd-shielded-pool-chipnet-mint.json`, chmod 600) —
-  test funds, no value.
+**The live pool uses this category** — self-minted as part of the TX-P3/G3/B3
+deployment (block 328731, 2026-10-20; see "Pool deployment" below):
+
+- **category (display/BE)**: `8c73ff150fbc5d1599d2de187c3382c5926cc5c9c2621cdc2cac1fc14cd93144`
+- **category (on-chain/LE, as it appears in token prefixes)**: `4431d94cc11fac2cdc1c62c2c9c56c92c582337c18ded299155dbc0f15ff738c`
+- Genesis/mint: **TX-G3** `3fd526e9cc5119cd11ef76615ad0c9e1b6187910aeaae1ed178b48c96897656b`
+  spent **TX-P3:vout0** (`8c73ff150fbc…3144`), so the new category = TX-P3's txid.
+  TX-G3 outputs: vout0 = pool mutable state NFT (64B commitment), vout1 =
+  minting-capability NFT (empty commitment), vout2 = **100,000,000 fungible units**,
+  vout3 = sats change.
 - Explorer: `https://chipnet.chaingraph.cash/tx/<txid>`.
+
+> **Superseded earlier stand-in — do NOT use.** An initial faucet-minted token
+> (category `479aeebabc682ddb90a3671bffd2a0bd918737de13f19a92231ed36a8580cc11`,
+> on-chain/LE `11cc80856ad31e23929af113de378791bda0d2ff1b67a390db2d68bcbaee9a47`,
+> genesis tx `4257dbfb68540cc9afcf569da8e651790c82d3951bdff88f5232a372760ba977`,
+> block 328616, minted 2026-10-19 via the `chipnet.bch.ninja` faucet's PoW-gated
+> `POST /api/challenge` + `/api/claim`) was a preliminary stand-in. It is **NOT** the
+> category the deployed pool enforces — the live pool uses `8c73ff150f…` above. Its
+> mint key (HD path `m/44'/145'/0'/0/0`, address `bchtest:qpt2lckk5ck5x7rwcnl6ucj6z0h9njm0pvy5nudg50`,
+> token-aware `bchtest:zpt2lckk5ck5x7rwcnl6ucj6z0h9njm0pvr7qzrwtu`) lives ONLY in the
+> gitignored secret store (`/Workspace/apecsdev/.secrets/pusd-shielded-pool-chipnet-mint.json`,
+> chmod 600) — test funds, no value.
 
 ### Fulcrum / signing caveats discovered during the mint (matter for wallet wiring)
 

@@ -149,9 +149,21 @@ contract AssetPool(bytes32 assetCategory)   // ← the category is a CONSTRUCTOR
   mempool policy.
 - `vk_x` is recomputed **in-script** (densless-msm pattern) — never accepted as a
   witness — to prevent public-input forgery (the bench red-team's finding).
-- One generality fix was upstreamed to `groth16_cashscript`
-  ([PR #26](https://github.com/mr-zwets/groth16_cashscript/pull/26)): the red-team
-  generator assumed the genesis selector is always `OP_0`; our proofs use `OP_2`.
+- One generality fix was upstreamed to **`mr-zwets/groth16_cashscript`** —
+  **[PR #26](https://github.com/mr-zwets/groth16_cashscript/pull/26)**
+  *"redteam: round-trip number opcodes (OP_1NEGATE, OP_1..OP_16) when re-encoding
+  pushes"* (author `nyusternie`; verified via the GitHub API: **state = open**, not
+  yet merged). The bench's `redteam.mjs` assumed the genesis selector is always
+  `OP_0`, but our proofs use selector `OP_2`; the fix preserves the raw encoded push
+  bytes when re-encoding. It is a fixture-dependent generator assumption, **not a
+  verifier weakness** — the verifier accepts any selector. **The team must track this
+  PR**: until it merges, regenerating the red-team for our key requires the patched
+  `redteam.mjs` (`artifacts/redteam.mjs.patched`).
+
+  > Note on attribution: the upstream author goes by the GitHub handle **`mr-zwets`**
+  > (repos `groth16_cashscript` and `zk-verifier-bench`). The handle's public GitHub
+  > profile does not expose a real name (field is `null`), so this doc cites the
+  > verified handle rather than an unverified personal name.
 
 ### 2.4 The full transaction shape (one pool op = 1 BCH tx)
 Every pool action is a single transaction that spends **6 UTXOs** and recreates them:
@@ -396,6 +408,8 @@ Path B). Treat Path B as a follow-up redesign with its own trusted-setup ceremon
 | Chipnet token + mint key | `/Workspace/apecsdev/.secrets/pusd-pool-chipnet-mint.json` (test-only) |
 | Generalization design | `pusd-shielded-pool/GENERALIZED-SHIELDING.md` |
 | Build record / worked examples | `pusd-shielded-pool/CHIPNET.md` |
+| Upstream verifier repos | [`mr-zwets/groth16_cashscript`](https://github.com/mr-zwets/groth16_cashscript) + [`mr-zwets/zk-verifier-bench`](https://github.com/mr-zwets/zk-verifier-bench) |
+| Our upstreamed fix | [`mr-zwets/groth16_cashscript` PR #26](https://github.com/mr-zwets/groth16_cashscript/pull/26) (open; red-team push round-trip) |
 
 ---
 

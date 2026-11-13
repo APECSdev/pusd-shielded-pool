@@ -152,13 +152,13 @@ contract AssetPool(bytes32 assetCategory)   // ← the category is a CONSTRUCTOR
 - One generality fix was upstreamed to **`mr-zwets/groth16_cashscript`** —
   **[PR #26](https://github.com/mr-zwets/groth16_cashscript/pull/26)**
   *"redteam: round-trip number opcodes (OP_1NEGATE, OP_1..OP_16) when re-encoding
-  pushes"* (author `nyusternie`; verified via the GitHub API: **state = open**, not
-  yet merged). The bench's `redteam.mjs` assumed the genesis selector is always
+  pushes"* (author `nyusternie`; **MERGED** 2026-10-30T14:21:57Z, merge commit
+  `3af2ad8` — verified via the GitHub API 2026-11-12). The bench's `redteam.mjs` assumed the genesis selector is always
   `OP_0`, but our proofs use selector `OP_2`; the fix preserves the raw encoded push
   bytes when re-encoding. It is a fixture-dependent generator assumption, **not a
-  verifier weakness** — the verifier accepts any selector. **The team must track this
-  PR**: until it merges, regenerating the red-team for our key requires the patched
-  `redteam.mjs` (`artifacts/redteam.mjs.patched`).
+  verifier weakness** — the verifier accepts any selector. **RESOLVED**: the PR is
+  merged upstream (2026-10-30), so regenerating the red-team for our key no longer
+  requires the local patch (`artifacts/redteam.mjs.patched` retained for reference).
 
   > Note on attribution: the upstream author goes by the GitHub handle **`mr-zwets`**
   > (repos `groth16_cashscript` and `zk-verifier-bench`). The handle's public GitHub
@@ -197,13 +197,23 @@ All on the current **Option B** pool deployment (P2SH32 locking prefix `aa20a458
 
 The three transfers are chained (b spends a's pool output, c spends b's), each
 ~36.8 KB, no public value moved — **proving many private payments settle in one block**.
-Explorer base: `https://chipnet.imaginary.cash/tx/<txid>`.
+Explorer base: `https://chipnet.imaginary.cash/tx/<txid>` (verified working).
+NOTE (2026-11-12): the wallet's DEFAULT Fulcrum server is now `chipnet.bch.ninja:50004`
+(wss); `chipnet.imaginary.cash` remains the fallback and the only chipnet block
+explorer (bch.ninja serves no explorer — verified 2026-11-12).
 
-**Chipnet stand-in token** (PUSD is mainnet-only): category
-`479aeebabc682ddb90a3671bffd2a0bd918737de13f19a92231ed36a8580cc11`, 100M fungible
-units + minting NFT, genesis tx
-`4257dbfb68540cc9afcf569da8e651790c82d3951bdff88f5232a372760ba977` (block 328616).
-Mint key (test-only, no value) at `/Workspace/apecsdev/.secrets/pusd-pool-chipnet-mint.json`.
+**Chipnet stand-in token — LIVE pool category** (PUSD is mainnet-only): category
+(display/BE) `8c73ff150fbc5d1599d2de187c3382c5926cc5c9c2621cdc2cac1fc14cd93144`
+(on-chain/LE `4431d94cc11fac2cdc1c62c2c9c56c92c582337c18ded299155dbc0f15ff738c`),
+100M fungible units + minting NFT, genesis/mint tx
+`3fd526e9cc5119cd11ef76615ad0c9e1b6187910aeaae1ed178b48c96897656b` (block 328731).
+Mint key (test-only, no value) at
+`/Workspace/apecsdev/.secrets/pusd-shielded-pool-chipnet-mint.json`. The enforced
+category is byte-verified from the LIVE Option B transactions (2026-11-12).
+(An earlier faucet-minted token, category
+`479aeebabc682ddb90a3671bffd2a0bd918737de13f19a92231ed36a8580cc11`, genesis
+`4257dbfb68540cc9afcf569da8e651790c82d3951bdff88f5232a372760ba977` block 328616,
+was a preliminary stand-in — SUPERSEDED, do NOT use; see CHIPNET.md.)
 
 ---
 
@@ -242,7 +252,7 @@ silent-failure cause (scripts emit the wrong verifier layout or fail to find the
    6-input/7-output tx, run `createVirtualMachineBch2026` on every input, throw if any
    `error`, then Schnorr-sign the funding input.
 5. **Broadcast** via Electrum `blockchain.transaction.broadcast` (chipnet server
-   `wss://chipnet.imaginary.cash:50004`).
+   `wss://chipnet.bch.ninja:50004`; fallback `wss://chipnet.imaginary.cash:50004`).
 6. **Confirm** via `blockchain.transaction.get [txid, true]` (confirmations / blockhash).
 
 Reference builders to read (small, single-purpose — keep them that way):
@@ -405,11 +415,40 @@ Path B). Treat Path B as a follow-up redesign with its own trusted-setup ceremon
 | On-chain verifier (VERIFIER_DIR) | runner `/home/ubuntu/zkb/bench-pusd/` |
 | Tx builders | runner `/home/ubuntu/zkb/cashscript/build-*.mjs` |
 | Proofs / metas / built chains | runner `/home/ubuntu/pusd-shielded-pool/` |
-| Chipnet token + mint key | `/Workspace/apecsdev/.secrets/pusd-pool-chipnet-mint.json` (test-only) |
+| Chipnet token + mint key | `/Workspace/apecsdev/.secrets/pusd-shielded-pool-chipnet-mint.json` (test-only) |
 | Generalization design | `pusd-shielded-pool/GENERALIZED-SHIELDING.md` |
 | Build record / worked examples | `pusd-shielded-pool/CHIPNET.md` |
 | Upstream verifier repos | [`mr-zwets/groth16_cashscript`](https://github.com/mr-zwets/groth16_cashscript) + [`mr-zwets/zk-verifier-bench`](https://github.com/mr-zwets/zk-verifier-bench) |
 | Our upstreamed fix | [`mr-zwets/groth16_cashscript` PR #26](https://github.com/mr-zwets/groth16_cashscript/pull/26) (open; red-team push round-trip) |
+
+---
+
+## 10. Live-state addendum (2026-11-12 — verified from public chipnet Fulcrum)
+
+Facts below were re-verified directly from the chain (`chipnet.imaginary.cash:50004`,
+verbose tx decode) — no runner access needed:
+
+- **Live pool = Option B, covenant locking `aa20a458f7790da8ccf8…`, category
+  `8c73ff150f…` (BE)** — confirmed via the SHIELD/TRANSFER continuity outputs.
+- **Live tx shapes differ from the §2.4 sketch**: SHIELD (`bd72f1f3…`) is
+  **3 in / 9 out** (3 Schnorr funding inputs; CREATES the pool UTXO + the 5
+  verifier-step UTXOs + minting NFT + FT change); TRANSFER (`b0a488db…`) is
+  **7 in / 7 out** (spends pool + the 5 verifier-step UTXOs + sats, re-creates
+  them all). §2.4's "6 inputs" describes the older layout.
+- **Genesis witness = 7,769 bytes** on the live TRANSFER (consistent with the
+  documented `n0@1825` / `n1@1792` offsets).
+- **State decode confirmed**: the pool continuity output's 64-byte mutable NFT
+  commitment = `newMerkleRoot[32 LE] ‖ nullifierSetHash[32 LE]` (TRANSFER:
+  `97bc4c8a…` ‖ `ca64cf7a…`, byte-identical to §3's record).
+- **Covenant unlocking arg order** (decoder prototype: nito.cash
+  `apps/web/indexer-proto.mjs`): `[isUnshield, publicValueAbs, newMerkleRoot,
+  cm1, cm0, nf1, nf0, <pad>, redeem]`.
+- **No note-tag carrier on-chain yet**: neither the covenant args nor any output
+  carries an encrypted note packet — §2.1's "outputs carry an encrypted note
+  tag" is the DESIGN (Zcash model), not the live state. The PoC transfers were
+  self-transfers (one wallet generates + knows both notes). Cross-wallet
+  delivery still needs a carrier (e.g., OP_RETURN) plus a covenant
+  output-tolerance check.
 
 ---
 

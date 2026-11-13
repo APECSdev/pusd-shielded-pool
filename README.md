@@ -8,16 +8,16 @@ Zero-knowledge privacy pool (zkSNARKs) for the **Paryon (PUSD)** stablecoin on B
 
 **Status: live on chipnet.** The full pool lifecycle — deploy, SHIELD,
 shielded→shielded TRANSFER, and UNSHIELD — is confirmed on-chain
-(blocks [328733](https://chipnet.chaingraph.cash/tx/d3a442f3d3145cba3d1d6fd626164e077fa92b02720b882e3e98b40e70f4188c) / [328740](https://chipnet.chaingraph.cash/tx/3a8b9287ea97c050b0110522afa84daf0de90984ef3266db4062768d19adf8a5) / [328744](https://chipnet.chaingraph.cash/tx/c8d4c6e67859602a700b36ed33c6d90f0bf0ecb43c2e58b87041f845d4cc214a)).
+(blocks [328733](https://explorer.selene.cash/tx/d3a442f3d3145cba3d1d6fd626164e077fa92b02720b882e3e98b40e70f4188c?network=chipnet) / [328740](https://explorer.selene.cash/tx/3a8b9287ea97c050b0110522afa84daf0de90984ef3266db4062768d19adf8a5?network=chipnet) / [328744](https://explorer.selene.cash/tx/c8d4c6e67859602a700b36ed33c6d90f0bf0ecb43c2e58b87041f845d4cc214a?network=chipnet)).
 
 **Latest redeploy (Option B):** the DEPLOY+SHIELD and TRANSFER were confirmed in the
-**same block — 329722** ([`bd72f1f3…`](https://chipnet.imaginary.cash/tx/bd72f1f367cc5e6e8e9f485d84f308ae5e3f80e66b34f82998c7a38eb1698e1a) / [`b0a488db…`](https://chipnet.imaginary.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b)), with the UNSHIELD confirmed in block **329736** ([`e90b9a56…`](https://chipnet.imaginary.cash/tx/e90b9a568d6908bf507e3239cde8b5ef055f9377aa95240d14453669f784717d)).
+**same block — 329722** ([`bd72f1f3…`](https://explorer.selene.cash/tx/bd72f1f367cc5e6e8e9f485d84f308ae5e3f80e66b34f82998c7a38eb1698e1a?network=chipnet) / [`b0a488db…`](https://explorer.selene.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b?network=chipnet)), with the UNSHIELD confirmed in block **329736** ([`e90b9a56…`](https://explorer.selene.cash/tx/e90b9a568d6908bf507e3239cde8b5ef055f9377aa95240d14453669f784717d?network=chipnet)).
 
 **⚡ Multiple shielded transfers in ONE block.** Three chained shielded→shielded
 **TRANSFERs** — each spending the previous transfer's pool output — were confirmed
 together in a **single block,
-[329764](https://chipnet.imaginary.cash/block/00000000000013e42e5d7d9eb402afde2c977b7b688c7aade0633db66d88f668)**
-([`60fe613e…`](https://chipnet.imaginary.cash/tx/60fe613ec853043908b8dc83fac8165da5b6b7f0ef3e26a4299fd87560784273) · [`7d89f877…`](https://chipnet.imaginary.cash/tx/7d89f877fe22b6ad6e684b17544aaa9e1dbd688dce812d1ff5e76159773ce9e3) · [`ebc6e4f9…`](https://chipnet.imaginary.cash/tx/ebc6e4f9c25bb511781726948e95bcbc6ad0652ccd9756663379c2b2fb76fc0e),
+[329764](https://explorer.selene.cash/block/329764?network=chipnet)**
+([`60fe613e…`](https://explorer.selene.cash/tx/60fe613ec853043908b8dc83fac8165da5b6b7f0ef3e26a4299fd87560784273?network=chipnet) · [`7d89f877…`](https://explorer.selene.cash/tx/7d89f877fe22b6ad6e684b17544aaa9e1dbd688dce812d1ff5e76159773ce9e3?network=chipnet) · [`ebc6e4f9…`](https://explorer.selene.cash/tx/ebc6e4f9c25bb511781726948e95bcbc6ad0652ccd9756663379c2b2fb76fc0e?network=chipnet),
 each ~36.8 KB, no public value moved). Because a transfer spends the prior transfer's
 pool output, many private payments can settle in the same block. (Executed on the latest
 **Option B** redeployment described above — pool `aa20a458f7…`.)

@@ -22,6 +22,8 @@
 // Usage: node eval-pool.mjs vectors.json poolArtifact.json evalProofs.json
 // NOTE: run from ~/zkb/bench-pusd (it resolves @bitauth/libauth + the vectors from
 // that project's node_modules); set CASHSCRIPT_SDK to the fork cashscript dist/index.js.
+// Optional: CARRIER_PACKET_HEX=<164-byte hex> appends an OP_RETURN carrier output to
+// every scenario (NOTE-CARRIER.md — the covenant output-tolerance check).
 import { readFileSync } from 'node:fs';
 import { createVirtualMachineBch2026, sha256, hexToBin, binToHex } from '@bitauth/libauth';
 const { Contract } = await import(process.env.CASHSCRIPT_SDK);
@@ -120,6 +122,23 @@ const runScenario = (scenario) => {
   // unshield: a public PUSD payout output of publicValueAbs must exist at index 1.
   if (isUnshield === 1n) {
     outputs.push({ lockingBytecode: new Uint8Array([0x6a]), valueSatoshis: 546n, token: { amount: publicValueAbs, category } });
+  }
+
+  // NOTE-CARRIER (optional): append an OP_RETURN encrypted-note carrier output when
+  // CARRIER_PACKET_HEX is set — the empirical "output-tolerance" check of
+  // NOTE-CARRIER.md §7.1 (the covenant constrains outputs[0]/[1] only, so an appended
+  // carrier output must leave every path accepted:true at unchanged op-cost). The
+  // carrier is always APPENDED (never inserted) so no existing output index shifts.
+  // No env -> no output appended (byte-identical prior behavior).
+  if (process.env.CARRIER_PACKET_HEX) {
+    const packet = Buffer.from(process.env.CARRIER_PACKET_HEX, 'hex');
+    if (packet.length !== 164) {
+      throw new Error(`CARRIER_PACKET_HEX must be 164 bytes (got ${packet.length})`);
+    }
+    outputs.push({
+      lockingBytecode: Buffer.concat([Buffer.from([0x6a, 0x4c, packet.length]), packet]),
+      valueSatoshis: 0n,
+    });
   }
 
   const program = { inputIndex: 5, sourceOutputs, transaction: { version: 2, inputs: allInputs, outputs, locktime: 0 } };

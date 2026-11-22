@@ -2,10 +2,11 @@
 
 # Note Carrier (NP01) — on-chain encrypted-note delivery for the shielded pool
 
-Status: **design v1 + wallet-side implementation** (`nito.cash`
-`apps/web/src/lib/pool/carrier.js`, unit-tested). Runner-side VM-eval +
-chipnet demo = the verification steps in §7 (NOT yet run at time of writing —
-this doc is the spec they run against).
+Status: **design v1 + wallet-side implementation + §7.1 VM-eval EXECUTED**
+(`nito.cash` `apps/web/src/lib/pool/carrier.js`, unit-tested; §7.1 run on the
+`apecsdev` VirtualBox VM 2026-11-22 — see §7). The live chipnet cross-wallet
+demo (§7.2) remains PENDING on runner materials (the `runner` VPS is down
+until next week; the live pools' operator note sets live there).
 
 ## 1. The problem
 
@@ -159,18 +160,28 @@ that workstream rather than replacing it.
 Per the standing rules: all VM-eval / tx-building / broadcasting happens on
 the `runner` VPS (`ssh runner`), VM-evaluating every input before broadcast.
 
-1. **VM-eval with a carrier output** (no chain access needed):
+1. **VM-eval with a carrier output** (no chain access needed) — **DONE, PASS
+   (2026-11-22, on the `apecsdev` VM** — the `runner` VPS is down until next
+   week; user directive to run the eval on the local VM. Environment rebuilt
+   there faithfully: `@bitauth/libauth@3.1.0-next.8` (the bench's pin, from
+   zk-verifier-bench package.json) + the `compiler-optimizations-8` cashscript
+   fork (mr-zwets/cashscript @ `dab3f89`, cloned + tsc-compiled on the VM).
    ```bash
-   # on runner, from the bench dir (eval-pool.mjs resolves libauth + SDK there):
-   cd ~/zkb/bench-pusd
-   CARRIER_PACKET_HEX=<164-byte hex from the wallet's encryptNote \
-     — or any 164 bytes, the covenant must not care> \
-   node /path/to/pusd-shielded-pool/eval-pool.mjs vectors.json \
-       poolArtifact.json evalProofs.json
+   # executed on the apecsdev VM (~/apps/pusd-shielded-pool):
+   CASHSCRIPT_SDK=~/apps/cashscript-fork/packages/cashscript/dist/index.js \
+   node eval-pool.mjs artifacts/verifier-vectors.json \
+       artifacts/asset-pool.artifact.json build/eval-proofs.json   # baseline
+   CARRIER_PACKET_HEX=<real 164-byte packet from the wallet's encryptNote> \
+   ...same...                                                  # carrier run
    ```
-   Expected: all three covenant paths still evaluate `accepted: true`, op-costs
-   unchanged (the covenant never touches the carrier). This IS the empirical
-   "output-tolerance check".
+   **Results:** the BASELINE reproduced the committed
+   `artifacts/eval-pool-results.json` byte-for-byte (transfer 65,885/166,400,
+   unlocking 167 B; shield 65,893/168,000, 169 B; unshield 65,981/168,000,
+   169 B; redeem 222 B; all `accepted: true`), and the CARRIER run (a real NP01
+   packet produced by the wallet's `encryptNote`) was IDENTICAL — all three
+   paths `accepted: true` at unchanged op-costs. This IS the empirical
+   "output-tolerance check": the covenant tolerates the appended carrier
+   output with zero cost, exactly as the §4 source analysis predicted.
 2. **Live chipnet demo (the blocker's resolution proof):**
    - build a TRANSFER to a SECOND wallet's delivery point (ownerPub = the
      recipient x-coord), appending the carrier output built from

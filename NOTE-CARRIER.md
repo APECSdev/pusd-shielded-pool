@@ -124,23 +124,48 @@ eval harness (`eval-pool.mjs`) gained an optional `CARRIER_PACKET_HEX` input to
 run exactly that check. **If the VM run surprises us, the fallback is an
 explicit carrier whitelist in the covenant (expected unnecessary).**
 
-## 5. Receiver scan (integrates with the note-detection infra)
+## 5. Receiver scan — IMPLEMENTED (nito.cash) + LIVE-VERIFIED on gate3
 
-For every tx that spends a pool covenant UTXO (found via the pool registry /
-indexing — the note-detection workstream), the receiver:
+**Status (2026-11-22): the wallet-side note-detection scan is implemented,
+unit-tested, and verified against the LIVE chipnet gate3-demo-pool.**
 
-1. collects every output's lockingBytecode and calls
-   `parseCarrierLockingBytecode()` (magic + format check — skips everything
-   else cheaply);
-2. for each packet, calls `decryptPacket(packet, sk, leaves)` with the
-   wallet's pool spend key and its known leaf set;
-3. a non-null result is a received note: `{ value, ownerPub, rho, r, cm,
-   leafIndex }` — record it via the wallet's `pool/recordNote` once its
-   commitment is on-chain (leaf index confirms).
+Implementation (nito.cash):
 
-The scan needs the pool's leaf set — that is exactly what the note-detection
-infra (Fulcrum + Chaingraph indexer) maintains, so the carrier lands on top of
-that workstream rather than replacing it.
+- `apps/web/src/lib/pool/registry.js` — the pool registry (mirrors
+  pool-registry.json): covenant locking bytecode, asset category, genesis
+  root + leaf count, and the covenant CashAddress derived via libauth
+  `lockingBytecodeToCashAddress` (gate3 → `bchtest:pd7qc90…ahan65`).
+- `apps/web/src/lib/pool/decode.js` — the covenant ACTION decoder: locates
+  the covenant input (redeem-push profile) + the verifier GENESIS input
+  (marker profile at the fixed n0/n1 offsets — found DYNAMICALLY: the live
+  gate3 SHIELD carries its genesis at input 4, not the eval's input 3),
+  extracts the args `[isUnshield, pvAbs, newMerkleRoot, cm1, cm0, nf1, nf0,
+  pad, redeem]` and any carrier packets.
+- `apps/web/src/lib/pool/scan.js` — the scan engine: covenant-address
+  history (Fulcrum) → decode → order by the covenant-input OUTPOINT chain
+  (correctly orders same-block chained transfers) → validate each action
+  (recomputed Option-F actionHash == the proven n1; proven n0 chain runs
+  genesis-root → action[i].newMerkleRoot → action[i+1]) → trial-decrypt every
+  carrier against the action's own on-chain cm0/cm1 (no seed leaves needed
+  for RECEIVING) → received notes (with REAL global leaf indices) + spent
+  nullifiers.
+- `apps/web/src/store/modules/pool.js` — the `pool/scanPool` store action:
+  records received notes (idempotent by cm), marks on-chain-spent notes,
+  sets a scan checkpoint; `resetPool` clears it.
+
+**LIVE verification (2026-11-22, from the dev host against public chipnet):**
+scanning gate3-demo-pool returned exactly the documented chain — 1 creation
+(DEPLOY-class) tx + the SHIELD `f5927a0b…` (height 330438, pvAbs =
+1,000,000, isUnshield = 0, carriers = 0 — a pre-carrier pool, as expected),
+leafBase = 2 (the seeded genesis leaves), and ALL internal validations passed:
+the recomputed actionHash equals the on-chain proven n1, and the proven n0
+anchor equals the registry's genesis root `2c0f5336…4525`. The scanner reads
+real pool actions end-to-end.
+
+What remains on this workstream: the runner-side indexer materials (seed
+subtree hashes for SPEND witnesses on non-aligned trees; the nullifier-set
+service) and the UI wiring (blocker #4) — plus, for the carrier itself, the
+§7.2 live cross-wallet demo when the runner returns.
 
 ## 6. Deferred (explicitly NOT in v1)
 

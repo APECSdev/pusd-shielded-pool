@@ -32,7 +32,7 @@ import { sha } from './protocol.mjs';
 
 /* BCH 2026 introspection opcodes not in asm.mjs's OP table */
 const IX = {
-    TXVERSION: 0xc2, INPUTINDEX: 0xc0, UTXOBYTECODE: 0xc7,
+    TXVERSION: 0xc2, INPUTINDEX: 0xc0, TXOUTPUTCOUNT: 0xc4, UTXOBYTECODE: 0xc7,
     UTXOTOKCAT: 0xce, UTXOTOKCOMMIT: 0xcf, UTXOTOKAMT: 0xd0,
     OUTBYTECODE: 0xcd, OUTTOKCAT: 0xd1, OUTTOKCOMMIT: 0xd2, OUTTOKAMT: 0xd3,
     REVERSEBYTES: 0xbc,
@@ -81,6 +81,7 @@ export function covenantHook(P) {
             runtime stack. Copy them now and use the copies throughout. */
         a.pick('n0', 'k0');
         a.pick('n1', 'k1');
+        const D0 = a.st.length;   /* everything above this at exit is ours to drop */
 
         /* ── 1. tx.version == 2 ─────────────────────────────────────────────── */
         a.op(IX.TXVERSION, 0, 'tv').push(2).op(OP.NUMEQUALVERIFY, 2);
@@ -96,7 +97,12 @@ export function covenantHook(P) {
 
         /* ── 3. the carrier: output 0 is exactly OP_RETURN <169 bytes> ──────── */
         a.push(0).op(IX.OUTBYTECODE, 1, 'ob');
-        a.pick('ob').op(OP.SIZE, 1, 'osz').push(CARRIER_PREFIX.length + CARRIER_LEN).op(OP.NUMEQUALVERIFY, 2);
+        /*  OP_SIZE on the BCH-2026 VM is NON-POPPING: it leaves the operand and pushes its size.
+            Model it exactly as the stock FILL local function does (script.mjs:75): pop 1, push 2
+            (the operand returns to the stack under the size). A pop-1/push-1 model leaves the
+            operand copy on the runtime stack and shifts every later pick by one — the exact bug
+            this note replaces. */
+        a.op(OP.SIZE, 1, 'ob', 'osz').push(CARRIER_PREFIX.length + CARRIER_LEN).op(OP.NUMEQUALVERIFY, 2);
         a.push(CARRIER_PREFIX.length).op(OP.SPLIT, 2, 'opre', 'pl').roll('opre');
         a.pushBytes(CARRIER_PREFIX).op(OP.EQUALVERIFY, 2);
         a.mark('p3');
@@ -131,18 +137,27 @@ export function covenantHook(P) {
         a.mark('p5');
 
         /* ── 6. n1 == actionHash(nf0,nf1,cm0,cm1,pv,sign,category,newRoot) ───── */
-        /*  be32(x) = REVERSEBYTES(NUM2BIN(x, 32))                             */
+        /*  The carrier limbs are the 32-byte LE VM-number forms (asset-pool.cash's
+            covenant-arg convention). The circuit's actionHash preimage uses 32-byte
+            BIG-ENDIAN fields, so every limb is REVERSEBYTES'd first — exactly what the
+            deployed covenant does (asset-pool.cash lines 192-200: nf0.reverse() …
+            newMerkleRoot.reverse()). The nullifier fold in check 7 below stays on the
+            RAW forms — the deployed covenant folds `old + nf0 + nf1` without reversal. */
+        const rev = (name) => { a.pick(name).op(IX.REVERSEBYTES, 1, name + '_be'); };
+        rev('nf0'); rev('nf1'); rev('cm0'); rev('cm1'); rev('newRoot');
+        /*  be32(x) = REVERSEBYTES(NUM2BIN(x, 32)) — pv and sign are small VM numbers  */
         const be32 = (name) => { a.pick(name).push(32).op(OP.NUM2BIN, 2, name + '_le').op(IX.REVERSEBYTES, 1, name + '_be'); };
         be32('pv'); be32('sign');
-        /*  preimage = nf0 ‖ nf1 ‖ cm0 ‖ cm1 ‖ be32(pv) ‖ be32(sign) ‖ cat ‖ newRoot  */
-        a.pick('nf0').pick('nf1').op(OP.CAT, 2, 'a1');
-        a.pick('cm0').pick('cm1').op(OP.CAT, 2, 'a2');
+        /*  preimage = be(nf0) ‖ be(nf1) ‖ be(cm0) ‖ be(cm1) ‖ be32(pv) ‖ be32(sign) ‖ cat ‖ be(newRoot)  */
+        a.pick('nf0_be').pick('nf1_be').op(OP.CAT, 2, 'a1');
+        a.pick('cm0_be').pick('cm1_be').op(OP.CAT, 2, 'a2');
         a.pick('pv_be').pick('sign_be').op(OP.CAT, 2, 'a3');
-        a.pushBytes(P.categoryDisplay).pick('newRoot').op(OP.CAT, 2, 'a4');
+        a.pushBytes(P.categoryDisplay).pick('newRoot_be').op(OP.CAT, 2, 'a4');
         a.pick('a1').pick('a2').op(OP.CAT, 2, 'b1');
         a.pick('a3').pick('a4').op(OP.CAT, 2, 'b2');
         a.pick('b1').pick('b2').op(OP.CAT, 2, 'pre');
-        a.pick('pre').op(OP.SIZE, 1, 'presz').push(256).op(OP.NUMEQUALVERIFY, 2);
+        /*  OP_SIZE again — same non-popping VM as check 3: pre stays, presz lands on top. */
+        a.op(OP.SIZE, 1, 'pre', 'presz').push(256).op(OP.NUMEQUALVERIFY, 2);
         /*  digest, clear the top 3 bits of the big-endian first byte, reverse to LE, compare */
         a.pick('pre').op(OP.SHA256, 1, 'h');
         a.pick('h').push(1).op(OP.SPLIT, 2, 'h0', 'hrest');
@@ -168,6 +183,15 @@ export function covenantHook(P) {
         a.pick('newBal').push(0).op(OP.GREATERTHANOREQUAL, 2, 'nb0').op(OP.VERIFY, 1);
         a.mark('p8');
 
+        /* ── 8b. TXOUTPUTCOUNT == 2 + sign ───────────────────────────────────── */
+        /*  Pin the transaction shape: exactly out0 (carrier), out1 (state), and for an
+            unshield out2 (payout). Without this, a sign=0 transition could append an
+            unchecked extra output. Consensus token conservation already limits totals;
+            this is defense in depth and makes the payout rules total. */
+        a.op(IX.TXOUTPUTCOUNT, 0, 'oc');
+        a.push(2).pick('sign').op(OP.ADD, 2, 'exp');
+        a.pick('oc').pick('exp').op(OP.NUMEQUALVERIFY, 2);
+
         /* ── 9. out1 = the new state, locked back to P2SH32(R) ──────────────── */
         a.push(1).op(IX.OUTBYTECODE, 1, 'o1b');
         a.push(STATE_INDEX).op(IX.UTXOBYTECODE, 1, 'own');
@@ -192,11 +216,10 @@ export function covenantHook(P) {
         a.mark('p11');
 
         /* ── 11. drop everything this hook created, restoring role 2's stack ── */
-        for (const n of ['a1', 'a2', 'a3', 'a4', 'b1', 'b2', 'pre', 'presz', 'h', 'hrest', 'hm', 'hcat', 'hle', 'dg',
-                         'nf0', 'nf1', 'cm0', 'cm1', 'newRoot', 'pv8', 'pv', 'pv_le', 'pv_be', 'sign', 'sign_le', 'sign_be',
-                         'oldNull', 'n1a', 'n1b', 'newNull', 'bal', 'sum', 'spv', 'spv2', 'newBal',
-                         'k0', 'k1', 'icat', 'ob', 'osz', 'opre', 'com', 'stored', 'n0le', 'o1b', 'own', 'o1cat', 'o1com', 'o1amt', 'un', 's0', 's1', 'tv', 'pl']) {
-            if (a.has(n)) a.drop(n);
-        }
+        /*  Drop by POSITION, not by name: pick() copies share their source's name, so a
+            name-based list drops only the topmost duplicate and leaks the rest — the
+            leaked copies were shifting every later pick by one. D0 was captured at hook
+            entry; dropping the top item repeatedly is always a plain OP_DROP. */
+        while (a.st.length > D0) a.drop(a.st[a.st.length - 1]);
     };
 }

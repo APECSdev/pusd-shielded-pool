@@ -42,28 +42,42 @@ const scenarioOf = (p) => {
     return { s, n0 };
 };
 
-const run = (label, expect, { proofIdx, mutate = {} }) => {
+const run = (label, expect, { proofIdx, mutate = {}, txMutate = {} }) => {
     const { s, n0 } = scenarioOf(proofs[proofIdx]);
     const sc = { ...s, ...mutate };
     const balance = 1000n;
     const oldNull = Buffer.alloc(32);
-    const newNull = sha(Buffer.concat([oldNull, be32(sc.nf0), be32(sc.nf1)]));
+    /*  the deployed covenant folds the RAW covenant args: sha256(old ‖ nf0 ‖ nf1) with the
+        32-byte LE VM-number forms (asset-pool.cash line 148) — NOT the BE preimage forms. */
+    const carr = carrierOf(sc);
+    const newNull = sha(Buffer.concat([oldNull, carr.subarray(0, 32), carr.subarray(32, 64)]));
     const newBal = balance + sc.pv - 2n * sc.sign * sc.pv;
     const stateCommit = Buffer.concat([to32LE(n0), oldNull]);
     const newCommit = Buffer.concat([to32LE(sc.newRoot), newNull]);
+    /*  tx-level tamper knobs — every field a plain Uint8Array (Node Buffers alias via slice()
+        and the VM's REVERSEBYTES writes through the views). */
+    const tx = {
+        sourceCategory: new Uint8Array(CATEGORY_DISPLAY),
+        stateCommit: new Uint8Array(stateCommit),
+        out1Category: new Uint8Array(CATEGORY_DISPLAY),
+        newCommit: new Uint8Array(newCommit),
+        out1Amount: newBal,
+        payout: sc.sign === 1n,
+        ...txMutate,
+    };
 
     const T = transactionFor(FIXTURES.fixtures[proofIdx], prog);
-    const inputs = T.unlockings.map((u, n) => ({ outpointIndex: n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: Buffer.from(u) }));
+    const inputs = T.unlockings.map((u, n) => ({ outpointIndex: n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(u) }));
     const sourceOutputs = [
         { lockingBytecode: lock, valueSatoshis: 1000n },
         { lockingBytecode: lock, valueSatoshis: 1000n },
-        { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: CATEGORY_DISPLAY, amount: balance, nft: { capability: 'mutable', commitment: stateCommit } } },
+        { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: tx.sourceCategory, amount: balance, nft: { capability: 'mutable', commitment: tx.stateCommit } } },
     ];
     const outputs = [
-        { lockingBytecode: carrierOutput(carrierOf(sc)), valueSatoshis: 0n },
-        { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: CATEGORY_DISPLAY, amount: newBal, nft: { capability: 'mutable', commitment: newCommit } } },
+        { lockingBytecode: new Uint8Array(carrierOutput(carrierOf(sc))), valueSatoshis: 0n },
+        { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: tx.out1Category, amount: tx.out1Amount, nft: { capability: 'mutable', commitment: tx.newCommit } } },
     ];
-    if (sc.sign === 1n) outputs.push({ lockingBytecode: Buffer.from([0x76, 0xa9, 0x14, ...Buffer.alloc(20), 0x88, 0xac]), valueSatoshis: 546n, token: { category: CATEGORY_DISPLAY, amount: sc.pv } });
+    if (tx.payout) outputs.push({ lockingBytecode: Buffer.from([0x76, 0xa9, 0x14, ...Buffer.alloc(20), 0x88, 0xac]), valueSatoshis: 546n, token: { category: new Uint8Array(CATEGORY_DISPLAY)  /* plain Uint8Array: Buffer.slice() returns a VIEW and REVERSEBYTES writes through it */, amount: sc.pv } });
 
     const res = {};
     for (const mode of ['consensus', 'standard']) {
@@ -78,9 +92,12 @@ const run = (label, expect, { proofIdx, mutate = {} }) => {
         for (const t of d) { offs.push(x); x += encodeAuthenticationInstruction(t).length; }
         const trace = VMS.consensus.debug({ inputIndex: 2, sourceOutputs, transaction: { version: 2, locktime: 0, inputs, outputs } });
         const bad = trace.find((s) => s.error);
-        const off = bad ? (offs[Math.max(0, bad.ip - 1)] ?? Infinity) : Infinity;
+        /*  libauth's debug ip is a BYTE OFFSET into the executing bytecode — not an instruction
+            index. Map it to the containing instruction, then show that window. */
+        const off = bad ? bad.ip : Infinity;
+        let di = 0; while (di + 1 < offs.length && offs[di + 1] <= off) di++;
         const mk = prog.marks.filter((m) => m.role === 2).sort((a, b) => a.roff - b.roff).filter((m) => m.roff <= off);
-        const instr = bad ? d.slice(Math.max(0, bad.ip - 4), bad.ip + 1).map((t) => (t.data ? `PUSH(${Buffer.from(t.data).toString('hex').slice(0, 12)})` : `0x${t.opcode.toString(16)}`)).join(' ') : '';
+        const instr = bad ? d.slice(Math.max(0, di - 4), di + 2).map((t) => (t.data ? `PUSH(${Buffer.from(t.data).toString('hex').slice(0, 12)})` : `0x${t.opcode.toString(16)}`)).join(' ') : '';
         const stk = (bad?.stack ?? []).slice(-8).map((x) => { const b = Buffer.from(x); return b.length > 8 ? `[${b.length}]${b.toString('hex').slice(0, 10)}` : `${b.toString('hex')}`; }).reverse().join(' | ');
         where = ` · at ${mk.at(-1)?.name ?? '?'} (ip ${bad?.ip}) · instr: ${instr}\n       runtime stack (top first): ${stk}`;
     }
@@ -95,11 +112,24 @@ console.log('--- control: a real pool transition ---');
 for (const i of [0, 1]) R.push(run(`fixture ${i} (pv=${proofs[i].covenant.publicValueAbs}, sign=${proofs[i].covenant.isUnshield})`, true, { proofIdx: i }));
 R.push(run('fixture 2 (unshield, pv=400)', true, { proofIdx: 2 }));
 
-console.log('\n--- rejections ---');
+console.log('\n--- rejections: carrier tampering ---');
 R.push(run('carrier newRoot changed (actionHash no longer matches n1)', false, { proofIdx: 0, mutate: { newRoot: 0x1234n } }));
 R.push(run('carrier pv changed', false, { proofIdx: 0, mutate: { pv: 1n } }));
 R.push(run('carrier sign flipped', false, { proofIdx: 0, mutate: { sign: 1n } }));
 R.push(run('carrier nf0 changed', false, { proofIdx: 0, mutate: { nf0: 7n } }));
+
+console.log('\n--- rejections: state input tampering ---');
+R.push(run('state input wrong category', false, { proofIdx: 0, txMutate: { sourceCategory: new Uint8Array(32) } }));
+R.push(run('state input wrong stored root', false, { proofIdx: 0, txMutate: { stateCommit: new Uint8Array(64) } }));
+
+console.log('\n--- rejections: out1 tampering ---');
+R.push(run('out1 wrong category', false, { proofIdx: 0, txMutate: { out1Category: new Uint8Array(32) } }));
+R.push(run('out1 wrong commitment (forged newRoot)', false, { proofIdx: 0, txMutate: { newCommit: new Uint8Array(64) } }));
+R.push(run('out1 wrong amount (balance not conserved)', false, { proofIdx: 0, txMutate: { out1Amount: 1001n } }));
+
+console.log('\n--- rejections: payout rules ---');
+R.push(run('unshield missing its payout', false, { proofIdx: 2, txMutate: { payout: false } }));
+R.push(run('shield minting a payout', false, { proofIdx: 0, txMutate: { payout: true } }));
 
 console.log(`\n${R.filter(Boolean).length}/${R.length} match expectation`);
 process.exit(R.every(Boolean) ? 0 : 1);

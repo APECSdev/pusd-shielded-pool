@@ -1,75 +1,130 @@
 # wip-role2-hook — status
 
-**Work in progress. Not reviewed, not deployed.** These files implement the pool rules as a
-`bn-native-sound` role-2 `COVENANT` hook (design: `../ROLE2-POOL-HOOK-DESIGN.md`).
-
-## What works
-
-- **The hook compiles into role 2 and the program builds.** `pool-build.mjs` registers the hook
-  via `setCovenant` and then runs the stock `build.mjs`; the code blob is generated, and the
-  program runs on the BCH-2026 VM.
-- **The carrier parsing works.** Output 0 is checked for exact size and prefix and split into
-  `nf0‖nf1‖cm0‖cm1‖newRoot‖pv(8)‖sign(1)`; the limbs are decoded and `sign` is range-checked.
-- **Every tamper case rejects**, in both consensus and standard mode:
-  carrier `newRoot` changed, carrier `pv` changed, carrier `sign` flipped, carrier `nf0` changed.
-  So the binding path (preimage → SHA256 → mask → compare to `n1`) is live.
-- **`OP_UTXOTOKENCATEGORY` semantics settled empirically** (`probe.mjs`): introspection returns
-  the **reverse** of the bytes stored in `Output.token.category`, followed by the capability
-  byte. So source outputs carry the *display* order and the hook compares the *reversed* form.
-
-## What does NOT work yet — the honest blocker
-
-The **control** (an honest pool transition with a real proof) rejects. Localized to the
-`n0 == stored merkle root` check, and the evidence says the symbolic stack and the runtime stack
-are **off by one** at that point:
+**The role-2 pool hook WORKS: pool-test passes 14/14 under our own VK** — 3 acceptance
+controls (transfer pv=0, shield pv=250, unshield pv=400 — the unshield exercises the
+conditional payout branch) and 11 rejection classes, with the COMPLETE program (prologue,
+STMT decode, graph solo, all 12 hook checks, then the post-hook GT-GLS fold and the final
+pairing verify) executing end-to-end. Still WIP: not independently reviewed, not deployed.
 
 ```
-model stack at the check (top→):  sign | pv | newRoot | cm1 | cm0 | nf1 | nf0 | sc5 | sc4 | sc3
-runtime stack at the failure    :  <to32LE(n1)> | <32 zero bytes> | <to32LE(n0)> | <64-byte commitment> | …
-emitted code                    :  OP_2 OP_PICK   (pick 'stored', model depth 2)
+--- control: a real pool transition ---
+ok   ACCEPT  fixture 0 (pv=0, sign=0)          ok   ACCEPT  fixture 1 (pv=250, sign=0)
+ok   ACCEPT  fixture 2 (unshield, pv=400)
+--- rejections: carrier tampering ---           (newRoot / pv / sign / nf0 changed — all REJECT)
+--- rejections: state input tampering ---       (wrong category / wrong stored root — REJECT)
+--- rejections: out1 tampering ---              (wrong category / forged commitment / wrong amount — REJECT)
+--- rejections: payout rules ---                (unshield missing payout / shield minting payout — REJECT)
+14/14 match expectation
 ```
 
-`pick('stored')` at model depth 2 lands on the runtime item **one below** `stored` (the 32-byte
-`oldNull`, all zeros), so the comparison is `oldNull == n0le` and fails. The same offset explains
-why `n0le` came out as `to32LE(n1)` on the earlier run: `pick('n0')` landed one slot off.
+## The hook's checks (pool-hook.mjs, marks p1..p11)
 
-I have **not** found the source of the offset. Candidates I have not eliminated:
+1. tx.version == 2
+2. active input carries the pool category as a MUTABLE NFT (state index = literal 2)
+3. out0 = the 169-byte carrier: `OP_RETURN PUSHDATA1 <nf0|nf1|cm0|cm1|newRoot|pv(8)|sign(1)>`,
+   exact size + prefix
+4. carrier split into limbs; pv, sign BIN2NUM'd; sign ∈ {0,1}
+5. n0 == the active input's stored merkle root (commitment[0..32), byte compare —
+   NUMEQUAL on 32-byte strings is a sign trap)
+6. n1 == SHA256(preimage) with the top 3 bits cleared, where the preimage is the eight
+   32-byte BIG-ENDIAN fields `nf0|nf1|cm0|cm1|be32(pv)|be32(sign)|category|newRoot`
+   — every carrier limb is REVERSEBYTES'd first (deployed covenant, asset-pool.cash
+   lines 192-200: `nf0.reverse() … newMerkleRoot.reverse()`)
+7. newNull == SHA256(oldNull | nf0 | nf1) — folded over the RAW LE forms (line 148: no reversal)
+8. newBalance == balance + pv − 2·sign·pv ≥ 0 (UTXOTOKAMT reads the state amount)
+8b. TXOUTPUTCOUNT == 2 + sign (pins the shape; makes the payout rules total, and blocks
+    extra outputs even though consensus token conservation already limits totals)
+9. out1: own P2SH32(R) locking, pool category as mutable NFT, commitment == newRoot|newNull,
+   amount == newBalance
+10. if sign==1: out2 pays pv in the BARE category
+11. drop everything the hook created (dynamic drop-to-entry-depth loop, NOT a name list —
+    pick() copies share names, so a name list drops only the topmost duplicate and leaks)
 
-1. an asymmetry between how `asm.mjs` models a local function's outputs and what `invoke`
-   actually pushes — `STMT` is `defLocal('STMT', 1, STMT_OUT.length, …)` and ends with
-   `arrangeAbove('__floor', STMT_OUT)`, so the entry stack depends on `arrangeAbove`'s model
-   agreeing with its emitted code;
-2. one of my own ops being mis-modelled (I checked the obvious ones: `SIZE`, `SPLIT`, `CAT`,
-   `BIN2NUM`, `NUM2BIN`, `VERIFY`, `NUMEQUALVERIFY`, `EQUALVERIFY`, `ROLL` — all pop/push as
-   declared).
+## Durable findings (the debugging saga, in order of discovery)
 
-**Deliberately not done:** I did not "fix" this by swapping the `n0`/`n1` picks or by
-compensating the depth. That would make the test pass while encoding a stack model I do not
-understand — precisely the failure mode this project has already been burned by twice (F6's
-omitted equations, the v2 layout bug).
+### 1. THE BIG ONE — Node `Buffer` + libauth = in-place corruption of your scenario
+
+libauth's opcodes are written for plain `Uint8Array` stack items and use `item.slice()`
+before mutating (e.g. `opReverseBytes` = `item.slice().reverse()`, `pushTokenExtendedCategory`
+= `category.slice().reverse() + capByte`). **`Uint8Array.prototype.slice()` copies — but
+`Buffer.prototype.slice()` is overridden to return a VIEW sharing memory.** If any
+transaction field is a Node `Buffer`, every "pure" slice becomes an alias and the
+"reversals" write straight through into your original objects:
+
+- the carrier's five 32-byte limb fields get byte-reversed in place,
+- `token.category` buffers flip per call (probe-mutate shows strict alternation),
+- results become call-order-dependent, which is why this bug masqueraded as
+  "UTXOTOKCAT returns reversed but OUTTOKCAT returns display" and as in-process vs
+  fresh-process disagreements that sent me chasing VM-internal state for hours.
+
+**Fix: pass ONLY plain `Uint8Array`s into the VM** (`new Uint8Array(buf)` copies).
+The stock harness does this (`Uint8Array.from` everywhere) which is why the stock code
+never hit it. A real node cannot mutate your transaction; this is purely a JS harness
+hazard — but it silently corrupts any harness built with Buffers. probe-proxy proves the
+writes bypass a Proxy over the Buffer (they go through views created from its ArrayBuffer).
+
+### 2. OP_SIZE on the BCH-2026 VM is NON-POPPING
+
+`[push 0xaa, OP_SIZE]` leaves `[aa, 01]`. Model it exactly as the stock FILL local
+function does (script.mjs:75): `op(OP.SIZE, 1, name, sizeOut)` — pop 1, push **2**
+(the operand returns under the size). A pop-1/push-1 model leaves an operand copy on the
+runtime stack and shifts every later pick by one — that single leak produced the
+original "one-slot offset" blocker recorded in the previous STATUS.
+
+### 3. The deployed covenant's byte-order conventions (asset-pool.cash)
+
+- actionHash preimage: ALL EIGHT 32-byte fields reversed to big-endian (lines 192-200);
+  the carrier carries the LE covenant-arg forms, so the hook REVERSEBYTES's each limb
+- nullifier fold: `sha256(old ‖ nf0 ‖ nf1)` over the RAW LE args (line 148) — no reversal
+- the category ctor arg is the ON-CHAIN (reversed) order, matching introspection
+- introspection pushes `reverse(stored category) + capability byte` for BOTH input-side
+  and output-side token categories (shared helper, bch-2023-tokens.js:202-236)
+- bare (no-NFT) token outputs push just the reversed category, no capability byte
+
+### 4. libauth trace/debug facts
+
+- the debug trace's `ip` is a BYTE OFFSET in the currently executing function's code
+  (OP_INVOKE starts a fresh ip space per invoked function) — NOT an instruction index
+- the instruction stream for input 2: witness data pushes → R (the 65-byte redeem:
+  INPUTBYTECODE-extracts the code pieces from inputs 0/1, SHA256==Kcode check,
+  OP_DEFINE + OP_INVOKE of the body) → the body dispatches to role 2's function
+- the assembler's model can be recorded per emitted op by monkey-patching
+  `Asm.prototype.emit` (model-diff.mjs, pick-diff.mjs) — that plus the VM trace's
+  stack snapshots is the decisive divergence-finding instrument
+
+### 5. Opcode numbers that matter here (verified live)
+
+stock IX (script.mjs:15): INPUTINDEX 0xc0, TXINPUTCOUNT 0xc3, UTXOBYTECODE 0xc7,
+INPUTBYTECODE 0xca. Hook additions, each probe-verified: TXVERSION 0xc2,
+TXOUTPUTCOUNT 0xc4, OUTBYTECODE 0xcd, UTXOTOKCAT 0xce, UTXOTOKCOMMIT 0xcf,
+UTXOTOKAMT 0xd0, OUTTOKCAT 0xd1, OUTTOKCOMMIT 0xd2, OUTTOKAMT 0xd3,
+REVERSEBYTES 0xbc. All introspection ops POP their index. OP_SIZE does not pop.
 
 ## Files
 
 | file | what it is |
 |---|---|
-| `pool-hook.mjs` | the hook: 11 checks, carrier parsing, `STATE_INDEX` literal, `p1..p11` marks for tracing |
-| `pool-test.mjs` | pool-aware acceptance harness (the stock `vm.mjs` gives source outputs no token), with a per-check tracer and a runtime-stack dump |
-| `pool-build.mjs` | registers the hook then imports the stock `build.mjs` |
-| `probe.mjs` | settles `OP_UTXOTOKENCATEGORY` byte order |
+| `pool-hook.mjs` | the hook: 12 checks, carrier parsing, dynamic tail, p-marks for tracing |
+| `pool-test.mjs` | the 14-case acceptance harness (pool-aware: tokens on source outputs, carrier out0, state out1, payout out2) with per-check tracer |
+| `pool-build.mjs` | registers the hook via setCovenant then imports the stock build.mjs |
+| `trace-dump.mjs` | per-state stack dump near the failure; FXI env picks the fixture |
+| `probe-size.mjs`, `probe-ix.mjs`, `probe-cat2/3.mjs`, `probe-ops.mjs` | opcode semantics probes (pop/push arity, byte orders) |
+| `probe-mutate.mjs`, `probe-carrier.mjs`, `probe-when.mjs`, `probe-isolate.mjs`, `probe-proxy.mjs` | the Buffer-aliasing investigation — repro and isolation of finding #1 |
+| `probe-fresh.mjs` | single-scenario fresh-process runner (fills + opCost printout) |
+| `carrier-hunt.mjs`, `model-diff.mjs`, `pick-diff.mjs`, `map-code.mjs` | divergence-finding instruments (trace vs assembler model vs disassembly) |
 
 Run on the apecsdev VM from `chunked/bn254/bn-native-sound/` with
 `BN_VK_FIXTURES=/home/apecs/cov/our.fixtures.json`.
 
-## Two harness facts worth keeping
+## Open items (before this stops being WIP)
 
-- **libauth's `Output.token.category` is display order; introspection returns it reversed.**
-  Getting this backwards fails the category check on every input.
-- **The pool stores its merkle root as the 32-byte LE VM-number form** (as `asset-pool.cash` does),
-  while the actionHash preimage uses **big-endian** fields. Mixing them up fails the root check.
-
-## Next step
-
-Resolve the one-slot offset before anything else. The cheapest way is to instrument
-`arrangeAbove` (or the `STMT` local function) and compare its model with the runtime stack right
-at the `invoke` boundary — i.e. find the offset *before* the hook adds any items, then confirm
-whether it is upstream or mine.
+1. **Fill sizing**: `sizeFills` runs against the DEFAULT single-OP_RETURN outputs, so with
+   the hook in the program it dies at check 3 and the fills stay [0,0,0] — the real
+   evaluation then runs at ~6.6-6.7M op of a ~6.94M budget (no margin). Production must
+   size fills against a pool-shaped transaction (carrier + state + payout outputs).
+2. **Price the hook** with the `pinned/covenant-cost.mjs` difference method; re-run
+   `sizeFills` once the harness sizes against pool outputs.
+3. **Independent review** — new bytes are new review (the standing rule).
+4. **Redeploy** a pool with the covenant logic inside the verifier, one deploy.
+5. Optional: `worstCaseProof` is still UNMEASURED for our key (densless-fixtures
+   trapdoor does not exist for our zkey).

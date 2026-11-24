@@ -164,11 +164,27 @@ mint with `node gen-sweep-proofs.mjs <count> <seed> <out>` from `~/zkb/pusd-shie
    The user's recorded quality bar is: **Nito Cash's own client is the FINAL approval for any
    deployed result.** `REVIEW.md` remains as a documentation/reproducibility package for any
    future reader — it gates nothing.
-5. ⬜ **DEPLOY the new pool** — THE remaining task (user directive 2026-11-24 PM: "have you
-   finished the NEW SHIELDED POOL? THAT WAS THE TASK"). Runner-free by user directive: all
-   materials live on the apecsdev VM (program, zkey, wasm — hash-verified against the ceremony
-   records) and `blackhost` (details); funding = the APECS faucet hot wallet (chipnet, 423,000
-   sats). No review precondition — deployment proceeds on the user's standing order.
+5. ✅ **DEPLOYED — the role-2 pool is LIVE on chipnet (2026-11-24, confirmed block 345,413).**
+   Runner-free end-to-end per user directive: anchor `b6ee4196da1b0e3d548a03ea86a63d61445cd38d74300b2f7a8725eea05ceb72`
+   (= the category) → mint `48d458b86bd59e33be59e4c8015820272c69df586920818005b86c04a6dbd538`
+   (minting NFT + 100,000,000 FT) → deploy `f8f215c3826b763805c71f0ee281b406cfa2e0d944f541dfdc3ae56e473b3319`
+   (state NFT born at :0, commitment = the PUBLIC bootstrap root 551108f6…510f ‖ zeros — verified
+   byte-identical to the v2/v4 on-chain genesis commitments), funded from the APECS faucet hot
+   wallet (423,000-sat UTXO). Program rebuilt for the real category: code 7,737 B sha256
+   `0e827602…`, R 65 B, pieces 3,981/3,756, locking `aa20cd37fe80b308ae414c2d342dae482256548f7280918b4b1946057f1b631d4acd87`.
+   NO covenant, NO step fleet — every pool UTXO locked to the same program P2SH32; actions are
+   SIGNATURE-FREE 3-input spends (TXINPUTCOUNT==3, fees ride the locked UTXOs' sats).
+   **Op 1 SHIELD 1,000,000 executed**: real witness under our ceremony zkey (22.8 s prove),
+   tx `582cefee285f2e3f9528c0958158bcb8c0eef72ff516d17dfcfa7e8180bb79a2` (28,138 B, fee 32,000
+   sats = 1.14 sat/B), the COMPLETE program (prologue, STMT, graph, all 12 hook checks, GT-GLS
+   fold, final pairing) ACCEPTED in consensus AND standard on all 3 inputs (7.03M/7.01M/6.65M op
+   standard), balance 0 → 1,000,000, FT conserved exactly, accepted by chipnet.bch.ninja.
+   Tooling (committed): `pool-deploy-role2.mjs`, `pool-op-role2.mjs` (bench dir) +
+   `role2-op-witness.mjs`, `role2-seeds.mjs` (repo root). State file: `/home/apecs/cov/role2-pool-state.json`.
+   Remaining for the full lifecycle: op 2 TRANSFER + op 3 UNSHIELD (each needs an actionInputs
+   refill from the wallet), and the nito.cash CLIENT integration (their committed VK 27f6ea03…
+   and 7-input shape differ — asset swap + 3-input builder; their client is the user's final
+   approval per standing directive).
 6. ✅ **`worstCaseProof` MEASURED for our key — DONE (2026-11-24, later session).** The snarkjs
    minter exists (`gen-sweep-proofs.mjs`, committed at the repo root: random valid circuit
    witnesses proved against `build/pool_final.zkey`, ~35-50 s per proof on the VM, seeded and

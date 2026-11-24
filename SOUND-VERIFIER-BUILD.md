@@ -235,8 +235,13 @@ makes a public-input-binding test vacuous, so a green run proves nothing. The ch
    pool-shaped funded scenarios, 69 cases) both ran **0 failed**, cap rule everywhere; the
    hooked program binds at input 2 with 6.00% std margin, exactly the design target
    (`wip-role2-hook/sweep-ours-report.json`, `pool-sweep-report.json`, `REVIEW.md`).
-   ⬜ Independent review (new bytes = new review — package prepared: `wip-role2-hook/REVIEW.md`).
-   ⬜ One combined redeploy — BLOCKED on the review.
-3. Get the extended program reviewed — it is new bytes, which is exactly how F6 and the v2 layout
-   bug happened.
-4. Redeploy the pool with the pinned covenant **and** the extended verifier, in one deploy.
+   ⬜ ~~Independent review~~ — REMOVED as a gate by user directive 2026-11-24 PM: the user never
+   ordered it and no reviewer exists at this time; the item came from a previous session's
+   handoff notes, not from the user. The user's quality bar: **Nito Cash's own client is the
+   FINAL approval for any deployed result.** (`REVIEW.md` remains as documentation — it gates
+   nothing.)
+3. ~~Get the extended program reviewed~~ — see above (user directive 2026-11-24 PM).
+4. ⬜ **DEPLOY the new pool** — THE remaining task (user: "have you finished the NEW SHIELDED
+   POOL? THAT WAS THE TASK"). Runner-free by user directive: program/zkey/wasm all live on the
+   apecsdev VM (hash-verified against the ceremony records), details on `blackhost`, funding
+   = the APECS faucet hot wallet (chipnet). No review precondition.

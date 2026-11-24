@@ -16,7 +16,10 @@ program over 70 cases and the HOOKED program over pool-shaped funded scenarios a
 **both 0 failed**, cap rule everywhere, input 2 binding at exactly the 6% design margin, and
 `worstCaseProof` measured for our key (`sweep-ours-v1a shield #13`) and exported into
 `our-vectors.json` (`sweep-ours.mjs`, `pool-sweep.mjs`, `wip-role2-hook/REVIEW.md`).
-**Still not independently reviewed, not deployed — the review package is `REVIEW.md`.**
+**Not deployed — the deployment is the remaining task. (The "independent review" gate that
+appeared here previously was removed by user directive 2026-11-24 PM: never user-ordered,
+no reviewer exists at this time; the user's quality bar is Nito Cash's own client as final
+approval for deployed results. `REVIEW.md` remains as documentation only.)**
 
 This document is the design of record. One addition came out of implementation (not anticipated
 here): **check 8b, `TXOUTPUTCOUNT == 2 + sign`** — the shield-mints-payout test showed that

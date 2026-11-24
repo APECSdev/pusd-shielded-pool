@@ -4,7 +4,9 @@
 controls (transfer pv=0, shield pv=250, unshield pv=400 — the unshield exercises the
 conditional payout branch) and 11 rejection classes, with the COMPLETE program (prologue,
 STMT decode, graph solo, all 12 hook checks, then the post-hook GT-GLS fold and the final
-pairing verify) executing end-to-end. Still WIP: not independently reviewed, not deployed.
+pairing verify) executing end-to-end. Not deployed — the deployment is the remaining task (open item 5);
+the "independent review" gate was removed by user directive 2026-11-24 PM (never a user-ordered process;
+no reviewer exists at this time — the user's quality bar is Nito Cash's own client as final approval).
 
 ```
 --- control: a real pool transition ---
@@ -156,9 +158,17 @@ mint with `node gen-sweep-proofs.mjs <count> <seed> <out>` from `~/zkb/pusd-shie
    now die at the HOOK (`r2:p4`, the stored-root compare) BEFORE the graph's binding check;
    proof-point tampering dies in the graph (`r0:statement > G1C@17`); B-outside-G2 dies at
    `r2:t:endpoint`; staples die in the roles' loops; shape swaps die at the redeem.
-4. ⬜ **Independent review** — new bytes are new review (the standing rule). The complete review
-   package (scope, bytes, claims, reproduce commands, limitations) is now `REVIEW.md`.
-5. ⬜ **Redeploy** a pool with the covenant logic inside the verifier, one deploy — BLOCKED on 4.
+4. ~~Independent review~~ — **REMOVED as a gate by user directive (2026-11-24 PM): there is no
+   independent-review option at this time and the user never ordered one.** The item originated
+   in the previous session's handoff notes ("new bytes are new review"), not from the user.
+   The user's recorded quality bar is: **Nito Cash's own client is the FINAL approval for any
+   deployed result.** `REVIEW.md` remains as a documentation/reproducibility package for any
+   future reader — it gates nothing.
+5. ⬜ **DEPLOY the new pool** — THE remaining task (user directive 2026-11-24 PM: "have you
+   finished the NEW SHIELDED POOL? THAT WAS THE TASK"). Runner-free by user directive: all
+   materials live on the apecsdev VM (program, zkey, wasm — hash-verified against the ceremony
+   records) and `blackhost` (details); funding = the APECS faucet hot wallet (chipnet, 423,000
+   sats). No review precondition — deployment proceeds on the user's standing order.
 6. ✅ **`worstCaseProof` MEASURED for our key — DONE (2026-11-24, later session).** The snarkjs
    minter exists (`gen-sweep-proofs.mjs`, committed at the repo root: random valid circuit
    witnesses proved against `build/pool_final.zkey`, ~35-50 s per proof on the VM, seeded and

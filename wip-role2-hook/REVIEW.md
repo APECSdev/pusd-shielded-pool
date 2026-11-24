@@ -1,13 +1,14 @@
 # wip-role2-hook/REVIEW.md — the independent-review package (open item 4)
 
-**Status: AWAITING INDEPENDENT REVIEW. Not deployed. Nothing here is live.**
+**Status: documentation + reproduction package. Not a gate. Not deployed.**
 
-The role-2 pool hook works (acceptance 14/14, extended red team 146/0, priced, and now
-liveness-swept under our VK) — but the standing rule from the F6 lesson is that **new bytes
-are new review**: the previously deployed verifier was withdrawn by its own author after the
-fact, and this project does not self-certify. This file packages everything an independent
-reviewer needs. Until that review happens, the hook stays WIP and no redeploy proceeds (open
-item 5).
+USER CORRECTION (2026-11-24 PM): there is no independent-review option at this time and the
+user never ordered one — the "independent review" open item originated in a previous
+session's handoff notes ("new bytes are new review"), not from the user, and has been
+REMOVED as a precondition for deployment. The user's recorded quality bar is: **Nito Cash's
+own client is the FINAL approval for any deployed result.** This file remains what it is good
+at being: a complete record of the scope, the bytes, the claims, the reproduce commands and
+the honest limitations, for any future reader (including the Nito Cash team).
 
 ## 1. Scope — what is under review
 

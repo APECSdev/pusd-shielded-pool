@@ -197,6 +197,25 @@ mint with `node gen-sweep-proofs.mjs <count> <seed> <out>` from `~/zkb/pusd-shie
    Remaining (follow-up work, not blockers): the nito.cash CLIENT integration (their committed
    VK 27f6ea03… and 7-input shape differ — asset swap + 3-input builder; their client is the
    user's final approval per standing directive) and the /research/shielded-pool site record.
+
+   ### SECURITY NOTE — standing fuel/deposit UTXOs are not author-bound (surfaced by the user
+   2026-11-24 PM). The old pools bound every deposit and fee to its author with a SIGNATURE
+   (the P2PKH funding input, input 6 in the 7-input shape). The role-2 pool has NO signature
+   anywhere (TXINPUTCOUNT==3 is pinned) and the hook does not check inputs 0/1's token data,
+   so: (a) standing FUEL UTXOs can pay any valid action's fee (theft-of-service); (b) more
+   seriously, any note-holder who front-runs can consume a standing FT DEPOSIT as their own
+   shield's input 0 with pv = the deposit (their witness is valid; consensus FT conservation
+   is satisfied exactly; the deposit lands in THEIR notes). The exposure exists ONLY in the
+   window between the lock confirming and the action confirming — nothing standing is at risk
+   after the action (the current pool holds no standing deposits/fuel). Client rule until
+   fixed: broadcast the lock and the action TOGETHER — the action may spend the lock's
+   UNCONFIRMED outputs (standard relay accepts mempool chains; first-seen wins the state
+   double-spend), closing the window to ~zero. The durable fix is a hook REVISION (not
+   implemented; must pass the full build/red-team/sweep gates first): tag the lock outputs
+   with an NFT commitment = H(nf0‖nf1) of the intended action, and add hook checks requiring
+   the carrier's nullifiers to hash to the tags (the hook already introspects input token
+   commitments via UTXOTOKCOMMIT — checks 2/9 use it). Until then, DO NOT leave deposits
+   standing.
 6. ✅ **`worstCaseProof` MEASURED for our key — DONE (2026-11-24, later session).** The snarkjs
    minter exists (`gen-sweep-proofs.mjs`, committed at the repo root: random valid circuit
    witnesses proved against `build/pool_final.zkey`, ~35-50 s per proof on the VM, seeded and

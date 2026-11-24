@@ -4,8 +4,14 @@
 under our own verifying key** (`wip-role2-hook/STATUS.md`): 3 acceptance controls (transfer pv=0,
 shield pv=250, unshield pv=400 — the unshield exercises the conditional payout branch) + 11
 rejection classes, with the complete program (prologue, STMT decode, graph solo, all 12 hook
-checks, post-hook GT-GLS fold, final pairing verify) executing end-to-end. **Still not
-independently reviewed, not deployed.**
+checks, post-hook GT-GLS fold, final pairing verify) executing end-to-end. The three
+follow-up gates also passed the same day: pool-shaped fill sizing (controls at exactly 94.0%
+of budget, `pool-tx.mjs`), the hook priced at **33,156 op standard / 32,260 op consensus,
+427 B** (statement→slices difference, `pool-cost.mjs`), and the extended red team — the
+stock 151-scenario list evaluated against the honest pool shape, **146 runs, 0 accepted**
+(5 filler-tamper scenarios inexpressible: inputs 0/1 have empty fillers in this build),
+both positive controls accepted (`pool-redteam.mjs`). **Still not independently reviewed,
+not deployed.**
 
 This document is the design of record. One addition came out of implementation (not anticipated
 here): **check 8b, `TXOUTPUTCOUNT == 2 + sign`** — the shield-mints-payout test showed that

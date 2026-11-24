@@ -107,6 +107,9 @@ REVERSEBYTES 0xbc. All introspection ops POP their index. OP_SIZE does not pop.
 | `pool-hook.mjs` | the hook: 12 checks, carrier parsing, dynamic tail, p-marks for tracing |
 | `pool-test.mjs` | the 14-case acceptance harness (pool-aware: tokens on source outputs, carrier out0, state out1, payout out2) with per-check tracer |
 | `pool-build.mjs` | registers the hook via setCovenant then imports the stock build.mjs |
+| `pool-tx.mjs` | pool-shaped fill sizing (the stock sizer's loop, evaluated against the pool shape) |
+| `pool-cost.mjs` | hook pricing via the statement→slices difference method |
+| `pool-redteam.mjs` + `pool-redteam-report.json` | the stock 151-scenario red team ported to the hooked program, evaluated against the honest pool shape — 146 runs, 0 accepted |
 | `trace-dump.mjs` | per-state stack dump near the failure; FXI env picks the fixture |
 | `probe-size.mjs`, `probe-ix.mjs`, `probe-cat2/3.mjs`, `probe-ops.mjs` | opcode semantics probes (pop/push arity, byte orders) |
 | `probe-mutate.mjs`, `probe-carrier.mjs`, `probe-when.mjs`, `probe-isolate.mjs`, `probe-proxy.mjs` | the Buffer-aliasing investigation — repro and isolation of finding #1 |
@@ -116,15 +119,36 @@ REVERSEBYTES 0xbc. All introspection ops POP their index. OP_SIZE does not pop.
 Run on the apecsdev VM from `chunked/bn254/bn-native-sound/` with
 `BN_VK_FIXTURES=/home/apecs/cov/our.fixtures.json`.
 
-## Open items (before this stops being WIP)
+## Open items — 1-3 OF 5 DONE (2026-11-24, same day)
 
-1. **Fill sizing**: `sizeFills` runs against the DEFAULT single-OP_RETURN outputs, so with
-   the hook in the program it dies at check 3 and the fills stay [0,0,0] — the real
-   evaluation then runs at ~6.6-6.7M op of a ~6.94M budget (no margin). Production must
-   size fills against a pool-shaped transaction (carrier + state + payout outputs).
-2. **Price the hook** with the `pinned/covenant-cost.mjs` difference method; re-run
-   `sizeFills` once the harness sizes against pool outputs.
-3. **Independent review** — new bytes are new review (the standing rule).
-4. **Redeploy** a pool with the covenant logic inside the verifier, one deploy.
-5. Optional: `worstCaseProof` is still UNMEASURED for our key (densless-fixtures
-   trapdoor does not exist for our zkey).
+1. ✅ **Fill sizing against pool-shaped transactions — DONE** (`pool-tx.mjs`). The stock
+   `sizeFills`/`programOf` build TOKENLESS source outputs (the module-global `setOutputs`
+   only swaps transaction outputs, which is why setOutputs alone could not fix it), so the
+   hook died at check 2 during sizing and fills stayed [0,0,0]. `pool-tx.mjs` replicates
+   the stock fill-growth loop verbatim but evaluates input 2 against the honest pool shape
+   (state NFT on source output 2, carrier/state/payout outputs). Results — the acceptance
+   controls now run at **exactly 94.0% of budget** (the 6% margin): fixture 0 fills
+   [0,0,171] (6,647,159 op of 7,073,600), fixture 1 [0,0,235] (6,623,738 of 7,048,000),
+   fixture 2 [0,0,66] (6,712,105 of 7,142,400). Inputs 0/1 legitimately have EMPTY fillers
+   in the hooked build (the hook's code pieces make their unlockings longer, so their
+   budgets already cover the graph).
+2. ✅ **Hook priced — DONE** (`pool-cost.mjs`, the statement→slices difference method from
+   upstream `pinned/covenant-cost.mjs`): **33,156 op standard / 32,260 op consensus,
+   427 B of role-2 code** — under half the design's ~85k estimate. Range totals: hooked
+   96,765 / plain 63,609 (standard). Totals: hooked 6,647,159 (94.0%) vs plain 6,610,435
+   (94.0%), both sized.
+3. ✅ **Extended red team under the hooked program — DONE** (`pool-redteam.mjs` +
+   `pool-redteam-report.json`): the stock 151-scenario list ported verbatim, evaluated
+   against the honest pool shape. **146 runs, 0 accepted** (consensus AND standard), both
+   positive controls accepted (the pool-sized honest witness + the lattice-shifted
+   alternative GLS witness). 5 stock scenarios are inexpressible in the hooked build: the
+   input-0/1 filler-tamper runs assume non-empty fillers, and those inputs legitimately
+   have empty fillers here (flipping a byte of an empty push is a no-op that would accept).
+   The layering works exactly as designed — public-input claims (n0±1 with DG recommitted)
+   now die at the HOOK (`r2:p4`, the stored-root compare) BEFORE the graph's binding check;
+   proof-point tampering dies in the graph (`r0:statement > G1C@17`); B-outside-G2 dies at
+   `r2:t:endpoint`; staples die in the roles' loops; shape swaps die at the redeem.
+4. ⬜ **Independent review** — new bytes are new review (the standing rule).
+5. ⬜ **Redeploy** a pool with the covenant logic inside the verifier, one deploy.
+6. ⬜ Optional: `worstCaseProof` still UNMEASURED for our key (no snarkjs minter under
+   our VK yet — the densless-fixtures trapdoor does not exist for our zkey).

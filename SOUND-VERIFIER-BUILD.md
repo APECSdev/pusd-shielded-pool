@@ -207,13 +207,24 @@ makes a public-input-binding test vacuous, so a green run proves nothing. The ch
    acceptance controls (transfer pv=0, shield pv=250, unshield pv=400) + 11 rejection classes,
    with the full program (graph + hook + final pairing) executing end-to-end. All findings and the
    probe set: `wip-role2-hook/STATUS.md`.
-2. Redeploy-path items still open: production **fill sizing** must run against a pool-shaped
-   transaction (the stock sizer dies at the hook's carrier check on the default single-OP_RETURN
-   outputs, leaving `fills [0,0,0]` and the real evaluation at ~6.6–6.7M op of a ~6.94M budget —
-   no margin); price the hook with `pinned/covenant-cost.mjs`; re-run the extended red team
-   (`export-our.mjs` + `redteam.mjs`); build a snarkjs-based minter so the liveness sweep can run
-   under our VK; `worstCaseProof` for our key is still UNMEASURED (the densless-fixtures trapdoor
-   does not exist for our zkey).
+2. Redeploy-path items — 1-3 DONE 2026-11-24, in order:
+   ✅ **Fill sizing against pool-shaped transactions** (`wip-role2-hook/pool-tx.mjs`): the
+   stock sizer/`programOf` build TOKENLESS source outputs (setOutputs alone cannot fix it),
+   so the hook died at check 2 during sizing and fills stayed [0,0,0]. The pool-shaped loop
+   sizes correctly: acceptance controls now run at **exactly 94.0% of budget** — fixture 0
+   fills [0,0,171] (6,647,159 op of 7,073,600), fixture 1 [0,0,235], fixture 2 [0,0,66].
+   Inputs 0/1 legitimately have empty fillers in the hooked build (the code pieces are
+   longer, so their budgets already cover the graph).
+   ✅ **Hook priced** (`wip-role2-hook/pool-cost.mjs`, statement→slices difference method):
+   **33,156 op standard / 32,260 op consensus, 427 B** — under half the ~85k estimate.
+   ✅ **Extended red team under the hooked program** (`wip-role2-hook/pool-redteam.mjs`):
+   the stock 151-scenario list evaluated against the honest pool shape — **146 runs,
+   0 accepted** (5 filler-tamper scenarios inexpressible: inputs 0/1 have empty fillers),
+   both positive controls accepted. The layering confirmed: public-input claims die at the
+   hook (`r2:p4`), proof tampering dies in the graph (`G1C@17`, `r2:t:endpoint`).
+   ⬜ Independent review (new bytes = new review). ⬜ One combined redeploy.
+   ⬜ snarkjs-based minter for the liveness sweep under our VK; `worstCaseProof` for our
+   key still UNMEASURED (the densless-fixtures trapdoor does not exist for our zkey).
 3. Get the extended program reviewed — it is new bytes, which is exactly how F6 and the v2 layout
    bug happened.
 4. Redeploy the pool with the pinned covenant **and** the extended verifier, in one deploy.

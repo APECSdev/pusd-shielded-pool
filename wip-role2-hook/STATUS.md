@@ -179,12 +179,24 @@ mint with `node gen-sweep-proofs.mjs <count> <seed> <out>` from `~/zkb/pusd-shie
    sats = 1.14 sat/B), the COMPLETE program (prologue, STMT, graph, all 12 hook checks, GT-GLS
    fold, final pairing) ACCEPTED in consensus AND standard on all 3 inputs (7.03M/7.01M/6.65M op
    standard), balance 0 → 1,000,000, FT conserved exactly, accepted by chipnet.bch.ninja.
-   Tooling (committed): `pool-deploy-role2.mjs`, `pool-op-role2.mjs` (bench dir) +
-   `role2-op-witness.mjs`, `role2-seeds.mjs` (repo root). State file: `/home/apecs/cov/role2-pool-state.json`.
-   Remaining for the full lifecycle: op 2 TRANSFER + op 3 UNSHIELD (each needs an actionInputs
-   refill from the wallet), and the nito.cash CLIENT integration (their committed VK 27f6ea03…
-   and 7-input shape differ — asset swap + 3-input builder; their client is the user's final
-   approval per standing directive).
+   Tooling (committed): `pool-deploy-role2.mjs`, `pool-op-role2.mjs`, `pool-refill-role2.mjs`
+   (bench dir) + `role2-op-witness.mjs`, `role2-seeds.mjs` (repo root). State file:
+   `/home/apecs/cov/role2-pool-state.json`.
+
+   **THE FULL LIFECYCLE IS CONFIRMED ON-CHAIN (2026-11-24):**
+   - op 1 SHIELD 1,000,000 — tx `582cefee…`, **block 345,415** (balance 0 → 1,000,000)
+   - refill `de98e0df…` (2×16,000-sat action inputs) — block 345,417
+   - op 2 TRANSFER (notes 2,3 → fresh notes, pv=0) — tx `17f1322b…`, **block 345,423**
+   - refill `fe9e1aad…` — block 345,426
+   - op 3 UNSHIELD 250,000 (sign=1: 250,000 FT paid out publicly to the wallet, 750,000
+     shielded onward as notes 450k+300k) — tx `24cd6b42…`, **block 345,427**
+   Every action: real witness under our ceremony zkey, the COMPLETE program VM-ACCEPTED in
+   consensus AND standard on all 3 inputs before broadcast, FT conserved exactly, accepted by
+   chipnet.bch.ninja, merkle-confirmed. Final state: root `19318325…`, balance 750,000,
+   notes at tree 6,7.
+   Remaining (follow-up work, not blockers): the nito.cash CLIENT integration (their committed
+   VK 27f6ea03… and 7-input shape differ — asset swap + 3-input builder; their client is the
+   user's final approval per standing directive) and the /research/shielded-pool site record.
 6. ✅ **`worstCaseProof` MEASURED for our key — DONE (2026-11-24, later session).** The snarkjs
    minter exists (`gen-sweep-proofs.mjs`, committed at the repo root: random valid circuit
    witnesses proved against `build/pool_final.zkey`, ~35-50 s per proof on the VM, seeded and

@@ -233,6 +233,37 @@ mint with `node gen-sweep-proofs.mjs <count> <seed> <out>` from `~/zkb/pusd-shie
    fuel/deposit UTXOs at the program locking that the next action spends (the fee
    prepayment: each action burns 32,000 sats of fuel because TXINPUTCOUNT==3 forbids a
    fee input).
+
+   ### PRIVACY SURFACE of the fee model (user-surfaced 2026-11-24 PM). The action spends
+   its fuel BY OUTPOINT, so the lock's funder is always on-chain linked to the action.
+   Per action: SHIELD — the deposit is public by definition (inherent to every shielded
+   pool; the privacy promise lives on the spend side, recipients/values off-chain or in
+   commitments); TRANSFER — THE real leak: pv=0, nullifiers preimage-resistant (computed
+   from the owner's secret inside the witness — revealing them does not reveal which
+   commitments were spent), recipients entirely off-chain, BUT the fee-paying wallet
+   reveals the ACTOR (and chains their actions if the address is reused); UNSHIELD — the
+   payout is public by design, the fee adds little. ROOT CAUSE: the fee asset (BCH) ≠ the
+   shielded asset (FT), so unlike Zcash (fully-shielded z→z pays its fee from shielded
+   value via vpub_new, no transparent input at all), a transparent fee source must exist.
+   NOT a regression: the §14/v4 shape carried the signed funding input INSIDE the action
+   tx (input 6); role 2 at least isolates it in a separate, independently-blendable lock.
+   CLIENT RULES (privacy) — CORRECTED per user directive 2026-11-24 PM (CashShuffle
+   re-appraisal; the earlier "blend via CashFusion" line was transport-blind):
+   (1) baseline: fresh history-free fee address per action; (2) browser-native blending =
+   a CASHSHUFFLE-STYLE round (simple relay-based message rounds, IN-BROWSER by design —
+   the original shuffle.cash ran it in JS; onion-blinded so the relay/coordinator CANNOT
+   learn the input→output mapping — the coordinator-sees critique applies to CashFusion,
+   not CashShuffle; its equal-amount-tier weakness is moot for us because fuel outputs are
+   uniform 16,000 sats BY CONSTRUCTION); wire spec already in-repo:
+   hushyourmoney web/pages/research/coinjoin.vue ("the full CashShuffle wire
+   specification", lines 14+334–349); our P2P fusion-over-Nostr harnesses (G1–G3L, EXP-01)
+   are the working prototype of this protocol class over WebSocket relays — nito.cash is a
+   WEB wallet and current CashFusion runs over TCP+Tor in the desktop client, unreachable
+   from a browser; (3) desktop CashFusion remains the battle-tested option for desktop
+   wallets only. POOL-NATIVE OPTION: a CashShuffle-style round whose outputs ARE the
+   tagged fuel UTXOs (N participants, onion-assignment of 2N uniform outputs, server-blind)
+   — composes with deposit tagging: the tag identifies WHICH FUEL OUTPUT the action spent
+   (already public via outpoints), never which funder paid for it.
 6. ✅ **`worstCaseProof` MEASURED for our key — DONE (2026-11-24, later session).** The snarkjs
    minter exists (`gen-sweep-proofs.mjs`, committed at the repo root: random valid circuit
    witnesses proved against `build/pool_final.zkey`, ~35-50 s per proof on the VM, seeded and

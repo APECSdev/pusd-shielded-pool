@@ -15,8 +15,9 @@
 // token-threading (covenant) mode: its state lives in an NFT commitment, perpetuated
 // via tx.outputs[0]. The verifier is 100% untouched.
 //
-// The coupling: the verifier's genesis step (input 3) carries the two proven public
-// inputs as witness pushes at FIXED byte offsets (stable across all proofs):
+// The coupling: the verifier's genesis step (at the constructor-supplied genesis input
+// index) carries the two proven public inputs as witness pushes at FIXED byte offsets
+// (stable across all proofs):
 //     n0 = merkleRoot   — 32-byte LE VM number at unlocking byte offset 1824
 //     n1 = actionHash   — 32-byte LE VM number at unlocking byte offset 1791
 //         actionHash = SHA256(nf0|nf1|cm0|cm1||pv||signPv|category|newMerkleRoot)
@@ -26,6 +27,13 @@
 // passes only for a valid proof over exactly (n0, n1) — so by reading these two
 // values out of the sibling witness, this covenant learns the transition the proof
 // attests to. (BCH covenants MAY introspect a sibling input's unlocking bytecode.)
+//
+// IMPORTANT — the read is only as good as the script it reads FROM. Reading bytes out
+// of a sibling witness authenticates nothing by itself: the stored root is public (it
+// is this pool's own NFT commitment) and the actionHash is recomputed from values the
+// spender supplies. spend() therefore PINS the five verifier step lockings and the
+// genesis input index (constructor args, so they are visible in the redeem and any
+// observer can audit which verifier layout a pool expects). See step −1 below.
 //
 // ─── State model ─────────────────────────────────────────────────────────────
 // The pool UTXO carries a MUTABLE NFT whose commitment encodes the pool state:
@@ -37,6 +45,9 @@
 // The PUSD balance is the fungible token amount on the same UTXO.
 //
 // ─── What spend() enforces (introspection only — cheap opcodes) ──────────────
+//  −1. Sibling pin  : the five verifier step inputs carry EXACTLY the pinned P2SH32
+//                     lockings, and the genesis step sits at the pinned input index.
+//                     Without this the reads in 0. and 5. trust an arbitrary script.
 //   0. Root binding : the proof's n0 (merkleRoot) == this pool's stored root, so the
 //                     proof is anchored to THIS pool's current state.
 //   1. Continuity   : output 0 pays back to THIS covenant and keeps the PUSD category.
@@ -57,7 +68,11 @@
 pragma cashscript ^0.14.0;
 
 contract AssetPool(
-    bytes32 assetCategory        // pinned PUSD CashToken category (on-chain byte order)
+    bytes32 assetCategory,           // pinned PUSD CashToken category (on-chain byte order)
+    bytes verifierGenesisLocking,    // P2SH32 locking (35 B) of the verifier's GENESIS step
+    bytes verifierExecLocking,       // P2SH32 locking (35 B) of the three EXECUTOR steps
+    bytes verifierTerminalLocking,   // P2SH32 locking (35 B) of the verifier's TERMINAL step
+    int verifierGenesisIndex         // tx input index the genesis step MUST occupy
 ) {
     // spend(): apply one shielded state transition.
     //
@@ -88,6 +103,25 @@ contract AssetPool(
         // ── locate THIS input ────────────────────────────────────────────────
         int i = this.activeInputIndex;
 
+        // ── −1. VERIFIER SIBLING BINDING (soundness-critical) ────────────────
+        //    Step 0 below takes the proven public inputs from the GENESIS step's
+        //    unlocking bytecode at fixed offsets. That read authenticates nothing on
+        //    its own: the stored root is public (this pool's own NFT commitment) and
+        //    the actionHash is recomputed from values the spender chooses. Without the
+        //    checks below a spender could place ANY script at the genesis index whose
+        //    unlocking pushes the stored root and their chosen actionHash — no proof,
+        //    no verifier, full drain.
+        //    The five step lockings are compile-time constants for a given verifying
+        //    key. The three EXECUTOR steps share one locking and occupy the three
+        //    indices immediately BEFORE the genesis step; the TERMINAL step is the one
+        //    immediately AFTER. Introspecting a non-existent input index fails at
+        //    runtime, so pinning the terminal also enforces the minimum input count.
+        require(tx.inputs[verifierGenesisIndex].lockingBytecode == verifierGenesisLocking);
+        require(tx.inputs[verifierGenesisIndex + 1].lockingBytecode == verifierTerminalLocking);
+        require(tx.inputs[verifierGenesisIndex - 1].lockingBytecode == verifierExecLocking);
+        require(tx.inputs[verifierGenesisIndex - 2].lockingBytecode == verifierExecLocking);
+        require(tx.inputs[verifierGenesisIndex - 3].lockingBytecode == verifierExecLocking);
+
         // ── 4. asset binding: this input holds the pinned PUSD category ──────
         //    tx.inputs[i].tokenCategory returns the 32-byte category concatenated
         //    with the NFT capability byte (0x01 = mutable). The pool state NFT is
@@ -100,9 +134,9 @@ contract AssetPool(
         //    n0 is the 32-byte LE VM number whose DATA payload starts at byte offset
         //    1825 of the genesis unlocking bytecode (byte 1824 is the 0x20 push opcode);
         //    the stored root uses the same LE byte form.
-        //    The verifier genesis step is always tx input index 3.
+        //    The verifier genesis step's index is a constructor arg (step −1 pins it).
         bytes storedRoot = tx.inputs[i].nftCommitment.split(32)[0];
-        bytes provenRoot = tx.inputs[3].unlockingBytecode.split(1825)[1].split(32)[0];
+        bytes provenRoot = tx.inputs[verifierGenesisIndex].unlockingBytecode.split(1825)[1].split(32)[0];
         require(provenRoot == storedRoot);
 
         // ── read current nullifier-set hash from THIS input's NFT commitment ──
@@ -173,7 +207,7 @@ contract AssetPool(
         ).reverse();
         // n1 is the 32-byte LE VM number whose DATA payload starts at byte offset
         // 1792 of the genesis unlocking bytecode (byte 1791 is the 0x20 push opcode).
-        bytes provenActionHash = tx.inputs[3].unlockingBytecode.split(1792)[1].split(32)[0];
+        bytes provenActionHash = tx.inputs[verifierGenesisIndex].unlockingBytecode.split(1792)[1].split(32)[0];
         require(provenActionHash == actionHashLE);
     }
 

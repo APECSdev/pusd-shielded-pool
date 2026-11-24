@@ -115,6 +115,67 @@ fixture 0: n_q 111, fills 94/31/118, unlocking 9314 / 9251 / 8748 = 27313, score
 
 That last line is the acceptance gate: our real proof, our VK, the BCH-2026 VM, both modes.
 
+## 4b. Red team under our VK — 151 runs, 0 accepted
+
+```sh
+node export-our.mjs /home/apecs/cov/our-vectors.json        # steps from fixture 0 under our VK
+node redteam.mjs our-vectors.json our-redteam.json our-redteam-report.json
+# runs 151 (143 in the bench file), accepted 0
+# positive controls accepted: fixture 0 (vectors); fixture 0, lattice-shifted GLS decomposition
+```
+
+Every rejection class the artifact ships, re-run against **our** program and **our** proofs:
+
+| kind | runs | | kind | runs |
+|---|---|---|---|---|
+| handover | 20 | | tamper-quotient | 9 |
+| layout | 16 | | gls-digit | 7 |
+| inverse-norm | 15 | | non-canonical-state | 3 |
+| invalid-proof-point | 14 | | tamper-transcript | 3 |
+| **graph** | **10** | | non-canonical-quotient | 3 |
+| staple | 10 | | quotient-cap | 3 |
+| public-input-binding | 7 | | tamper-residue | 2 |
+| tamper-state | 7 | | code | 2 |
+| filler | 7 | | constants | 2 |
+| non-canonical-coordinate | 6 | | g2-subgroup | 1 |
+| public-input-encoding | 4 | | | |
+
+### The graph tests answer the covenant-sibling question empirically
+
+All ten shape tests reject — including the three that matter for us:
+
+```
+input 2 replaced by a foreign P2SH32(OP_TRUE) input        => reject
+foreign P2SH32 input at index 0 carrying the honest pushes => reject
+foreign P2SH32 input at index 1 carrying the honest pushes => reject
+foreign P2SH32 input at index 2 carrying the honest pushes => reject
+```
+
+So the sound verifier does not merely *document* that it forbids a foreign-locking sibling — it
+enforces it, and it rejects a foreign script **even when that script carries the honest pushes**.
+This confirms from the verifier's side what `pin-sibling-test.mjs` showed from the covenant's
+side: the two cannot be composed as siblings. Extending role 2 is the route.
+
+### Fixture-degeneracy trap (found, fixed, worth recording)
+
+The **first** red-team run under our VK reported `accepted 1`:
+
+```
+ACCEPTED: claim n0 := fixture 1 n0 (honest witness otherwise; DG recommitted)
+```
+
+That was **not** a soundness failure. Our first five scenarios reused the same input notes, so
+fixtures 0 and 1 shared one `n0` (the merkle root) — the "tamper n0" run was therefore a no-op
+on an already-honest witness, and accepting it was correct behaviour. The fixture set was
+degenerate for the public-input-binding test, not the verifier.
+
+Fix: every scenario now uses distinct input notes (`rho`/`r` offset per scenario), giving
+**5 distinct `n0` values of 5**. Re-run: `accepted 0`.
+
+**Recorded because the failure mode is dangerous in both directions:** a degenerate fixture set
+makes a public-input-binding test vacuous, so a green run proves nothing. The check is
+`distinct n0 values == fixtures` — verify it before trusting a red-team pass.
+
 ## 5. What this does NOT do
 
 - **Not deployed.** No pool uses this program yet.
@@ -124,20 +185,24 @@ That last line is the acceptance gate: our real proof, our VK, the BCH-2026 VM, 
   covenant sibling and a fee input, so the route is to extend its **third role** with the pool
   rules — the integration the artifact documents ("applications that release funds add output
   rules in role 2").
-- **Not re-swept or re-red-teamed under our VK.** `sweep.mjs` / `export.mjs` mint new proofs
-  through the densless-fixtures trapdoor, which does not exist for our VK; those runs need a
-  snarkjs-based minter. `redteam.mjs` operates on a vectors file and can be pointed at vectors
-  built from our five proofs.
+- **Not swept under our VK.** The red team is done (4b), but `sweep.mjs` mints new proofs through
+  the densless-fixtures trapdoor, which does not exist for our VK — liveness over a sweep needs a
+  snarkjs-based minter. What we have is the measured margins on our five real proofs (6.03%
+  standard / 6.49% consensus), not a 424-case sweep.
+- **`worstCaseProof` is absent from our vectors.** That entry requires minting a proof with every
+  GT-GLS nibble 15 under the trapdoor; we cannot mint under our VK. So the forced op-cost worst
+  case is UNMEASURED for our program.
 - **The covenant sibling pin (commit `61777c6`) is still undeployed.** Every live pool carries
   the unpinned covenant, which accepts a one-byte `OP_1` at the genesis index
   (`pin-sibling-test.mjs`, 6/6).
 
 ## 6. Next gates, in order
 
-1. Build a vectors file from our five proofs and run `redteam.mjs` — the rejection battery under
-   our VK, recorded as **our** run.
-2. Extend role 2 with the pool rules (state NFT continuity, new commitment, balance arithmetic,
-   unshield payout at a fixed output index, `actionHash == n1`). Role 2 has
+1. **Extend role 2 with the pool rules** (state NFT continuity, new commitment, balance
+   arithmetic, unshield payout at a fixed output index, `actionHash == n1`). Role 2 has
    `(41 + 9792) × 800 ≈ 7.87M` with ~6.66M used → ~1.2M spare; the covenant logic is ~85k op.
-3. Re-run the sweep (liveness) and the red team after the extension, then get it reviewed.
+2. Re-run the red team after the extension (it is cheap now — `export-our.mjs` + `redteam.mjs`),
+   and build a snarkjs-based minter so the liveness sweep can run under our VK.
+3. Get the extended program reviewed — it is new bytes, which is exactly how F6 and the v2 layout
+   bug happened.
 4. Redeploy the pool with the pinned covenant **and** the extended verifier, in one deploy.

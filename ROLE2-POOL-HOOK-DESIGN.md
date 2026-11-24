@@ -1,8 +1,21 @@
 # ROLE2-POOL-HOOK-DESIGN.md — putting the pool rules into the sound verifier's third role
 
-**Status: DESIGN (2026-11-24). Not implemented, not reviewed, not deployed.**
-This document exists because the code that follows it is *new bytes nobody has reviewed*, which is
-exactly how finding F6 and the v2 layout bug happened. The design is the reviewable artifact.
+**Status: IMPLEMENTED (WIP) 2026-11-24 — the hook exists and the acceptance suite passes 14/14
+under our own verifying key** (`wip-role2-hook/STATUS.md`): 3 acceptance controls (transfer pv=0,
+shield pv=250, unshield pv=400 — the unshield exercises the conditional payout branch) + 11
+rejection classes, with the complete program (prologue, STMT decode, graph solo, all 12 hook
+checks, post-hook GT-GLS fold, final pairing verify) executing end-to-end. **Still not
+independently reviewed, not deployed.**
+
+This document is the design of record. One addition came out of implementation (not anticipated
+here): **check 8b, `TXOUTPUTCOUNT == 2 + sign`** — the shield-mints-payout test showed that
+without a shape pin, a sign=0 transition could append an unchecked extra output. Every other
+check matches the design below. The implementation lives in `wip-role2-hook/pool-hook.mjs`
+(+ `pool-test.mjs`, the 14-case harness, and the probe/instrument set).
+
+The design rationale below is unchanged from 2026-11-24 and is kept as written, because the code
+that follows it is *new bytes nobody has reviewed* — exactly how finding F6 and the v2 layout bug
+happened. The design plus the implementation plus the test suite are the reviewable artifacts.
 
 ---
 

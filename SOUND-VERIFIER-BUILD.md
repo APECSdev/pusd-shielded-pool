@@ -198,11 +198,22 @@ makes a public-input-binding test vacuous, so a green run proves nothing. The ch
 
 ## 6. Next gates, in order
 
-1. **Extend role 2 with the pool rules** (state NFT continuity, new commitment, balance
-   arithmetic, unshield payout at a fixed output index, `actionHash == n1`). Role 2 has
-   `(41 + 9792) × 800 ≈ 7.87M` with ~6.66M used → ~1.2M spare; the covenant logic is ~85k op.
-2. Re-run the red team after the extension (it is cheap now — `export-our.mjs` + `redteam.mjs`),
-   and build a snarkjs-based minter so the liveness sweep can run under our VK.
+1. **Extend role 2 with the pool rules** — DONE 2026-11-24 (implemented WIP, gate 1 passed):
+   `wip-role2-hook/pool-hook.mjs` implements the 12 checks (state category + stored root,
+   carrier size/prefix/limbs, `n1 == actionHash` with all eight preimage fields reversed to
+   big-endian, the raw-LE nullifier fold, balance arithmetic, the new `TXOUTPUTCOUNT == 2 + sign`
+   pin, out1 locking/category/commitment/amount, the conditional unshield payout, and a dynamic
+   drop-to-entry tail). `wip-role2-hook/pool-test.mjs` passes **14/14 under our VK** — 3
+   acceptance controls (transfer pv=0, shield pv=250, unshield pv=400) + 11 rejection classes,
+   with the full program (graph + hook + final pairing) executing end-to-end. All findings and the
+   probe set: `wip-role2-hook/STATUS.md`.
+2. Redeploy-path items still open: production **fill sizing** must run against a pool-shaped
+   transaction (the stock sizer dies at the hook's carrier check on the default single-OP_RETURN
+   outputs, leaving `fills [0,0,0]` and the real evaluation at ~6.6–6.7M op of a ~6.94M budget —
+   no margin); price the hook with `pinned/covenant-cost.mjs`; re-run the extended red team
+   (`export-our.mjs` + `redteam.mjs`); build a snarkjs-based minter so the liveness sweep can run
+   under our VK; `worstCaseProof` for our key is still UNMEASURED (the densless-fixtures trapdoor
+   does not exist for our zkey).
 3. Get the extended program reviewed — it is new bytes, which is exactly how F6 and the v2 layout
    bug happened.
 4. Redeploy the pool with the pinned covenant **and** the extended verifier, in one deploy.

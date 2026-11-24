@@ -216,6 +216,23 @@ mint with `node gen-sweep-proofs.mjs <count> <seed> <out>` from `~/zkb/pusd-shie
    the carrier's nullifiers to hash to the tags (the hook already introspects input token
    commitments via UTXOTOKCOMMIT — checks 2/9 use it). Until then, DO NOT leave deposits
    standing.
+
+   ### FUNDING & TERMINOLOGY (user-clarified 2026-11-24 PM). The funder
+   `bchtest:qzmux3gx…` is the APECS FAUCET HOT WALLET (faucet-hot-wallet.json — the
+   operational float for the apecs-api Worker's FAUCET_BCH_WIF), NOT a public faucet
+   service, and NOT the hushyourmoney chipnet-faucet.json key (bchtest:qzk22…, 0 sats,
+   unused). It funded the whole chain as the only funded chipnet wallet we hold runner-free
+   (423,000 sats, electrum-verified). Its address appears as sender of every SIGNED step
+   (anchor/mint/deploy/locks — the mint's outputs all returned to it); the actions contain
+   no wallet at all. EXACT LEDGER: 112,666 sats spent (chain fees + fuel burned by the
+   actions + the 10,000-sat state float that stays live on the state NFT); 310,334 sats +
+   the 99M FT supply + the 250,000 FT payout remain. One key played three demo roles
+   (issuer / operator / demo user) that production must separate; every tooling script
+   takes --secrets, so any funded chipnet key can fund future locks. TERMINOLOGY: the
+   "supporting"/"refill" transactions ARE the LOCK transactions — each pre-creates the
+   fuel/deposit UTXOs at the program locking that the next action spends (the fee
+   prepayment: each action burns 32,000 sats of fuel because TXINPUTCOUNT==3 forbids a
+   fee input).
 6. ✅ **`worstCaseProof` MEASURED for our key — DONE (2026-11-24, later session).** The snarkjs
    minter exists (`gen-sweep-proofs.mjs`, committed at the repo root: random valid circuit
    witnesses proved against `build/pool_final.zkey`, ~35-50 s per proof on the VM, seeded and

@@ -110,6 +110,12 @@ REVERSEBYTES 0xbc. All introspection ops POP their index. OP_SIZE does not pop.
 | `pool-tx.mjs` | pool-shaped fill sizing (the stock sizer's loop, evaluated against the pool shape) |
 | `pool-cost.mjs` | hook pricing via the statement→slices difference method |
 | `pool-redteam.mjs` + `pool-redteam-report.json` | the stock 151-scenario red team ported to the hooked program, evaluated against the honest pool shape — 146 runs, 0 accepted |
+| `sweep-ours.mjs` + `sweep-ours-report.json` | the liveness sweep under our VK with REAL snarkjs proofs — 70 cases, 0 failed (plain program) |
+| `pool-sweep.mjs` + `pool-sweep-report.json` | the same sweep against the HOOKED program with pool-shaped fills — 69 cases, 0 failed |
+| `export-our.mjs` | bench-vectors export under our VK; since the sweep it also emits `worstCaseProof` |
+| `REVIEW.md` | the independent-review package (open item 4): scope, bytes, claims, reproduce commands, limitations |
+| `gen-sweep-proofs.mjs` + `gen-our-proofs.mjs` (repo ROOT) | the snarkjs minter (random valid witnesses, seeded, ~35-50 s/proof) and the original 5-fixture generator — both now committed (reproducible generator source is a review requirement) |
+| `our-sweep-proofs-a/b.json` | the 64 minted proofs (seeds `sweep-ours-v1a`/`v1b`) the sweeps consumed — committed so the reports are re-runnable without re-minting |
 | `trace-dump.mjs` | per-state stack dump near the failure; FXI env picks the fixture |
 | `probe-size.mjs`, `probe-ix.mjs`, `probe-cat2/3.mjs`, `probe-ops.mjs` | opcode semantics probes (pop/push arity, byte orders) |
 | `probe-mutate.mjs`, `probe-carrier.mjs`, `probe-when.mjs`, `probe-isolate.mjs`, `probe-proxy.mjs` | the Buffer-aliasing investigation — repro and isolation of finding #1 |
@@ -117,9 +123,11 @@ REVERSEBYTES 0xbc. All introspection ops POP their index. OP_SIZE does not pop.
 | `carrier-hunt.mjs`, `model-diff.mjs`, `pick-diff.mjs`, `map-code.mjs` | divergence-finding instruments (trace vs assembler model vs disassembly) |
 
 Run on the apecsdev VM from `chunked/bn254/bn-native-sound/` with
-`BN_VK_FIXTURES=/home/apecs/cov/our.fixtures.json`.
+`BN_VK_FIXTURES=/home/apecs/cov/our.fixtures.json`. The liveness sweeps (same env):
+`node sweep-ours.mjs <out> <minted.json...>` and `node pool-sweep.mjs <out> <minted.json...>`;
+mint with `node gen-sweep-proofs.mjs <count> <seed> <out>` from `~/zkb/pusd-shielded-pool`.
 
-## Open items — 1-3 OF 5 DONE (2026-11-24, same day)
+## Open items — 1-3 AND 6 OF 6 DONE (2026-11-24, same day + later session)
 
 1. ✅ **Fill sizing against pool-shaped transactions — DONE** (`pool-tx.mjs`). The stock
    `sizeFills`/`programOf` build TOKENLESS source outputs (the module-global `setOutputs`
@@ -148,7 +156,38 @@ Run on the apecsdev VM from `chunked/bn254/bn-native-sound/` with
    now die at the HOOK (`r2:p4`, the stored-root compare) BEFORE the graph's binding check;
    proof-point tampering dies in the graph (`r0:statement > G1C@17`); B-outside-G2 dies at
    `r2:t:endpoint`; staples die in the roles' loops; shape swaps die at the redeem.
-4. ⬜ **Independent review** — new bytes are new review (the standing rule).
-5. ⬜ **Redeploy** a pool with the covenant logic inside the verifier, one deploy.
-6. ⬜ Optional: `worstCaseProof` still UNMEASURED for our key (no snarkjs minter under
-   our VK yet — the densless-fixtures trapdoor does not exist for our zkey).
+4. ⬜ **Independent review** — new bytes are new review (the standing rule). The complete review
+   package (scope, bytes, claims, reproduce commands, limitations) is now `REVIEW.md`.
+5. ⬜ **Redeploy** a pool with the covenant logic inside the verifier, one deploy — BLOCKED on 4.
+6. ✅ **`worstCaseProof` MEASURED for our key — DONE (2026-11-24, later session).** The snarkjs
+   minter exists (`gen-sweep-proofs.mjs`, committed at the repo root: random valid circuit
+   witnesses proved against `build/pool_final.zkey`, ~35-50 s per proof on the VM, seeded and
+   reproducible) and both liveness sweeps ran under our VK with 64 random REAL proofs (seeds
+   `sweep-ours-v1a`/`v1b`, committed as `our-sweep-proofs-a/b.json`):
+   - `sweep-ours.mjs` (the PLAIN program, stock sweep flow): **70 cases (5 fixtures + the
+     lattice-shifted witness + 64 random), 0 failed** — every case accepted in consensus AND
+     standard at prover-sized fills AND at exactly the 10,000 B unlock cap, cap rule
+     `op ≤ 7,550,832` holds. Min margins 6.00% std / 6.45% cons; max at-cap op 7,076,392 std
+     (input 0, cap margin 11.91%); nq range 99-123 (`v1a unshield #26` hit **nq 123**, above the
+     reference sweep's random max of 114 — and liveness held).
+   - `pool-sweep.mjs` (the HOOKED program, pool-shaped fills, funded scenarios): **69 cases,
+     0 failed** — input 2 (the hook's input) binds at 6.00% std / 6.49% cons (the design
+     margin); inputs 0/1 ride at 6.89-8.56% (legitimately empty fillers); max at-cap op
+     6,749,569 std on input 2 (cap margin 15.97%).
+   - **`worstCaseProof` (bench definition: smallest input-0 standard margin) =
+     `sweep-ours-v1a shield #13`** — exported into `our-vectors.json` by the updated
+     `export-our.mjs`, closing the gap its own header documented.
+   - HONEST LIMIT: the stock trapdoor-forced extremes (every-nibble-15 etc.) are structurally
+     unreachable under our VK (no trapdoor for a ceremony zkey; real witnesses cannot hit
+     measure-zero statement shapes). Those classes remain measured only under the reference
+     VK (stock `sweep.json`); op cost is VK-independent given (statement, witness, fills) —
+     identical code layout, fixed-size baked constants — but that transfer is an argument, not
+     a measurement. See `REVIEW.md` §6.
+   - Incidental validation: the first pool-sweep run REJECTED every big-pv minted unshield —
+     check 8 (newBalance ≥ 0) correctly firing on underfunded scenarios (balance was 1000 while
+     pv was ~2^40); the fixed sweep funds each case with balance = 1000n + pv. The hook's
+     balance rule demonstrably enforces on real proofs, not just fixture #2.
+   - New program-bytes facts first recorded: hooked code **7,737 B** (plain 7,309 + 428;
+     the priced role-2 slice is 427 B), hooked R sha256 `14ab8983…78b` (65 B), pieces
+     3,981/3,756, hooked P2SH32 locking
+     `aa208caa897c21a9cd65fd617efec64d06c91f766d72334d3e2c51b96b280ea7b10487`.

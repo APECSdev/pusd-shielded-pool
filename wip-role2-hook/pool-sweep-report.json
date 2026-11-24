@@ -1,0 +1,7947 @@
+{
+ "inputs": [
+  "/home/apecs/cov/our-sweep-a.json",
+  "/home/apecs/cov/our-sweep-b.json"
+ ],
+ "shard": "0/1",
+ "capBudget": 8032800,
+ "capRule": 7550832,
+ "balanceRule": "per case: balance = 1000n + pv (an unshield must be funded; hook check 8 requires newBalance >= 0)",
+ "results": [
+  {
+   "label": "fixture 0",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "7017148170027463748288882338239306895786272080659497705757329714043148680521",
+    "4927022042255244812786945826298331265969113809810528695501987465021834541318"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    171
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8801
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7003944,
+      "budget": 7579200,
+      "margin": 0.0759,
+      "capMargin": 0.12808,
+      "error": null
+     },
+     {
+      "op": 6957238,
+      "budget": 7580000,
+      "margin": 0.08216,
+      "capMargin": 0.1339,
+      "error": null
+     },
+     {
+      "op": 6612471,
+      "budget": 7073600,
+      "margin": 0.06519,
+      "capMargin": 0.17682,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7039144,
+      "budget": 7579200,
+      "margin": 0.07126,
+      "capMargin": 0.1237,
+      "error": null
+     },
+     {
+      "op": 6992438,
+      "budget": 7580000,
+      "margin": 0.07751,
+      "capMargin": 0.12951,
+      "error": null
+     },
+     {
+      "op": 6647159,
+      "budget": 7073600,
+      "margin": 0.06029,
+      "capMargin": 0.1725,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7019829,
+       "capMargin": 0.1261,
+       "error": null
+      },
+      {
+       "op": 6974971,
+       "capMargin": 0.13169,
+       "error": null
+      },
+      {
+       "op": 6619777,
+       "capMargin": 0.17591,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7057461,
+       "capMargin": 0.12142,
+       "error": null
+      },
+      {
+       "op": 7012603,
+       "capMargin": 0.127,
+       "error": null
+      },
+      {
+       "op": 6656897,
+       "capMargin": 0.17129,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "fixture 1",
+   "pv": "250",
+   "sign": "0",
+   "publicInputs": [
+    "18134855945186975874533321084551720488887775869741704052778677533842794658896",
+    "8042054201306950117810807611929676184428772784431684383329905562405189712640"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    235
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8769
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6978186,
+      "budget": 7579200,
+      "margin": 0.0793,
+      "capMargin": 0.13129,
+      "error": null
+     },
+     {
+      "op": 6969773,
+      "budget": 7580000,
+      "margin": 0.0805,
+      "capMargin": 0.13234,
+      "error": null
+     },
+     {
+      "op": 6589178,
+      "budget": 7048000,
+      "margin": 0.0651,
+      "capMargin": 0.17972,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7013258,
+      "budget": 7579200,
+      "margin": 0.07467,
+      "capMargin": 0.12692,
+      "error": null
+     },
+     {
+      "op": 7004845,
+      "budget": 7580000,
+      "margin": 0.07588,
+      "capMargin": 0.12797,
+      "error": null
+     },
+     {
+      "op": 6623738,
+      "budget": 7048000,
+      "margin": 0.0602,
+      "capMargin": 0.17541,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 6996856,
+       "capMargin": 0.12896,
+       "error": null
+      },
+      {
+       "op": 6989811,
+       "capMargin": 0.12984,
+       "error": null
+      },
+      {
+       "op": 6602067,
+       "capMargin": 0.17811,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7034488,
+       "capMargin": 0.12428,
+       "error": null
+      },
+      {
+       "op": 7027443,
+       "capMargin": 0.12516,
+       "error": null
+      },
+      {
+       "op": 6639187,
+       "capMargin": 0.17349,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "fixture 2",
+   "pv": "400",
+   "sign": "1",
+   "publicInputs": [
+    "8542031303966532818753416209175473194459110143378558709312593476033005657266",
+    "11470954574214631689037216506641767228798888659138253482400493310908761436955"
+   ],
+   "nq": 117,
+   "fills": [
+    0,
+    0,
+    66
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8887
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6999645,
+      "budget": 7579200,
+      "margin": 0.07647,
+      "capMargin": 0.12862,
+      "error": null
+     },
+     {
+      "op": 6970754,
+      "budget": 7580000,
+      "margin": 0.08038,
+      "capMargin": 0.13221,
+      "error": null
+     },
+     {
+      "op": 6677289,
+      "budget": 7142400,
+      "margin": 0.06512,
+      "capMargin": 0.16875,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7034973,
+      "budget": 7579200,
+      "margin": 0.07181,
+      "capMargin": 0.12422,
+      "error": null
+     },
+     {
+      "op": 7006082,
+      "budget": 7580000,
+      "margin": 0.07571,
+      "capMargin": 0.12782,
+      "error": null
+     },
+     {
+      "op": 6712105,
+      "budget": 7142400,
+      "margin": 0.06025,
+      "capMargin": 0.16441,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7018124,
+       "capMargin": 0.12632,
+       "error": null
+      },
+      {
+       "op": 6991045,
+       "capMargin": 0.12969,
+       "error": null
+      },
+      {
+       "op": 6689424,
+       "capMargin": 0.16724,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7055756,
+       "capMargin": 0.12163,
+       "error": null
+      },
+      {
+       "op": 7028677,
+       "capMargin": 0.125,
+       "error": null
+      },
+      {
+       "op": 6726544,
+       "capMargin": 0.16262,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "fixture 3",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "5383319612191958920149385819760776027833519779158111144003659207213880015467",
+    "2774175352725557626602135035581354231707517231427537969312439826905093828365"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    332
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8771
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010503,
+      "budget": 7579200,
+      "margin": 0.07503,
+      "capMargin": 0.12727,
+      "error": null
+     },
+     {
+      "op": 6960628,
+      "budget": 7580000,
+      "margin": 0.08171,
+      "capMargin": 0.13347,
+      "error": null
+     },
+     {
+      "op": 6591947,
+      "budget": 7049600,
+      "margin": 0.06492,
+      "capMargin": 0.17937,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7045575,
+      "budget": 7579200,
+      "margin": 0.07041,
+      "capMargin": 0.1229,
+      "error": null
+     },
+     {
+      "op": 6995700,
+      "budget": 7580000,
+      "margin": 0.07708,
+      "capMargin": 0.12911,
+      "error": null
+     },
+     {
+      "op": 6626507,
+      "budget": 7049600,
+      "margin": 0.06002,
+      "capMargin": 0.17507,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028958,
+       "capMargin": 0.12497,
+       "error": null
+      },
+      {
+       "op": 6979640,
+       "capMargin": 0.13111,
+       "error": null
+      },
+      {
+       "op": 6603607,
+       "capMargin": 0.17792,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066590,
+       "capMargin": 0.12028,
+       "error": null
+      },
+      {
+       "op": 7017272,
+       "capMargin": 0.12642,
+       "error": null
+      },
+      {
+       "op": 6640727,
+       "capMargin": 0.1733,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "fixture 4",
+   "pv": "125",
+   "sign": "0",
+   "publicInputs": [
+    "20793164852381915016012908699446545294200737898188796335595290720789487965511",
+    "14023632000035749515083558970537725833575995862613441335334995785623330723376"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    403
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8746
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6993731,
+      "budget": 7579200,
+      "margin": 0.07725,
+      "capMargin": 0.12935,
+      "error": null
+     },
+     {
+      "op": 6970416,
+      "budget": 7580000,
+      "margin": 0.08042,
+      "capMargin": 0.13226,
+      "error": null
+     },
+     {
+      "op": 6572812,
+      "budget": 7029600,
+      "margin": 0.06498,
+      "capMargin": 0.18175,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7028803,
+      "budget": 7579200,
+      "margin": 0.07262,
+      "capMargin": 0.12499,
+      "error": null
+     },
+     {
+      "op": 7005488,
+      "budget": 7580000,
+      "margin": 0.07579,
+      "capMargin": 0.12789,
+      "error": null
+     },
+     {
+      "op": 6607372,
+      "budget": 7029600,
+      "margin": 0.06006,
+      "capMargin": 0.17745,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7010474,
+       "capMargin": 0.12727,
+       "error": null
+      },
+      {
+       "op": 6987929,
+       "capMargin": 0.13008,
+       "error": null
+      },
+      {
+       "op": 6582216,
+       "capMargin": 0.18058,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7048106,
+       "capMargin": 0.12258,
+       "error": null
+      },
+      {
+       "op": 7025561,
+       "capMargin": 0.12539,
+       "error": null
+      },
+      {
+       "op": 6619336,
+       "capMargin": 0.17596,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a transfer #0",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "16912173401691815940412997987999740551816453491287898273906760439928458701306",
+    "1634858487295581838380174953649780159679783903807520071338799983095754101411"
+   ],
+   "nq": 99,
+   "fills": [
+    0,
+    0,
+    434
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8681
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6996532,
+      "budget": 7579200,
+      "margin": 0.07688,
+      "capMargin": 0.129,
+      "error": null
+     },
+     {
+      "op": 6956724,
+      "budget": 7580000,
+      "margin": 0.08223,
+      "capMargin": 0.13396,
+      "error": null
+     },
+     {
+      "op": 6523274,
+      "budget": 6977600,
+      "margin": 0.06511,
+      "capMargin": 0.18792,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7031476,
+      "budget": 7579200,
+      "margin": 0.07227,
+      "capMargin": 0.12465,
+      "error": null
+     },
+     {
+      "op": 6991668,
+      "budget": 7580000,
+      "margin": 0.07762,
+      "capMargin": 0.12961,
+      "error": null
+     },
+     {
+      "op": 6557706,
+      "budget": 6977600,
+      "margin": 0.06018,
+      "capMargin": 0.18363,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7015137,
+       "capMargin": 0.12669,
+       "error": null
+      },
+      {
+       "op": 6977906,
+       "capMargin": 0.13132,
+       "error": null
+      },
+      {
+       "op": 6536303,
+       "capMargin": 0.1863,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7052769,
+       "capMargin": 0.122,
+       "error": null
+      },
+      {
+       "op": 7015538,
+       "capMargin": 0.12664,
+       "error": null
+      },
+      {
+       "op": 6573423,
+       "capMargin": 0.18168,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a shield #1",
+   "pv": "397549425733",
+   "sign": "0",
+   "publicInputs": [
+    "9821479463369646328816772848533566697459989763925466371589133886335692042703",
+    "6410519841103802281657686028408473405877977729211604889057346761703793847468"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    171
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8801
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6996647,
+      "budget": 7579200,
+      "margin": 0.07686,
+      "capMargin": 0.12899,
+      "error": null
+     },
+     {
+      "op": 6958366,
+      "budget": 7580000,
+      "margin": 0.08201,
+      "capMargin": 0.13376,
+      "error": null
+     },
+     {
+      "op": 6614426,
+      "budget": 7073600,
+      "margin": 0.06491,
+      "capMargin": 0.17657,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7031847,
+      "budget": 7579200,
+      "margin": 0.07222,
+      "capMargin": 0.12461,
+      "error": null
+     },
+     {
+      "op": 6993566,
+      "budget": 7580000,
+      "margin": 0.07737,
+      "capMargin": 0.12937,
+      "error": null
+     },
+     {
+      "op": 6649114,
+      "budget": 7073600,
+      "margin": 0.06001,
+      "capMargin": 0.17225,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7015034,
+       "capMargin": 0.1267,
+       "error": null
+      },
+      {
+       "op": 6977993,
+       "capMargin": 0.13131,
+       "error": null
+      },
+      {
+       "op": 6626329,
+       "capMargin": 0.17509,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7052666,
+       "capMargin": 0.12202,
+       "error": null
+      },
+      {
+       "op": 7015625,
+       "capMargin": 0.12663,
+       "error": null
+      },
+      {
+       "op": 6663449,
+       "capMargin": 0.17047,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a unshield #2",
+   "pv": "89403068460",
+   "sign": "1",
+   "publicInputs": [
+    "13204484777456890079929053777276020008399124479824282653922398742750823485477",
+    "7092973938045345749308647370118805493486539022594961955575227619288434577968"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    331
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8770
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7011033,
+      "budget": 7579200,
+      "margin": 0.07496,
+      "capMargin": 0.1272,
+      "error": null
+     },
+     {
+      "op": 6951386,
+      "budget": 7580000,
+      "margin": 0.08293,
+      "capMargin": 0.13462,
+      "error": null
+     },
+     {
+      "op": 6591211,
+      "budget": 7048800,
+      "margin": 0.06492,
+      "capMargin": 0.17946,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7046105,
+      "budget": 7579200,
+      "margin": 0.07034,
+      "capMargin": 0.12283,
+      "error": null
+     },
+     {
+      "op": 6986458,
+      "budget": 7580000,
+      "margin": 0.0783,
+      "capMargin": 0.13026,
+      "error": null
+     },
+     {
+      "op": 6625771,
+      "budget": 7048800,
+      "margin": 0.06001,
+      "capMargin": 0.17516,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028505,
+       "capMargin": 0.12502,
+       "error": null
+      },
+      {
+       "op": 6971087,
+       "capMargin": 0.13217,
+       "error": null
+      },
+      {
+       "op": 6603344,
+       "capMargin": 0.17795,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066137,
+       "capMargin": 0.12034,
+       "error": null
+      },
+      {
+       "op": 7008719,
+       "capMargin": 0.12749,
+       "error": null
+      },
+      {
+       "op": 6640464,
+       "capMargin": 0.17333,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a transfer #3",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "320066946757084890937399212467640182462399749296502665422873609047694753391",
+    "1153231091348099310051514373452970402576280635268713774884524364861435790635"
+   ],
+   "nq": 99,
+   "fills": [
+    0,
+    0,
+    442
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8689
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7004247,
+      "budget": 7579200,
+      "margin": 0.07586,
+      "capMargin": 0.12804,
+      "error": null
+     },
+     {
+      "op": 6957108,
+      "budget": 7580000,
+      "margin": 0.08218,
+      "capMargin": 0.13391,
+      "error": null
+     },
+     {
+      "op": 6529641,
+      "budget": 6984000,
+      "margin": 0.06506,
+      "capMargin": 0.18713,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7039191,
+      "budget": 7579200,
+      "margin": 0.07125,
+      "capMargin": 0.12369,
+      "error": null
+     },
+     {
+      "op": 6992052,
+      "budget": 7580000,
+      "margin": 0.07757,
+      "capMargin": 0.12956,
+      "error": null
+     },
+     {
+      "op": 6564073,
+      "budget": 6984000,
+      "margin": 0.06013,
+      "capMargin": 0.18284,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022020,
+       "capMargin": 0.12583,
+       "error": null
+      },
+      {
+       "op": 6976447,
+       "capMargin": 0.1315,
+       "error": null
+      },
+      {
+       "op": 6541339,
+       "capMargin": 0.18567,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7059652,
+       "capMargin": 0.12115,
+       "error": null
+      },
+      {
+       "op": 7014079,
+       "capMargin": 0.12682,
+       "error": null
+      },
+      {
+       "op": 6578459,
+       "capMargin": 0.18105,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a shield #4",
+   "pv": "703999563539",
+   "sign": "0",
+   "publicInputs": [
+    "4263008834223559347401152018625340572472305298428422918192266235157700489771",
+    "9341628390688688591722697760720722862013973432234146411243484082563752703229"
+   ],
+   "nq": 99,
+   "fills": [
+    0,
+    0,
+    434
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8681
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7015406,
+      "budget": 7579200,
+      "margin": 0.07439,
+      "capMargin": 0.12665,
+      "error": null
+     },
+     {
+      "op": 6949879,
+      "budget": 7580000,
+      "margin": 0.08313,
+      "capMargin": 0.13481,
+      "error": null
+     },
+     {
+      "op": 6523880,
+      "budget": 6977600,
+      "margin": 0.06503,
+      "capMargin": 0.18784,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7050350,
+      "budget": 7579200,
+      "margin": 0.06978,
+      "capMargin": 0.1223,
+      "error": null
+     },
+     {
+      "op": 6984823,
+      "budget": 7580000,
+      "margin": 0.07852,
+      "capMargin": 0.13046,
+      "error": null
+     },
+     {
+      "op": 6558312,
+      "budget": 6977600,
+      "margin": 0.06009,
+      "capMargin": 0.18356,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7034417,
+       "capMargin": 0.12429,
+       "error": null
+      },
+      {
+       "op": 6970544,
+       "capMargin": 0.13224,
+       "error": null
+      },
+      {
+       "op": 6536303,
+       "capMargin": 0.1863,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7072049,
+       "capMargin": 0.1196,
+       "error": null
+      },
+      {
+       "op": 7008176,
+       "capMargin": 0.12756,
+       "error": null
+      },
+      {
+       "op": 6573423,
+       "capMargin": 0.18168,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a unshield #5",
+   "pv": "465804859474",
+   "sign": "1",
+   "publicInputs": [
+    "15778308654140650323469052003357266037838626106912848482095595643118313560838",
+    "2551019167711735155675015486986571083059067493518695257796833293568475678575"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    305
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8744
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7007171,
+      "budget": 7579200,
+      "margin": 0.07547,
+      "capMargin": 0.12768,
+      "error": null
+     },
+     {
+      "op": 6966168,
+      "budget": 7580000,
+      "margin": 0.08098,
+      "capMargin": 0.13278,
+      "error": null
+     },
+     {
+      "op": 6569714,
+      "budget": 7028000,
+      "margin": 0.06521,
+      "capMargin": 0.18214,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7042243,
+      "budget": 7579200,
+      "margin": 0.07085,
+      "capMargin": 0.12331,
+      "error": null
+     },
+     {
+      "op": 7001240,
+      "budget": 7580000,
+      "margin": 0.07635,
+      "capMargin": 0.12842,
+      "error": null
+     },
+     {
+      "op": 6604274,
+      "budget": 7028000,
+      "margin": 0.06029,
+      "capMargin": 0.17784,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028718,
+       "capMargin": 0.125,
+       "error": null
+      },
+      {
+       "op": 6990035,
+       "capMargin": 0.12981,
+       "error": null
+      },
+      {
+       "op": 6584003,
+       "capMargin": 0.18036,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066350,
+       "capMargin": 0.12031,
+       "error": null
+      },
+      {
+       "op": 7027667,
+       "capMargin": 0.12513,
+       "error": null
+      },
+      {
+       "op": 6621123,
+       "capMargin": 0.17574,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a transfer #6",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "5701849519198489241276642397347783587436521054296400971732506380226496553751",
+    "5392455050532044878671471415623150974456964699323844177971959301332855637760"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    174
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8804
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6983754,
+      "budget": 7579200,
+      "margin": 0.07856,
+      "capMargin": 0.1306,
+      "error": null
+     },
+     {
+      "op": 6959460,
+      "budget": 7580000,
+      "margin": 0.08187,
+      "capMargin": 0.13362,
+      "error": null
+     },
+     {
+      "op": 6615460,
+      "budget": 7076000,
+      "margin": 0.06508,
+      "capMargin": 0.17644,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7018954,
+      "budget": 7579200,
+      "margin": 0.07392,
+      "capMargin": 0.12621,
+      "error": null
+     },
+     {
+      "op": 6994660,
+      "budget": 7580000,
+      "margin": 0.07722,
+      "capMargin": 0.12924,
+      "error": null
+     },
+     {
+      "op": 6650148,
+      "budget": 7076000,
+      "margin": 0.06018,
+      "capMargin": 0.17213,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7003319,
+       "capMargin": 0.12816,
+       "error": null
+      },
+      {
+       "op": 6980078,
+       "capMargin": 0.13105,
+       "error": null
+      },
+      {
+       "op": 6628647,
+       "capMargin": 0.1748,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7040951,
+       "capMargin": 0.12347,
+       "error": null
+      },
+      {
+       "op": 7017710,
+       "capMargin": 0.12637,
+       "error": null
+      },
+      {
+       "op": 6665767,
+       "capMargin": 0.17018,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a shield #7",
+   "pv": "967081143780",
+   "sign": "0",
+   "publicInputs": [
+    "12420799291385038453743865685702377763925588795619491797661865769671645289273",
+    "6270971789235288299524724946991042763920037008193101770088381659887355250260"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    245
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8779
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6970805,
+      "budget": 7579200,
+      "margin": 0.08027,
+      "capMargin": 0.13221,
+      "error": null
+     },
+     {
+      "op": 6944793,
+      "budget": 7580000,
+      "margin": 0.0838,
+      "capMargin": 0.13545,
+      "error": null
+     },
+     {
+      "op": 6595579,
+      "budget": 7056000,
+      "margin": 0.06525,
+      "capMargin": 0.17892,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7006005,
+      "budget": 7579200,
+      "margin": 0.07563,
+      "capMargin": 0.12783,
+      "error": null
+     },
+     {
+      "op": 6979993,
+      "budget": 7580000,
+      "margin": 0.07916,
+      "capMargin": 0.13106,
+      "error": null
+     },
+     {
+      "op": 6630267,
+      "budget": 7056000,
+      "margin": 0.06034,
+      "capMargin": 0.1746,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 6989591,
+       "capMargin": 0.12987,
+       "error": null
+      },
+      {
+       "op": 6964876,
+       "capMargin": 0.13295,
+       "error": null
+      },
+      {
+       "op": 6608911,
+       "capMargin": 0.17726,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7027223,
+       "capMargin": 0.12518,
+       "error": null
+      },
+      {
+       "op": 7002508,
+       "capMargin": 0.12826,
+       "error": null
+      },
+      {
+       "op": 6646031,
+       "capMargin": 0.17264,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a unshield #8",
+   "pv": "654496255987",
+   "sign": "1",
+   "publicInputs": [
+    "11168108066648896068759473940208411277264845598814098458486971642707120016217",
+    "11703535418440502650582181047817969152342666535131345406058529357811287758592"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    173
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8803
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6985293,
+      "budget": 7579200,
+      "margin": 0.07836,
+      "capMargin": 0.1304,
+      "error": null
+     },
+     {
+      "op": 6952547,
+      "budget": 7580000,
+      "margin": 0.08278,
+      "capMargin": 0.13448,
+      "error": null
+     },
+     {
+      "op": 6614973,
+      "budget": 7075200,
+      "margin": 0.06505,
+      "capMargin": 0.1765,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7020493,
+      "budget": 7579200,
+      "margin": 0.07372,
+      "capMargin": 0.12602,
+      "error": null
+     },
+     {
+      "op": 6987747,
+      "budget": 7580000,
+      "margin": 0.07813,
+      "capMargin": 0.1301,
+      "error": null
+     },
+     {
+      "op": 6649661,
+      "budget": 7075200,
+      "margin": 0.06015,
+      "capMargin": 0.17219,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7003758,
+       "capMargin": 0.12811,
+       "error": null
+      },
+      {
+       "op": 6971992,
+       "capMargin": 0.13206,
+       "error": null
+      },
+      {
+       "op": 6627304,
+       "capMargin": 0.17497,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7041390,
+       "capMargin": 0.12342,
+       "error": null
+      },
+      {
+       "op": 7009624,
+       "capMargin": 0.12737,
+       "error": null
+      },
+      {
+       "op": 6664424,
+       "capMargin": 0.17035,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a transfer #9",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "15836056439292934784550805618831113462330709141018663397179754174849601498801",
+    "12752383954539748596126249557819086994671262335141916064500863084367010111987"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    234
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8768
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7009565,
+      "budget": 7579200,
+      "margin": 0.07516,
+      "capMargin": 0.12738,
+      "error": null
+     },
+     {
+      "op": 6956544,
+      "budget": 7580000,
+      "margin": 0.08225,
+      "capMargin": 0.13398,
+      "error": null
+     },
+     {
+      "op": 6589180,
+      "budget": 7047200,
+      "margin": 0.06499,
+      "capMargin": 0.17972,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7044637,
+      "budget": 7579200,
+      "margin": 0.07053,
+      "capMargin": 0.12302,
+      "error": null
+     },
+     {
+      "op": 6991616,
+      "budget": 7580000,
+      "margin": 0.07762,
+      "capMargin": 0.12962,
+      "error": null
+     },
+     {
+      "op": 6623740,
+      "budget": 7047200,
+      "margin": 0.06009,
+      "capMargin": 0.17541,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028234,
+       "capMargin": 0.12506,
+       "error": null
+      },
+      {
+       "op": 6978066,
+       "capMargin": 0.1313,
+       "error": null
+      },
+      {
+       "op": 6601388,
+       "capMargin": 0.1782,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7065866,
+       "capMargin": 0.12037,
+       "error": null
+      },
+      {
+       "op": 7015698,
+       "capMargin": 0.12662,
+       "error": null
+      },
+      {
+       "op": 6638508,
+       "capMargin": 0.17357,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a shield #10",
+   "pv": "119262301878",
+   "sign": "0",
+   "publicInputs": [
+    "19333731662925839526603208152873079924202657548853139844380740392501999896218",
+    "5329132928839323676477013619558412726581886921304812887306304633877085840568"
+   ],
+   "nq": 117,
+   "fills": [
+    0,
+    0,
+    75
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8896
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010142,
+      "budget": 7579200,
+      "margin": 0.07508,
+      "capMargin": 0.12731,
+      "error": null
+     },
+     {
+      "op": 6963312,
+      "budget": 7580000,
+      "margin": 0.08136,
+      "capMargin": 0.13314,
+      "error": null
+     },
+     {
+      "op": 6684906,
+      "budget": 7149600,
+      "margin": 0.065,
+      "capMargin": 0.1678,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7045470,
+      "budget": 7579200,
+      "margin": 0.07042,
+      "capMargin": 0.12291,
+      "error": null
+     },
+     {
+      "op": 6998640,
+      "budget": 7580000,
+      "margin": 0.0767,
+      "capMargin": 0.12874,
+      "error": null
+     },
+     {
+      "op": 6719722,
+      "budget": 7149600,
+      "margin": 0.06013,
+      "capMargin": 0.16346,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7029536,
+       "capMargin": 0.1249,
+       "error": null
+      },
+      {
+       "op": 6983949,
+       "capMargin": 0.13057,
+       "error": null
+      },
+      {
+       "op": 6697094,
+       "capMargin": 0.16628,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7067168,
+       "capMargin": 0.12021,
+       "error": null
+      },
+      {
+       "op": 7021581,
+       "capMargin": 0.12589,
+       "error": null
+      },
+      {
+       "op": 6734214,
+       "capMargin": 0.16166,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a unshield #11",
+   "pv": "254539396050",
+   "sign": "1",
+   "publicInputs": [
+    "12391125273011651695032636825399682850415729868211711011435314827447117197407",
+    "9000103139842820751727097859133976208711690456143890311345084396505833091031"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    239
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8773
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6990079,
+      "budget": 7579200,
+      "margin": 0.07773,
+      "capMargin": 0.12981,
+      "error": null
+     },
+     {
+      "op": 6970251,
+      "budget": 7580000,
+      "margin": 0.08044,
+      "capMargin": 0.13228,
+      "error": null
+     },
+     {
+      "op": 6592245,
+      "budget": 7051200,
+      "margin": 0.06509,
+      "capMargin": 0.17933,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7025151,
+      "budget": 7579200,
+      "margin": 0.0731,
+      "capMargin": 0.12544,
+      "error": null
+     },
+     {
+      "op": 7005323,
+      "budget": 7580000,
+      "margin": 0.07581,
+      "capMargin": 0.12791,
+      "error": null
+     },
+     {
+      "op": 6626805,
+      "budget": 7051200,
+      "margin": 0.06019,
+      "capMargin": 0.17503,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7009939,
+       "capMargin": 0.12734,
+       "error": null
+      },
+      {
+       "op": 6990486,
+       "capMargin": 0.12976,
+       "error": null
+      },
+      {
+       "op": 6605066,
+       "capMargin": 0.17774,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7047571,
+       "capMargin": 0.12265,
+       "error": null
+      },
+      {
+       "op": 7028118,
+       "capMargin": 0.12507,
+       "error": null
+      },
+      {
+       "op": 6642186,
+       "capMargin": 0.17312,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a transfer #12",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "782931537594860129798852679088644305597017905383429446661983696805358312750",
+    "1741310097422708209237730017270492297550899156565855233672268576099839176843"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    170
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8800
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7002521,
+      "budget": 7579200,
+      "margin": 0.07609,
+      "capMargin": 0.12826,
+      "error": null
+     },
+     {
+      "op": 6968731,
+      "budget": 7580000,
+      "margin": 0.08064,
+      "capMargin": 0.13247,
+      "error": null
+     },
+     {
+      "op": 6611428,
+      "budget": 7072800,
+      "margin": 0.06523,
+      "capMargin": 0.17695,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7037721,
+      "budget": 7579200,
+      "margin": 0.07144,
+      "capMargin": 0.12388,
+      "error": null
+     },
+     {
+      "op": 7003931,
+      "budget": 7580000,
+      "margin": 0.076,
+      "capMargin": 0.12808,
+      "error": null
+     },
+     {
+      "op": 6646116,
+      "budget": 7072800,
+      "margin": 0.06033,
+      "capMargin": 0.17263,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022720,
+       "capMargin": 0.12574,
+       "error": null
+      },
+      {
+       "op": 6990232,
+       "capMargin": 0.12979,
+       "error": null
+      },
+      {
+       "op": 6625474,
+       "capMargin": 0.1752,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7060352,
+       "capMargin": 0.12106,
+       "error": null
+      },
+      {
+       "op": 7027864,
+       "capMargin": 0.1251,
+       "error": null
+      },
+      {
+       "op": 6662594,
+       "capMargin": 0.17058,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a shield #13",
+   "pv": "400241411615",
+   "sign": "0",
+   "publicInputs": [
+    "12692909755269302523456671384197430066692032351505034784579744451098468126750",
+    "847376499170791058697255332131232320000126657543145761597717609603847877949"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    237
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8771
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6997638,
+      "budget": 7579200,
+      "margin": 0.07673,
+      "capMargin": 0.12887,
+      "error": null
+     },
+     {
+      "op": 6958151,
+      "budget": 7580000,
+      "margin": 0.08204,
+      "capMargin": 0.13378,
+      "error": null
+     },
+     {
+      "op": 6590996,
+      "budget": 7049600,
+      "margin": 0.06505,
+      "capMargin": 0.17949,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7032710,
+      "budget": 7579200,
+      "margin": 0.0721,
+      "capMargin": 0.1245,
+      "error": null
+     },
+     {
+      "op": 6993223,
+      "budget": 7580000,
+      "margin": 0.07741,
+      "capMargin": 0.12942,
+      "error": null
+     },
+     {
+      "op": 6625556,
+      "budget": 7049600,
+      "margin": 0.06015,
+      "capMargin": 0.17519,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7014316,
+       "capMargin": 0.12679,
+       "error": null
+      },
+      {
+       "op": 6977601,
+       "capMargin": 0.13136,
+       "error": null
+      },
+      {
+       "op": 6600694,
+       "capMargin": 0.17828,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7051948,
+       "capMargin": 0.12211,
+       "error": null
+      },
+      {
+       "op": 7015233,
+       "capMargin": 0.12668,
+       "error": null
+      },
+      {
+       "op": 6637814,
+       "capMargin": 0.17366,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a unshield #14",
+   "pv": "1108439970179",
+   "sign": "1",
+   "publicInputs": [
+    "11393812063451003521069255490643651659034675104786733761124539420663385875126",
+    "3900773562688670968256089290393669220753882668544194267596403896287193967323"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    238
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8772
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7016736,
+      "budget": 7579200,
+      "margin": 0.07421,
+      "capMargin": 0.12649,
+      "error": null
+     },
+     {
+      "op": 6944134,
+      "budget": 7580000,
+      "margin": 0.08389,
+      "capMargin": 0.13553,
+      "error": null
+     },
+     {
+      "op": 6591283,
+      "budget": 7050400,
+      "margin": 0.06512,
+      "capMargin": 0.17945,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7051808,
+      "budget": 7579200,
+      "margin": 0.06958,
+      "capMargin": 0.12212,
+      "error": null
+     },
+     {
+      "op": 6979206,
+      "budget": 7580000,
+      "margin": 0.07926,
+      "capMargin": 0.13116,
+      "error": null
+     },
+     {
+      "op": 6625843,
+      "budget": 7050400,
+      "margin": 0.06022,
+      "capMargin": 0.17515,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7035042,
+       "capMargin": 0.12421,
+       "error": null
+      },
+      {
+       "op": 6964755,
+       "capMargin": 0.13296,
+       "error": null
+      },
+      {
+       "op": 6603235,
+       "capMargin": 0.17797,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7072674,
+       "capMargin": 0.11953,
+       "error": null
+      },
+      {
+       "op": 7002387,
+       "capMargin": 0.12828,
+       "error": null
+      },
+      {
+       "op": 6640355,
+       "capMargin": 0.17334,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a transfer #15",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "1402221696321234579339634328527860420073329330529808440668031063089140369873",
+    "4733835891215993922513045820121879699499135247420457861905002822966665825943"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    148
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8778
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7015797,
+      "budget": 7579200,
+      "margin": 0.07434,
+      "capMargin": 0.12661,
+      "error": null
+     },
+     {
+      "op": 6951829,
+      "budget": 7580000,
+      "margin": 0.08287,
+      "capMargin": 0.13457,
+      "error": null
+     },
+     {
+      "op": 6596975,
+      "budget": 7055200,
+      "margin": 0.06495,
+      "capMargin": 0.17875,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7050997,
+      "budget": 7579200,
+      "margin": 0.06969,
+      "capMargin": 0.12222,
+      "error": null
+     },
+     {
+      "op": 6987029,
+      "budget": 7580000,
+      "margin": 0.07823,
+      "capMargin": 0.13019,
+      "error": null
+     },
+     {
+      "op": 6631663,
+      "budget": 7055200,
+      "margin": 0.06003,
+      "capMargin": 0.17443,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7034742,
+       "capMargin": 0.12425,
+       "error": null
+      },
+      {
+       "op": 6972039,
+       "capMargin": 0.13205,
+       "error": null
+      },
+      {
+       "op": 6609181,
+       "capMargin": 0.17723,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7072374,
+       "capMargin": 0.11956,
+       "error": null
+      },
+      {
+       "op": 7009671,
+       "capMargin": 0.12737,
+       "error": null
+      },
+      {
+       "op": 6646301,
+       "capMargin": 0.1726,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a shield #16",
+   "pv": "138456394458",
+   "sign": "0",
+   "publicInputs": [
+    "7263309569878287516185959119829743322041500173158813513269317542764952274452",
+    "11818506810597720550385297525794866687279752411776871198457204081065816250212"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    314
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8753
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6997274,
+      "budget": 7579200,
+      "margin": 0.07678,
+      "capMargin": 0.12891,
+      "error": null
+     },
+     {
+      "op": 6964007,
+      "budget": 7580000,
+      "margin": 0.08127,
+      "capMargin": 0.13305,
+      "error": null
+     },
+     {
+      "op": 6578304,
+      "budget": 7035200,
+      "margin": 0.06494,
+      "capMargin": 0.18107,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7032346,
+      "budget": 7579200,
+      "margin": 0.07215,
+      "capMargin": 0.12455,
+      "error": null
+     },
+     {
+      "op": 6999079,
+      "budget": 7580000,
+      "margin": 0.07664,
+      "capMargin": 0.12869,
+      "error": null
+     },
+     {
+      "op": 6612864,
+      "budget": 7035200,
+      "margin": 0.06003,
+      "capMargin": 0.17677,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7015956,
+       "capMargin": 0.12659,
+       "error": null
+      },
+      {
+       "op": 6984062,
+       "capMargin": 0.13056,
+       "error": null
+      },
+      {
+       "op": 6590857,
+       "capMargin": 0.17951,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7053588,
+       "capMargin": 0.1219,
+       "error": null
+      },
+      {
+       "op": 7021694,
+       "capMargin": 0.12587,
+       "error": null
+      },
+      {
+       "op": 6627977,
+       "capMargin": 0.17489,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a unshield #17",
+   "pv": "54283677841",
+   "sign": "1",
+   "publicInputs": [
+    "19013468694880847451568474296352681658777715026590901716343982442140122346038",
+    "13519494132961835502342402678752051082819558876639273263844125904899308501303"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    236
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8770
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6991241,
+      "budget": 7579200,
+      "margin": 0.07758,
+      "capMargin": 0.12966,
+      "error": null
+     },
+     {
+      "op": 6963832,
+      "budget": 7580000,
+      "margin": 0.08129,
+      "capMargin": 0.13308,
+      "error": null
+     },
+     {
+      "op": 6590478,
+      "budget": 7048800,
+      "margin": 0.06502,
+      "capMargin": 0.17955,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7026313,
+      "budget": 7579200,
+      "margin": 0.07295,
+      "capMargin": 0.1253,
+      "error": null
+     },
+     {
+      "op": 6998904,
+      "budget": 7580000,
+      "margin": 0.07666,
+      "capMargin": 0.12871,
+      "error": null
+     },
+     {
+      "op": 6625038,
+      "budget": 7048800,
+      "margin": 0.06012,
+      "capMargin": 0.17525,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7009688,
+       "capMargin": 0.12737,
+       "error": null
+      },
+      {
+       "op": 6983502,
+       "capMargin": 0.13063,
+       "error": null
+      },
+      {
+       "op": 6602039,
+       "capMargin": 0.17811,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7047320,
+       "capMargin": 0.12268,
+       "error": null
+      },
+      {
+       "op": 7021134,
+       "capMargin": 0.12594,
+       "error": null
+      },
+      {
+       "op": 6639159,
+       "capMargin": 0.17349,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a transfer #18",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "10653344380041425569886956940732866617873383170100236847070338089629677743212",
+    "1503498270768816325914166721793094343724658202353929423918433970128831970060"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    180
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8810
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7003615,
+      "budget": 7579200,
+      "margin": 0.07594,
+      "capMargin": 0.12812,
+      "error": null
+     },
+     {
+      "op": 6951640,
+      "budget": 7580000,
+      "margin": 0.0829,
+      "capMargin": 0.13459,
+      "error": null
+     },
+     {
+      "op": 6619596,
+      "budget": 7080800,
+      "margin": 0.06513,
+      "capMargin": 0.17593,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7038815,
+      "budget": 7579200,
+      "margin": 0.0713,
+      "capMargin": 0.12374,
+      "error": null
+     },
+     {
+      "op": 6986840,
+      "budget": 7580000,
+      "margin": 0.07825,
+      "capMargin": 0.13021,
+      "error": null
+     },
+     {
+      "op": 6654284,
+      "budget": 7080800,
+      "margin": 0.06024,
+      "capMargin": 0.17161,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7020594,
+       "capMargin": 0.12601,
+       "error": null
+      },
+      {
+       "op": 6969451,
+       "capMargin": 0.13238,
+       "error": null
+      },
+      {
+       "op": 6630686,
+       "capMargin": 0.17455,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7058226,
+       "capMargin": 0.12132,
+       "error": null
+      },
+      {
+       "op": 7007083,
+       "capMargin": 0.12769,
+       "error": null
+      },
+      {
+       "op": 6667806,
+       "capMargin": 0.16993,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a shield #19",
+   "pv": "342349775758",
+   "sign": "0",
+   "publicInputs": [
+    "13584892295982059961445245292737592111201005068543318289862692048195748295907",
+    "263001056416283955313605395378337031066224051921810930137180631721952086648"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    368
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8711
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6997259,
+      "budget": 7579200,
+      "margin": 0.07678,
+      "capMargin": 0.12891,
+      "error": null
+     },
+     {
+      "op": 6963227,
+      "budget": 7580000,
+      "margin": 0.08137,
+      "capMargin": 0.13315,
+      "error": null
+     },
+     {
+      "op": 6545992,
+      "budget": 7001600,
+      "margin": 0.06507,
+      "capMargin": 0.18509,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7032203,
+      "budget": 7579200,
+      "margin": 0.07217,
+      "capMargin": 0.12456,
+      "error": null
+     },
+     {
+      "op": 6998171,
+      "budget": 7580000,
+      "margin": 0.07676,
+      "capMargin": 0.1288,
+      "error": null
+     },
+     {
+      "op": 6580424,
+      "budget": 7001600,
+      "margin": 0.06015,
+      "capMargin": 0.18081,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7016521,
+       "capMargin": 0.12652,
+       "error": null
+      },
+      {
+       "op": 6983612,
+       "capMargin": 0.13061,
+       "error": null
+      },
+      {
+       "op": 6559196,
+       "capMargin": 0.18345,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7054153,
+       "capMargin": 0.12183,
+       "error": null
+      },
+      {
+       "op": 7021244,
+       "capMargin": 0.12593,
+       "error": null
+      },
+      {
+       "op": 6596316,
+       "capMargin": 0.17883,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a unshield #20",
+   "pv": "783689522721",
+   "sign": "1",
+   "publicInputs": [
+    "7347281967163028493037435837870351499642862263729416699705689591902311229642",
+    "2455317754241969928156786758495077075928121305877696743728118493620454123479"
+   ],
+   "nq": 99,
+   "fills": [
+    0,
+    0,
+    440
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8687
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7001889,
+      "budget": 7579200,
+      "margin": 0.07617,
+      "capMargin": 0.12834,
+      "error": null
+     },
+     {
+      "op": 6963194,
+      "budget": 7580000,
+      "margin": 0.08137,
+      "capMargin": 0.13315,
+      "error": null
+     },
+     {
+      "op": 6528102,
+      "budget": 6982400,
+      "margin": 0.06506,
+      "capMargin": 0.18732,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7036833,
+      "budget": 7579200,
+      "margin": 0.07156,
+      "capMargin": 0.12399,
+      "error": null
+     },
+     {
+      "op": 6998138,
+      "budget": 7580000,
+      "margin": 0.07676,
+      "capMargin": 0.1288,
+      "error": null
+     },
+     {
+      "op": 6562534,
+      "budget": 6982400,
+      "margin": 0.06013,
+      "capMargin": 0.18303,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022203,
+       "capMargin": 0.12581,
+       "error": null
+      },
+      {
+       "op": 6983138,
+       "capMargin": 0.13067,
+       "error": null
+      },
+      {
+       "op": 6540893,
+       "capMargin": 0.18573,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7059835,
+       "capMargin": 0.12112,
+       "error": null
+      },
+      {
+       "op": 7020770,
+       "capMargin": 0.12599,
+       "error": null
+      },
+      {
+       "op": 6578013,
+       "capMargin": 0.18111,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a transfer #21",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "8295724019113572350098399653322200135636066570236914308273390783775263461138",
+    "13603053572627869756641467979322766582170497716523504773644519799097848595583"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    245
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8779
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7016774,
+      "budget": 7579200,
+      "margin": 0.07421,
+      "capMargin": 0.12648,
+      "error": null
+     },
+     {
+      "op": 6963479,
+      "budget": 7580000,
+      "margin": 0.08134,
+      "capMargin": 0.13312,
+      "error": null
+     },
+     {
+      "op": 6596323,
+      "budget": 7056000,
+      "margin": 0.06515,
+      "capMargin": 0.17883,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7051974,
+      "budget": 7579200,
+      "margin": 0.06956,
+      "capMargin": 0.1221,
+      "error": null
+     },
+     {
+      "op": 6998679,
+      "budget": 7580000,
+      "margin": 0.07669,
+      "capMargin": 0.12874,
+      "error": null
+     },
+     {
+      "op": 6631011,
+      "budget": 7056000,
+      "margin": 0.06023,
+      "capMargin": 0.17451,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7033683,
+       "capMargin": 0.12438,
+       "error": null
+      },
+      {
+       "op": 6982950,
+       "capMargin": 0.1307,
+       "error": null
+      },
+      {
+       "op": 6608186,
+       "capMargin": 0.17735,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7071315,
+       "capMargin": 0.11969,
+       "error": null
+      },
+      {
+       "op": 7020582,
+       "capMargin": 0.12601,
+       "error": null
+      },
+      {
+       "op": 6645306,
+       "capMargin": 0.17273,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a shield #22",
+   "pv": "488109083784",
+   "sign": "0",
+   "publicInputs": [
+    "16536366595369398994518032654102461707983498678878773297197843382019152009444",
+    "22676754229892676700835322555729041907356187304078249473420225710006525524"
+   ],
+   "nq": 117,
+   "fills": [
+    0,
+    0,
+    84
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8906
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010872,
+      "budget": 7579200,
+      "margin": 0.07499,
+      "capMargin": 0.12722,
+      "error": null
+     },
+     {
+      "op": 6958577,
+      "budget": 7580000,
+      "margin": 0.08198,
+      "capMargin": 0.13373,
+      "error": null
+     },
+     {
+      "op": 6692514,
+      "budget": 7157600,
+      "margin": 0.06498,
+      "capMargin": 0.16685,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7046328,
+      "budget": 7579200,
+      "margin": 0.07031,
+      "capMargin": 0.12281,
+      "error": null
+     },
+     {
+      "op": 6994033,
+      "budget": 7580000,
+      "margin": 0.0773,
+      "capMargin": 0.12932,
+      "error": null
+     },
+     {
+      "op": 6727458,
+      "budget": 7157600,
+      "margin": 0.0601,
+      "capMargin": 0.1625,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7029016,
+       "capMargin": 0.12496,
+       "error": null
+      },
+      {
+       "op": 6976878,
+       "capMargin": 0.13145,
+       "error": null
+      },
+      {
+       "op": 6704501,
+       "capMargin": 0.16536,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066648,
+       "capMargin": 0.12028,
+       "error": null
+      },
+      {
+       "op": 7014510,
+       "capMargin": 0.12677,
+       "error": null
+      },
+      {
+       "op": 6741621,
+       "capMargin": 0.16074,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a unshield #23",
+   "pv": "498560401033",
+   "sign": "1",
+   "publicInputs": [
+    "11544227079273885756103184561294896151923236527384232380992607204591928851391",
+    "8877994562910113222098762652900531509083880961577911589077152958758479799130"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    341
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8780
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7005254,
+      "budget": 7579200,
+      "margin": 0.07573,
+      "capMargin": 0.12792,
+      "error": null
+     },
+     {
+      "op": 6970714,
+      "budget": 7580000,
+      "margin": 0.08038,
+      "capMargin": 0.13222,
+      "error": null
+     },
+     {
+      "op": 6598542,
+      "budget": 7056800,
+      "margin": 0.06494,
+      "capMargin": 0.17855,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7040454,
+      "budget": 7579200,
+      "margin": 0.07108,
+      "capMargin": 0.12354,
+      "error": null
+     },
+     {
+      "op": 7005914,
+      "budget": 7580000,
+      "margin": 0.07574,
+      "capMargin": 0.12784,
+      "error": null
+     },
+     {
+      "op": 6633230,
+      "budget": 7056800,
+      "margin": 0.06002,
+      "capMargin": 0.17423,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7023632,
+       "capMargin": 0.12563,
+       "error": null
+      },
+      {
+       "op": 6989975,
+       "capMargin": 0.12982,
+       "error": null
+      },
+      {
+       "op": 6610259,
+       "capMargin": 0.17709,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7061264,
+       "capMargin": 0.12095,
+       "error": null
+      },
+      {
+       "op": 7027607,
+       "capMargin": 0.12514,
+       "error": null
+      },
+      {
+       "op": 6647379,
+       "capMargin": 0.17247,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a transfer #24",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "16038380537386156557870952848388616085053857825322809749543014479953367484330",
+    "6838638981796935519862233773239824628527042810681851846122841328851803760492"
+   ],
+   "nq": 117,
+   "fills": [
+    0,
+    0,
+    38
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8859
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7009214,
+      "budget": 7579200,
+      "margin": 0.0752,
+      "capMargin": 0.12743,
+      "error": null
+     },
+     {
+      "op": 6957427,
+      "budget": 7580000,
+      "margin": 0.08213,
+      "capMargin": 0.13387,
+      "error": null
+     },
+     {
+      "op": 6657760,
+      "budget": 7120000,
+      "margin": 0.06492,
+      "capMargin": 0.17118,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7044542,
+      "budget": 7579200,
+      "margin": 0.07054,
+      "capMargin": 0.12303,
+      "error": null
+     },
+     {
+      "op": 6992755,
+      "budget": 7580000,
+      "margin": 0.07747,
+      "capMargin": 0.12947,
+      "error": null
+     },
+     {
+      "op": 6692576,
+      "budget": 7120000,
+      "margin": 0.06003,
+      "capMargin": 0.16684,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7027549,
+       "capMargin": 0.12514,
+       "error": null
+      },
+      {
+       "op": 6976752,
+       "capMargin": 0.13147,
+       "error": null
+      },
+      {
+       "op": 6670143,
+       "capMargin": 0.16964,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7065181,
+       "capMargin": 0.12046,
+       "error": null
+      },
+      {
+       "op": 7014384,
+       "capMargin": 0.12678,
+       "error": null
+      },
+      {
+       "op": 6707263,
+       "capMargin": 0.16502,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a shield #25",
+   "pv": "582027771705",
+   "sign": "0",
+   "publicInputs": [
+    "3020616063070516971811606074104886029214622171417494105577861221816743384234",
+    "11619147863625508245613417314977913034146065091535887001118259277693458969366"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    171
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8801
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7016459,
+      "budget": 7579200,
+      "margin": 0.07425,
+      "capMargin": 0.12652,
+      "error": null
+     },
+     {
+      "op": 6945163,
+      "budget": 7580000,
+      "margin": 0.08375,
+      "capMargin": 0.1354,
+      "error": null
+     },
+     {
+      "op": 6612608,
+      "budget": 7073600,
+      "margin": 0.06517,
+      "capMargin": 0.1768,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7051659,
+      "budget": 7579200,
+      "margin": 0.0696,
+      "capMargin": 0.12214,
+      "error": null
+     },
+     {
+      "op": 6980363,
+      "budget": 7580000,
+      "margin": 0.07911,
+      "capMargin": 0.13102,
+      "error": null
+     },
+     {
+      "op": 6647296,
+      "budget": 7073600,
+      "margin": 0.06027,
+      "capMargin": 0.17248,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7034959,
+       "capMargin": 0.12422,
+       "error": null
+      },
+      {
+       "op": 6964265,
+       "capMargin": 0.13302,
+       "error": null
+      },
+      {
+       "op": 6624582,
+       "capMargin": 0.17531,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7072591,
+       "capMargin": 0.11954,
+       "error": null
+      },
+      {
+       "op": 7001897,
+       "capMargin": 0.12834,
+       "error": null
+      },
+      {
+       "op": 6661702,
+       "capMargin": 0.17069,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a unshield #26",
+   "pv": "580939625789",
+   "sign": "1",
+   "publicInputs": [
+    "14470954399248975767990484234078540597028644555857632143215837976575308750738",
+    "13451149672890737703682486900826281318926544087439479955793100719704042923777"
+   ],
+   "nq": 123,
+   "fills": [
+    0,
+    0,
+    0
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    9013
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6963597,
+      "budget": 7579200,
+      "margin": 0.08122,
+      "capMargin": 0.1331,
+      "error": null
+     },
+     {
+      "op": 6948296,
+      "budget": 7580000,
+      "margin": 0.08334,
+      "capMargin": 0.13501,
+      "error": null
+     },
+     {
+      "op": 6698226,
+      "budget": 7243200,
+      "margin": 0.07524,
+      "capMargin": 0.16614,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6999181,
+      "budget": 7579200,
+      "margin": 0.07653,
+      "capMargin": 0.12867,
+      "error": null
+     },
+     {
+      "op": 6983880,
+      "budget": 7580000,
+      "margin": 0.07864,
+      "capMargin": 0.13058,
+      "error": null
+     },
+     {
+      "op": 6733298,
+      "budget": 7243200,
+      "margin": 0.0704,
+      "capMargin": 0.16177,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 6984778,
+       "capMargin": 0.13047,
+       "error": null
+      },
+      {
+       "op": 6970783,
+       "capMargin": 0.13221,
+       "error": null
+      },
+      {
+       "op": 6712449,
+       "capMargin": 0.16437,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022410,
+       "capMargin": 0.12578,
+       "error": null
+      },
+      {
+       "op": 7008415,
+       "capMargin": 0.12753,
+       "error": null
+      },
+      {
+       "op": 6749569,
+       "capMargin": 0.15975,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a transfer #27",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "14193172120754236875356203740555097171329252755017112587553000752831959803504",
+    "5338274419828117339966825388208089539633868097747696401987866624014073524925"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    114
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8840
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010645,
+      "budget": 7579200,
+      "margin": 0.07502,
+      "capMargin": 0.12725,
+      "error": null
+     },
+     {
+      "op": 6958693,
+      "budget": 7580000,
+      "margin": 0.08197,
+      "capMargin": 0.13372,
+      "error": null
+     },
+     {
+      "op": 6643714,
+      "budget": 7104800,
+      "margin": 0.0649,
+      "capMargin": 0.17293,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7045845,
+      "budget": 7579200,
+      "margin": 0.07037,
+      "capMargin": 0.12287,
+      "error": null
+     },
+     {
+      "op": 6993893,
+      "budget": 7580000,
+      "margin": 0.07732,
+      "capMargin": 0.12933,
+      "error": null
+     },
+     {
+      "op": 6678402,
+      "budget": 7104800,
+      "margin": 0.06002,
+      "capMargin": 0.16861,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7027840,
+       "capMargin": 0.12511,
+       "error": null
+      },
+      {
+       "op": 6977788,
+       "capMargin": 0.13134,
+       "error": null
+      },
+      {
+       "op": 6655738,
+       "capMargin": 0.17143,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7065472,
+       "capMargin": 0.12042,
+       "error": null
+      },
+      {
+       "op": 7015420,
+       "capMargin": 0.12665,
+       "error": null
+      },
+      {
+       "op": 6692858,
+       "capMargin": 0.16681,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a shield #28",
+   "pv": "929333769640",
+   "sign": "0",
+   "publicInputs": [
+    "2011456251911631192818255512108158846294594434892162914942046254555256669646",
+    "3733614778329411543266930026594950784688564281231531553220023650893928844700"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    376
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8719
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6970332,
+      "budget": 7579200,
+      "margin": 0.08033,
+      "capMargin": 0.13227,
+      "error": null
+     },
+     {
+      "op": 6970203,
+      "budget": 7580000,
+      "margin": 0.08045,
+      "capMargin": 0.13228,
+      "error": null
+     },
+     {
+      "op": 6552769,
+      "budget": 7008000,
+      "margin": 0.06496,
+      "capMargin": 0.18425,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7005404,
+      "budget": 7579200,
+      "margin": 0.07571,
+      "capMargin": 0.1279,
+      "error": null
+     },
+     {
+      "op": 7005275,
+      "budget": 7580000,
+      "margin": 0.07582,
+      "capMargin": 0.12792,
+      "error": null
+     },
+     {
+      "op": 6587329,
+      "budget": 7008000,
+      "margin": 0.06003,
+      "capMargin": 0.17995,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 6987204,
+       "capMargin": 0.13017,
+       "error": null
+      },
+      {
+       "op": 6987813,
+       "capMargin": 0.13009,
+       "error": null
+      },
+      {
+       "op": 6563010,
+       "capMargin": 0.18297,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7024836,
+       "capMargin": 0.12548,
+       "error": null
+      },
+      {
+       "op": 7025445,
+       "capMargin": 0.12541,
+       "error": null
+      },
+      {
+       "op": 6600130,
+       "capMargin": 0.17835,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a unshield #29",
+   "pv": "140345295240",
+   "sign": "1",
+   "publicInputs": [
+    "16179252365383308369896886552426735371333027594219074966161917849889837743409",
+    "4425046070313028285355046719981750608685640426726678406246638815838150347934"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    381
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8724
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7009708,
+      "budget": 7579200,
+      "margin": 0.07514,
+      "capMargin": 0.12736,
+      "error": null
+     },
+     {
+      "op": 6945325,
+      "budget": 7580000,
+      "margin": 0.08373,
+      "capMargin": 0.13538,
+      "error": null
+     },
+     {
+      "op": 6556477,
+      "budget": 7012000,
+      "margin": 0.06496,
+      "capMargin": 0.18379,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7044780,
+      "budget": 7579200,
+      "margin": 0.07051,
+      "capMargin": 0.123,
+      "error": null
+     },
+     {
+      "op": 6980397,
+      "budget": 7580000,
+      "margin": 0.0791,
+      "capMargin": 0.13101,
+      "error": null
+     },
+     {
+      "op": 6591037,
+      "budget": 7012000,
+      "margin": 0.06003,
+      "capMargin": 0.17948,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028443,
+       "capMargin": 0.12503,
+       "error": null
+      },
+      {
+       "op": 6966963,
+       "capMargin": 0.13269,
+       "error": null
+      },
+      {
+       "op": 6569743,
+       "capMargin": 0.18214,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066075,
+       "capMargin": 0.12035,
+       "error": null
+      },
+      {
+       "op": 7004595,
+       "capMargin": 0.128,
+       "error": null
+      },
+      {
+       "op": 6606863,
+       "capMargin": 0.17751,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a transfer #30",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "19633191413652247656424999300776851679278379823397836134633155829151388865379",
+    "2139637158952087124653189340080056787237082678446980348835250165989271503804"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    385
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8728
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7003252,
+      "budget": 7579200,
+      "margin": 0.07599,
+      "capMargin": 0.12817,
+      "error": null
+     },
+     {
+      "op": 6945221,
+      "budget": 7580000,
+      "margin": 0.08374,
+      "capMargin": 0.13539,
+      "error": null
+     },
+     {
+      "op": 6558773,
+      "budget": 7015200,
+      "margin": 0.06506,
+      "capMargin": 0.1835,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7038324,
+      "budget": 7579200,
+      "margin": 0.07136,
+      "capMargin": 0.1238,
+      "error": null
+     },
+     {
+      "op": 6980293,
+      "budget": 7580000,
+      "margin": 0.07912,
+      "capMargin": 0.13103,
+      "error": null
+     },
+     {
+      "op": 6593333,
+      "budget": 7015200,
+      "margin": 0.06014,
+      "capMargin": 0.1792,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7021981,
+       "capMargin": 0.12584,
+       "error": null
+      },
+      {
+       "op": 6964901,
+       "capMargin": 0.13294,
+       "error": null
+      },
+      {
+       "op": 6570527,
+       "capMargin": 0.18204,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7059613,
+       "capMargin": 0.12115,
+       "error": null
+      },
+      {
+       "op": 7002533,
+       "capMargin": 0.12826,
+       "error": null
+      },
+      {
+       "op": 6607647,
+       "capMargin": 0.17742,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1a shield #31",
+   "pv": "52444128461",
+   "sign": "0",
+   "publicInputs": [
+    "5082355948255852717538458161801046470198594105820413169596839302319545734250",
+    "12234385864437074186227362070717253959106593598582615179711048551409320008558"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    141
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8867
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7005489,
+      "budget": 7579200,
+      "margin": 0.0757,
+      "capMargin": 0.12789,
+      "error": null
+     },
+     {
+      "op": 6977637,
+      "budget": 7580000,
+      "margin": 0.07947,
+      "capMargin": 0.13136,
+      "error": null
+     },
+     {
+      "op": 6662902,
+      "budget": 7126400,
+      "margin": 0.06504,
+      "capMargin": 0.17054,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7040817,
+      "budget": 7579200,
+      "margin": 0.07103,
+      "capMargin": 0.12349,
+      "error": null
+     },
+     {
+      "op": 7012965,
+      "budget": 7580000,
+      "margin": 0.07481,
+      "capMargin": 0.12696,
+      "error": null
+     },
+     {
+      "op": 6697718,
+      "budget": 7126400,
+      "margin": 0.06015,
+      "capMargin": 0.1662,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7023009,
+       "capMargin": 0.12571,
+       "error": null
+      },
+      {
+       "op": 6996294,
+       "capMargin": 0.12903,
+       "error": null
+      },
+      {
+       "op": 6674325,
+       "capMargin": 0.16912,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7060641,
+       "capMargin": 0.12102,
+       "error": null
+      },
+      {
+       "op": 7033926,
+       "capMargin": 0.12435,
+       "error": null
+      },
+      {
+       "op": 6711445,
+       "capMargin": 0.16449,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b transfer #0",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "19441295690120481525820603721648313180387953113930272458744508105133843265586",
+    "1963036387290224223466553842100283648413752079365940329654065969147188439544"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    235
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8769
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7004161,
+      "budget": 7579200,
+      "margin": 0.07587,
+      "capMargin": 0.12805,
+      "error": null
+     },
+     {
+      "op": 6970780,
+      "budget": 7580000,
+      "margin": 0.08037,
+      "capMargin": 0.13221,
+      "error": null
+     },
+     {
+      "op": 6590013,
+      "budget": 7048000,
+      "margin": 0.06498,
+      "capMargin": 0.17961,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7039233,
+      "budget": 7579200,
+      "margin": 0.07124,
+      "capMargin": 0.12369,
+      "error": null
+     },
+     {
+      "op": 7005852,
+      "budget": 7580000,
+      "margin": 0.07575,
+      "capMargin": 0.12784,
+      "error": null
+     },
+     {
+      "op": 6624573,
+      "budget": 7048000,
+      "margin": 0.06008,
+      "capMargin": 0.17531,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7021936,
+       "capMargin": 0.12584,
+       "error": null
+      },
+      {
+       "op": 6989269,
+       "capMargin": 0.12991,
+       "error": null
+      },
+      {
+       "op": 6600707,
+       "capMargin": 0.17828,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7059568,
+       "capMargin": 0.12116,
+       "error": null
+      },
+      {
+       "op": 7026901,
+       "capMargin": 0.12522,
+       "error": null
+      },
+      {
+       "op": 6637827,
+       "capMargin": 0.17366,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b shield #1",
+   "pv": "137432110739",
+   "sign": "0",
+   "publicInputs": [
+    "7817120058183429050099635451928406494104210764340691153402456177456884575740",
+    "7563513061768820809886513804741351674316827742170983027936529959017465070713"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    170
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8800
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010543,
+      "budget": 7579200,
+      "margin": 0.07503,
+      "capMargin": 0.12726,
+      "error": null
+     },
+     {
+      "op": 6957734,
+      "budget": 7580000,
+      "margin": 0.08209,
+      "capMargin": 0.13383,
+      "error": null
+     },
+     {
+      "op": 6612089,
+      "budget": 7072800,
+      "margin": 0.06514,
+      "capMargin": 0.17686,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7045743,
+      "budget": 7579200,
+      "margin": 0.07038,
+      "capMargin": 0.12288,
+      "error": null
+     },
+     {
+      "op": 6992934,
+      "budget": 7580000,
+      "margin": 0.07745,
+      "capMargin": 0.12945,
+      "error": null
+     },
+     {
+      "op": 6646777,
+      "budget": 7072800,
+      "margin": 0.06023,
+      "capMargin": 0.17255,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7029053,
+       "capMargin": 0.12496,
+       "error": null
+      },
+      {
+       "op": 6977603,
+       "capMargin": 0.13136,
+       "error": null
+      },
+      {
+       "op": 6623582,
+       "capMargin": 0.17543,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066685,
+       "capMargin": 0.12027,
+       "error": null
+      },
+      {
+       "op": 7015235,
+       "capMargin": 0.12668,
+       "error": null
+      },
+      {
+       "op": 6660702,
+       "capMargin": 0.17081,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b unshield #2",
+   "pv": "8186455694",
+   "sign": "1",
+   "publicInputs": [
+    "3505618886028472526526801250979296989398633417550811622639713104623089800980",
+    "4112733953392608473231229530062326848274464450621554827463345064464485859004"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    179
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8809
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010118,
+      "budget": 7579200,
+      "margin": 0.07508,
+      "capMargin": 0.12731,
+      "error": null
+     },
+     {
+      "op": 6957211,
+      "budget": 7580000,
+      "margin": 0.08216,
+      "capMargin": 0.1339,
+      "error": null
+     },
+     {
+      "op": 6620185,
+      "budget": 7080000,
+      "margin": 0.06495,
+      "capMargin": 0.17586,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7045318,
+      "budget": 7579200,
+      "margin": 0.07044,
+      "capMargin": 0.12293,
+      "error": null
+     },
+     {
+      "op": 6992411,
+      "budget": 7580000,
+      "margin": 0.07752,
+      "capMargin": 0.12952,
+      "error": null
+     },
+     {
+      "op": 6654873,
+      "budget": 7080000,
+      "margin": 0.06005,
+      "capMargin": 0.17154,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028385,
+       "capMargin": 0.12504,
+       "error": null
+      },
+      {
+       "op": 6977507,
+       "capMargin": 0.13137,
+       "error": null
+      },
+      {
+       "op": 6632245,
+       "capMargin": 0.17435,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066017,
+       "capMargin": 0.12035,
+       "error": null
+      },
+      {
+       "op": 7015139,
+       "capMargin": 0.12669,
+       "error": null
+      },
+      {
+       "op": 6669365,
+       "capMargin": 0.16973,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b transfer #3",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "8009453988122488737095301034038787190039294318562288791960173946406549722938",
+    "447367550015347952773552642548921834602900674138936781970541633276303827881"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    122
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8848
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6997897,
+      "budget": 7579200,
+      "margin": 0.0767,
+      "capMargin": 0.12883,
+      "error": null
+     },
+     {
+      "op": 6940899,
+      "budget": 7580000,
+      "margin": 0.08431,
+      "capMargin": 0.13593,
+      "error": null
+     },
+     {
+      "op": 6648918,
+      "budget": 7111200,
+      "margin": 0.06501,
+      "capMargin": 0.17228,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7033225,
+      "budget": 7579200,
+      "margin": 0.07204,
+      "capMargin": 0.12444,
+      "error": null
+     },
+     {
+      "op": 6976227,
+      "budget": 7580000,
+      "margin": 0.07965,
+      "capMargin": 0.13153,
+      "error": null
+     },
+     {
+      "op": 6683734,
+      "budget": 7111200,
+      "margin": 0.06011,
+      "capMargin": 0.16794,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7015462,
+       "capMargin": 0.12665,
+       "error": null
+      },
+      {
+       "op": 6959681,
+       "capMargin": 0.13359,
+       "error": null
+      },
+      {
+       "op": 6660235,
+       "capMargin": 0.17087,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7053094,
+       "capMargin": 0.12196,
+       "error": null
+      },
+      {
+       "op": 6997313,
+       "capMargin": 0.12891,
+       "error": null
+      },
+      {
+       "op": 6697355,
+       "capMargin": 0.16625,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b shield #4",
+   "pv": "141428929714",
+   "sign": "0",
+   "publicInputs": [
+    "5776190626084883747715009893031548908154011680055528963807948988385748784510",
+    "6831941780641695380314359918881355164813561902231185127642454870698907037531"
+   ],
+   "nq": 99,
+   "fills": [
+    0,
+    0,
+    431
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8678
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6991641,
+      "budget": 7579200,
+      "margin": 0.07752,
+      "capMargin": 0.12961,
+      "error": null
+     },
+     {
+      "op": 6962871,
+      "budget": 7580000,
+      "margin": 0.08142,
+      "capMargin": 0.1332,
+      "error": null
+     },
+     {
+      "op": 6522253,
+      "budget": 6975200,
+      "margin": 0.06494,
+      "capMargin": 0.18805,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7026585,
+      "budget": 7579200,
+      "margin": 0.07291,
+      "capMargin": 0.12526,
+      "error": null
+     },
+     {
+      "op": 6997815,
+      "budget": 7580000,
+      "margin": 0.07681,
+      "capMargin": 0.12884,
+      "error": null
+     },
+     {
+      "op": 6556685,
+      "budget": 6975200,
+      "margin": 0.06,
+      "capMargin": 0.18376,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7011808,
+       "capMargin": 0.1271,
+       "error": null
+      },
+      {
+       "op": 6983634,
+       "capMargin": 0.13061,
+       "error": null
+      },
+      {
+       "op": 6534294,
+       "capMargin": 0.18655,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7049440,
+       "capMargin": 0.12242,
+       "error": null
+      },
+      {
+       "op": 7021266,
+       "capMargin": 0.12593,
+       "error": null
+      },
+      {
+       "op": 6571414,
+       "capMargin": 0.18193,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b unshield #5",
+   "pv": "189211060431",
+   "sign": "1",
+   "publicInputs": [
+    "15192080551223427082178776341204904086302185815889105658930793144180160577702",
+    "649586611626078115998449658551501788547347781551223163591960297264882336968"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    198
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8828
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7004845,
+      "budget": 7579200,
+      "margin": 0.07578,
+      "capMargin": 0.12797,
+      "error": null
+     },
+     {
+      "op": 6952115,
+      "budget": 7580000,
+      "margin": 0.08283,
+      "capMargin": 0.13453,
+      "error": null
+     },
+     {
+      "op": 6633635,
+      "budget": 7095200,
+      "margin": 0.06505,
+      "capMargin": 0.17418,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7040045,
+      "budget": 7579200,
+      "margin": 0.07114,
+      "capMargin": 0.12359,
+      "error": null
+     },
+     {
+      "op": 6987315,
+      "budget": 7580000,
+      "margin": 0.07819,
+      "capMargin": 0.13015,
+      "error": null
+     },
+     {
+      "op": 6668323,
+      "budget": 7095200,
+      "margin": 0.06016,
+      "capMargin": 0.16986,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022650,
+       "capMargin": 0.12575,
+       "error": null
+      },
+      {
+       "op": 6971369,
+       "capMargin": 0.13214,
+       "error": null
+      },
+      {
+       "op": 6645386,
+       "capMargin": 0.17272,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7060282,
+       "capMargin": 0.12107,
+       "error": null
+      },
+      {
+       "op": 7009001,
+       "capMargin": 0.12745,
+       "error": null
+      },
+      {
+       "op": 6682506,
+       "capMargin": 0.1681,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b transfer #6",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "18351857331454488454004104429977937542225393926431232416777340634495965472386",
+    "10891224706125991884820406767952989982614016690018525449227669022810506433264"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    123
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8849
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7017598,
+      "budget": 7579200,
+      "margin": 0.0741,
+      "capMargin": 0.12638,
+      "error": null
+     },
+     {
+      "op": 6970317,
+      "budget": 7580000,
+      "margin": 0.08043,
+      "capMargin": 0.13227,
+      "error": null
+     },
+     {
+      "op": 6650354,
+      "budget": 7112000,
+      "margin": 0.06491,
+      "capMargin": 0.1721,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7052926,
+      "budget": 7579200,
+      "margin": 0.06944,
+      "capMargin": 0.12198,
+      "error": null
+     },
+     {
+      "op": 7005645,
+      "budget": 7580000,
+      "margin": 0.07577,
+      "capMargin": 0.12787,
+      "error": null
+     },
+     {
+      "op": 6685170,
+      "budget": 7112000,
+      "margin": 0.06002,
+      "capMargin": 0.16777,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7035029,
+       "capMargin": 0.12421,
+       "error": null
+      },
+      {
+       "op": 6989923,
+       "capMargin": 0.12983,
+       "error": null
+      },
+      {
+       "op": 6662273,
+       "capMargin": 0.17062,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7072661,
+       "capMargin": 0.11953,
+       "error": null
+      },
+      {
+       "op": 7027555,
+       "capMargin": 0.12514,
+       "error": null
+      },
+      {
+       "op": 6699393,
+       "capMargin": 0.166,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b shield #7",
+   "pv": "809135703336",
+   "sign": "0",
+   "publicInputs": [
+    "18193062916590806758591368995271101295414639416972634068509867873457553716643",
+    "5430038456849645412941226004418062859198094887585808287230983879728794805421"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    245
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8779
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6996874,
+      "budget": 7579200,
+      "margin": 0.07683,
+      "capMargin": 0.12896,
+      "error": null
+     },
+     {
+      "op": 6956344,
+      "budget": 7580000,
+      "margin": 0.08228,
+      "capMargin": 0.13401,
+      "error": null
+     },
+     {
+      "op": 6597040,
+      "budget": 7056000,
+      "margin": 0.06505,
+      "capMargin": 0.17874,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7032074,
+      "budget": 7579200,
+      "margin": 0.07219,
+      "capMargin": 0.12458,
+      "error": null
+     },
+     {
+      "op": 6991544,
+      "budget": 7580000,
+      "margin": 0.07763,
+      "capMargin": 0.12963,
+      "error": null
+     },
+     {
+      "op": 6631728,
+      "budget": 7056000,
+      "margin": 0.06013,
+      "capMargin": 0.17442,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7015688,
+       "capMargin": 0.12662,
+       "error": null
+      },
+      {
+       "op": 6976618,
+       "capMargin": 0.13148,
+       "error": null
+      },
+      {
+       "op": 6610127,
+       "capMargin": 0.17711,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7053320,
+       "capMargin": 0.12194,
+       "error": null
+      },
+      {
+       "op": 7014250,
+       "capMargin": 0.1268,
+       "error": null
+      },
+      {
+       "op": 6647247,
+       "capMargin": 0.17249,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b unshield #8",
+   "pv": "985278415291",
+   "sign": "1",
+   "publicInputs": [
+    "1733504308764330906172825713071645370239282573497660227660124703721483175809",
+    "8541971795375488404605438523366147581297811287382633579464804897641523382374"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    253
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8787
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7016880,
+      "budget": 7579200,
+      "margin": 0.07419,
+      "capMargin": 0.12647,
+      "error": null
+     },
+     {
+      "op": 6950117,
+      "budget": 7580000,
+      "margin": 0.0831,
+      "capMargin": 0.13478,
+      "error": null
+     },
+     {
+      "op": 6600749,
+      "budget": 7062400,
+      "margin": 0.06537,
+      "capMargin": 0.17828,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7052080,
+      "budget": 7579200,
+      "margin": 0.06955,
+      "capMargin": 0.12209,
+      "error": null
+     },
+     {
+      "op": 6985317,
+      "budget": 7580000,
+      "margin": 0.07845,
+      "capMargin": 0.1304,
+      "error": null
+     },
+     {
+      "op": 6635437,
+      "budget": 7062400,
+      "margin": 0.06046,
+      "capMargin": 0.17396,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7036265,
+       "capMargin": 0.12406,
+       "error": null
+      },
+      {
+       "op": 6970016,
+       "capMargin": 0.13231,
+       "error": null
+      },
+      {
+       "op": 6614874,
+       "capMargin": 0.17652,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7073897,
+       "capMargin": 0.11937,
+       "error": null
+      },
+      {
+       "op": 7007648,
+       "capMargin": 0.12762,
+       "error": null
+      },
+      {
+       "op": 6651994,
+       "capMargin": 0.1719,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b transfer #9",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "16509052200319361943643800298794069668384433456047583251580663233080297918146",
+    "8200074094419279793629598474448059225175621017209744483032485729354729167206"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    375
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8718
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7002667,
+      "budget": 7579200,
+      "margin": 0.07607,
+      "capMargin": 0.12824,
+      "error": null
+     },
+     {
+      "op": 6956193,
+      "budget": 7580000,
+      "margin": 0.0823,
+      "capMargin": 0.13403,
+      "error": null
+     },
+     {
+      "op": 6552032,
+      "budget": 7007200,
+      "margin": 0.06496,
+      "capMargin": 0.18434,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7037739,
+      "budget": 7579200,
+      "margin": 0.07144,
+      "capMargin": 0.12387,
+      "error": null
+     },
+     {
+      "op": 6991265,
+      "budget": 7580000,
+      "margin": 0.07767,
+      "capMargin": 0.12966,
+      "error": null
+     },
+     {
+      "op": 6586592,
+      "budget": 7007200,
+      "margin": 0.06003,
+      "capMargin": 0.18004,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7021829,
+       "capMargin": 0.12586,
+       "error": null
+      },
+      {
+       "op": 6976493,
+       "capMargin": 0.1315,
+       "error": null
+      },
+      {
+       "op": 6564157,
+       "capMargin": 0.18283,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7059461,
+       "capMargin": 0.12117,
+       "error": null
+      },
+      {
+       "op": 7014125,
+       "capMargin": 0.12681,
+       "error": null
+      },
+      {
+       "op": 6601277,
+       "capMargin": 0.17821,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b shield #10",
+   "pv": "533489521411",
+   "sign": "0",
+   "publicInputs": [
+    "5683829270886886001347489139369152735120517117194174339249973508299570513155",
+    "11341082604706298023116536864158491324633829341414357494456381558856127779223"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    171
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8801
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7011540,
+      "budget": 7579200,
+      "margin": 0.0749,
+      "capMargin": 0.12714,
+      "error": null
+     },
+     {
+      "op": 6951247,
+      "budget": 7580000,
+      "margin": 0.08295,
+      "capMargin": 0.13464,
+      "error": null
+     },
+     {
+      "op": 6614281,
+      "budget": 7073600,
+      "margin": 0.06493,
+      "capMargin": 0.17659,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7046740,
+      "budget": 7579200,
+      "margin": 0.07025,
+      "capMargin": 0.12275,
+      "error": null
+     },
+     {
+      "op": 6986447,
+      "budget": 7580000,
+      "margin": 0.07831,
+      "capMargin": 0.13026,
+      "error": null
+     },
+     {
+      "op": 6648969,
+      "budget": 7073600,
+      "margin": 0.06003,
+      "capMargin": 0.17227,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7029347,
+       "capMargin": 0.12492,
+       "error": null
+      },
+      {
+       "op": 6971034,
+       "capMargin": 0.13218,
+       "error": null
+      },
+      {
+       "op": 6626096,
+       "capMargin": 0.17512,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066979,
+       "capMargin": 0.12023,
+       "error": null
+      },
+      {
+       "op": 7008666,
+       "capMargin": 0.12749,
+       "error": null
+      },
+      {
+       "op": 6663216,
+       "capMargin": 0.1705,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b unshield #11",
+   "pv": "151556809914",
+   "sign": "1",
+   "publicInputs": [
+    "13216477101727271863409176806409236376571906893814679324744318424734519423854",
+    "12130292558217929137202190857014311980209518281123361769158106362912392917559"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    220
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8754
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7009228,
+      "budget": 7579200,
+      "margin": 0.0752,
+      "capMargin": 0.12742,
+      "error": null
+     },
+     {
+      "op": 6957197,
+      "budget": 7580000,
+      "margin": 0.08216,
+      "capMargin": 0.1339,
+      "error": null
+     },
+     {
+      "op": 6579216,
+      "budget": 7036000,
+      "margin": 0.06492,
+      "capMargin": 0.18096,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7044300,
+      "budget": 7579200,
+      "margin": 0.07057,
+      "capMargin": 0.12306,
+      "error": null
+     },
+     {
+      "op": 6992269,
+      "budget": 7580000,
+      "margin": 0.07754,
+      "capMargin": 0.12954,
+      "error": null
+     },
+     {
+      "op": 6613776,
+      "budget": 7036000,
+      "margin": 0.06001,
+      "capMargin": 0.17665,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028348,
+       "capMargin": 0.12504,
+       "error": null
+      },
+      {
+       "op": 6977880,
+       "capMargin": 0.13133,
+       "error": null
+      },
+      {
+       "op": 6591395,
+       "capMargin": 0.17944,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7065980,
+       "capMargin": 0.12036,
+       "error": null
+      },
+      {
+       "op": 7015512,
+       "capMargin": 0.12664,
+       "error": null
+      },
+      {
+       "op": 6628515,
+       "capMargin": 0.17482,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b transfer #12",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "5048645643509007429892295482906802928840174140717743856068346288108597365558",
+    "10099049607677932161453295683960770004181870911937190527112395725923975321749"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    238
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8772
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010744,
+      "budget": 7579200,
+      "margin": 0.075,
+      "capMargin": 0.12724,
+      "error": null
+     },
+     {
+      "op": 6975255,
+      "budget": 7580000,
+      "margin": 0.07978,
+      "capMargin": 0.13165,
+      "error": null
+     },
+     {
+      "op": 6592285,
+      "budget": 7050400,
+      "margin": 0.06498,
+      "capMargin": 0.17933,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7045816,
+      "budget": 7579200,
+      "margin": 0.07037,
+      "capMargin": 0.12287,
+      "error": null
+     },
+     {
+      "op": 7010327,
+      "budget": 7580000,
+      "margin": 0.07515,
+      "capMargin": 0.12729,
+      "error": null
+     },
+     {
+      "op": 6626845,
+      "budget": 7050400,
+      "margin": 0.06008,
+      "capMargin": 0.17503,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7029653,
+       "capMargin": 0.12488,
+       "error": null
+      },
+      {
+       "op": 6996633,
+       "capMargin": 0.12899,
+       "error": null
+      },
+      {
+       "op": 6604569,
+       "capMargin": 0.1778,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7067285,
+       "capMargin": 0.1202,
+       "error": null
+      },
+      {
+       "op": 7034265,
+       "capMargin": 0.12431,
+       "error": null
+      },
+      {
+       "op": 6641689,
+       "capMargin": 0.17318,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b shield #13",
+   "pv": "1022177766171",
+   "sign": "0",
+   "publicInputs": [
+    "18783963056345430059580429545187331760721155256770080268936003886455231072032",
+    "5490147324696036069318850703633876472075229143859081057930423685406630267994"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    367
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8710
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6996819,
+      "budget": 7579200,
+      "margin": 0.07684,
+      "capMargin": 0.12897,
+      "error": null
+     },
+     {
+      "op": 6943639,
+      "budget": 7580000,
+      "margin": 0.08395,
+      "capMargin": 0.13559,
+      "error": null
+     },
+     {
+      "op": 6545720,
+      "budget": 7000800,
+      "margin": 0.065,
+      "capMargin": 0.18513,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7031763,
+      "budget": 7579200,
+      "margin": 0.07223,
+      "capMargin": 0.12462,
+      "error": null
+     },
+     {
+      "op": 6978583,
+      "budget": 7580000,
+      "margin": 0.07934,
+      "capMargin": 0.13124,
+      "error": null
+     },
+     {
+      "op": 6580152,
+      "budget": 7000800,
+      "margin": 0.06009,
+      "capMargin": 0.18084,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7016884,
+       "capMargin": 0.12647,
+       "error": null
+      },
+      {
+       "op": 6964234,
+       "capMargin": 0.13303,
+       "error": null
+      },
+      {
+       "op": 6557841,
+       "capMargin": 0.18362,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7054516,
+       "capMargin": 0.12179,
+       "error": null
+      },
+      {
+       "op": 7001866,
+       "capMargin": 0.12834,
+       "error": null
+      },
+      {
+       "op": 6594961,
+       "capMargin": 0.179,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b unshield #14",
+   "pv": "91931404951",
+   "sign": "1",
+   "publicInputs": [
+    "21039259565579995850648070916389580108516180879246796785264044728120286911090",
+    "7722167796430375189921080460554164325161513044104674649400253485401858030693"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    202
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8736
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010641,
+      "budget": 7579200,
+      "margin": 0.07502,
+      "capMargin": 0.12725,
+      "error": null
+     },
+     {
+      "op": 6950587,
+      "budget": 7580000,
+      "margin": 0.08304,
+      "capMargin": 0.13472,
+      "error": null
+     },
+     {
+      "op": 6565373,
+      "budget": 7021600,
+      "margin": 0.06497,
+      "capMargin": 0.18268,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7045713,
+      "budget": 7579200,
+      "margin": 0.07039,
+      "capMargin": 0.12288,
+      "error": null
+     },
+     {
+      "op": 6985659,
+      "budget": 7580000,
+      "margin": 0.07841,
+      "capMargin": 0.13036,
+      "error": null
+     },
+     {
+      "op": 6599933,
+      "budget": 7021600,
+      "margin": 0.06005,
+      "capMargin": 0.17838,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7029146,
+       "capMargin": 0.12494,
+       "error": null
+      },
+      {
+       "op": 6970182,
+       "capMargin": 0.13228,
+       "error": null
+      },
+      {
+       "op": 6577090,
+       "capMargin": 0.18122,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066778,
+       "capMargin": 0.12026,
+       "error": null
+      },
+      {
+       "op": 7007814,
+       "capMargin": 0.1276,
+       "error": null
+      },
+      {
+       "op": 6614210,
+       "capMargin": 0.1766,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b transfer #15",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "6544140648026272048048984201378508374292719764081551661371113338703175022668",
+    "12495751051814108656462291191052520088668855152944147663875475902820587129621"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    383
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8726
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7021926,
+      "budget": 7579200,
+      "margin": 0.07353,
+      "capMargin": 0.12584,
+      "error": null
+     },
+     {
+      "op": 6940925,
+      "budget": 7580000,
+      "margin": 0.08431,
+      "capMargin": 0.13593,
+      "error": null
+     },
+     {
+      "op": 6557896,
+      "budget": 7013600,
+      "margin": 0.06497,
+      "capMargin": 0.18361,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7056998,
+      "budget": 7579200,
+      "margin": 0.0689,
+      "capMargin": 0.12148,
+      "error": null
+     },
+     {
+      "op": 6975997,
+      "budget": 7580000,
+      "margin": 0.07968,
+      "capMargin": 0.13156,
+      "error": null
+     },
+     {
+      "op": 6592456,
+      "budget": 7013600,
+      "margin": 0.06005,
+      "capMargin": 0.17931,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7041161,
+       "capMargin": 0.12345,
+       "error": null
+      },
+      {
+       "op": 6960373,
+       "capMargin": 0.13351,
+       "error": null
+      },
+      {
+       "op": 6569719,
+       "capMargin": 0.18214,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7078793,
+       "capMargin": 0.11876,
+       "error": null
+      },
+      {
+       "op": 6998005,
+       "capMargin": 0.12882,
+       "error": null
+      },
+      {
+       "op": 6606839,
+       "capMargin": 0.17752,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b shield #16",
+   "pv": "49630330636",
+   "sign": "0",
+   "publicInputs": [
+    "13780963193981623694272644219680434320293686683293573262002427439207223408890",
+    "9292092513257766621411123326394317975788928981514120925575886912348727938223"
+   ],
+   "nq": 99,
+   "fills": [
+    0,
+    0,
+    442
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8689
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6996958,
+      "budget": 7579200,
+      "margin": 0.07682,
+      "capMargin": 0.12895,
+      "error": null
+     },
+     {
+      "op": 6956084,
+      "budget": 7580000,
+      "margin": 0.08231,
+      "capMargin": 0.13404,
+      "error": null
+     },
+     {
+      "op": 6529731,
+      "budget": 6984000,
+      "margin": 0.06504,
+      "capMargin": 0.18712,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7031902,
+      "budget": 7579200,
+      "margin": 0.07221,
+      "capMargin": 0.1246,
+      "error": null
+     },
+     {
+      "op": 6991028,
+      "budget": 7580000,
+      "margin": 0.0777,
+      "capMargin": 0.12969,
+      "error": null
+     },
+     {
+      "op": 6564163,
+      "budget": 6984000,
+      "margin": 0.06011,
+      "capMargin": 0.18283,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7016861,
+       "capMargin": 0.12647,
+       "error": null
+      },
+      {
+       "op": 6977287,
+       "capMargin": 0.1314,
+       "error": null
+      },
+      {
+       "op": 6543478,
+       "capMargin": 0.18541,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7054493,
+       "capMargin": 0.12179,
+       "error": null
+      },
+      {
+       "op": 7014919,
+       "capMargin": 0.12672,
+       "error": null
+      },
+      {
+       "op": 6580598,
+       "capMargin": 0.18078,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b unshield #17",
+   "pv": "15515249164",
+   "sign": "1",
+   "publicInputs": [
+    "17568127846311272354443611297596847744053373215535199399078597336546042160470",
+    "9332420980139771730673297490710971981008449019927939422068913618431706762750"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    119
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8845
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7011611,
+      "budget": 7579200,
+      "margin": 0.07489,
+      "capMargin": 0.12713,
+      "error": null
+     },
+     {
+      "op": 6977350,
+      "budget": 7580000,
+      "margin": 0.07951,
+      "capMargin": 0.13139,
+      "error": null
+     },
+     {
+      "op": 6647039,
+      "budget": 7108800,
+      "margin": 0.06496,
+      "capMargin": 0.17251,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7046939,
+      "budget": 7579200,
+      "margin": 0.07023,
+      "capMargin": 0.12273,
+      "error": null
+     },
+     {
+      "op": 7012678,
+      "budget": 7580000,
+      "margin": 0.07484,
+      "capMargin": 0.12699,
+      "error": null
+     },
+     {
+      "op": 6681855,
+      "budget": 7108800,
+      "margin": 0.06006,
+      "capMargin": 0.16818,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7029137,
+       "capMargin": 0.12495,
+       "error": null
+      },
+      {
+       "op": 6996901,
+       "capMargin": 0.12896,
+       "error": null
+      },
+      {
+       "op": 6659100,
+       "capMargin": 0.17101,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066769,
+       "capMargin": 0.12026,
+       "error": null
+      },
+      {
+       "op": 7034533,
+       "capMargin": 0.12427,
+       "error": null
+      },
+      {
+       "op": 6696220,
+       "capMargin": 0.16639,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b transfer #18",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "13609901781616499108888194446011601389986423421323069576680645351265067449463",
+    "14323714428580850808550876672987019412531821570080747393659064867599851636511"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    169
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8799
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7004095,
+      "budget": 7579200,
+      "margin": 0.07588,
+      "capMargin": 0.12806,
+      "error": null
+     },
+     {
+      "op": 6971542,
+      "budget": 7580000,
+      "margin": 0.08027,
+      "capMargin": 0.13212,
+      "error": null
+     },
+     {
+      "op": 6612446,
+      "budget": 7072000,
+      "margin": 0.06498,
+      "capMargin": 0.17682,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7039295,
+      "budget": 7579200,
+      "margin": 0.07124,
+      "capMargin": 0.12368,
+      "error": null
+     },
+     {
+      "op": 7006742,
+      "budget": 7580000,
+      "margin": 0.07563,
+      "capMargin": 0.12773,
+      "error": null
+     },
+     {
+      "op": 6647134,
+      "budget": 7072000,
+      "margin": 0.06008,
+      "capMargin": 0.1725,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7021706,
+       "capMargin": 0.12587,
+       "error": null
+      },
+      {
+       "op": 6990345,
+       "capMargin": 0.12977,
+       "error": null
+      },
+      {
+       "op": 6623391,
+       "capMargin": 0.17546,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7059338,
+       "capMargin": 0.12119,
+       "error": null
+      },
+      {
+       "op": 7027977,
+       "capMargin": 0.12509,
+       "error": null
+      },
+      {
+       "op": 6660511,
+       "capMargin": 0.17084,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b shield #19",
+   "pv": "488347168956",
+   "sign": "0",
+   "publicInputs": [
+    "794932549857934674756847769919761211035112594379248725167150184493947445226",
+    "8060002989374805102393072195896122571585193197687935251617611359295536422901"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    228
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8762
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7008657,
+      "budget": 7579200,
+      "margin": 0.07528,
+      "capMargin": 0.1275,
+      "error": null
+     },
+     {
+      "op": 6956172,
+      "budget": 7580000,
+      "margin": 0.0823,
+      "capMargin": 0.13403,
+      "error": null
+     },
+     {
+      "op": 6584523,
+      "budget": 7042400,
+      "margin": 0.06502,
+      "capMargin": 0.1803,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7043729,
+      "budget": 7579200,
+      "margin": 0.07065,
+      "capMargin": 0.12313,
+      "error": null
+     },
+     {
+      "op": 6991244,
+      "budget": 7580000,
+      "margin": 0.07767,
+      "capMargin": 0.12966,
+      "error": null
+     },
+     {
+      "op": 6619083,
+      "budget": 7042400,
+      "margin": 0.06011,
+      "capMargin": 0.17599,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028766,
+       "capMargin": 0.12499,
+       "error": null
+      },
+      {
+       "op": 6977480,
+       "capMargin": 0.13138,
+       "error": null
+      },
+      {
+       "op": 6596744,
+       "capMargin": 0.17877,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066398,
+       "capMargin": 0.12031,
+       "error": null
+      },
+      {
+       "op": 7015112,
+       "capMargin": 0.12669,
+       "error": null
+      },
+      {
+       "op": 6633864,
+       "capMargin": 0.17415,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b unshield #20",
+   "pv": "177035053380",
+   "sign": "1",
+   "publicInputs": [
+    "21122384653291841340003899541836083277247497168517056338939109255734009426813",
+    "10103042692771386237862861664454764286790780010318117766027674399862568995277"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    235
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8769
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6983979,
+      "budget": 7579200,
+      "margin": 0.07853,
+      "capMargin": 0.13057,
+      "error": null
+     },
+     {
+      "op": 6956240,
+      "budget": 7580000,
+      "margin": 0.08229,
+      "capMargin": 0.13402,
+      "error": null
+     },
+     {
+      "op": 6590265,
+      "budget": 7048000,
+      "margin": 0.06495,
+      "capMargin": 0.17958,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7019051,
+      "budget": 7579200,
+      "margin": 0.07391,
+      "capMargin": 0.1262,
+      "error": null
+     },
+     {
+      "op": 6991312,
+      "budget": 7580000,
+      "margin": 0.07766,
+      "capMargin": 0.12965,
+      "error": null
+     },
+     {
+      "op": 6624825,
+      "budget": 7048000,
+      "margin": 0.06004,
+      "capMargin": 0.17528,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7002425,
+       "capMargin": 0.12827,
+       "error": null
+      },
+      {
+       "op": 6976827,
+       "capMargin": 0.13146,
+       "error": null
+      },
+      {
+       "op": 6603961,
+       "capMargin": 0.17788,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7040057,
+       "capMargin": 0.12359,
+       "error": null
+      },
+      {
+       "op": 7014459,
+       "capMargin": 0.12677,
+       "error": null
+      },
+      {
+       "op": 6641081,
+       "capMargin": 0.17325,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b transfer #21",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "2346400447914152028915230787304637174142715265826904938662492282685179503362",
+    "6631432950408722327903183425954902630146721795907711658328983896182365260587"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    332
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8771
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7019827,
+      "budget": 7579200,
+      "margin": 0.0738,
+      "capMargin": 0.1261,
+      "error": null
+     },
+     {
+      "op": 6962178,
+      "budget": 7580000,
+      "margin": 0.08151,
+      "capMargin": 0.13328,
+      "error": null
+     },
+     {
+      "op": 6591184,
+      "budget": 7049600,
+      "margin": 0.06503,
+      "capMargin": 0.17947,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7054899,
+      "budget": 7579200,
+      "margin": 0.06918,
+      "capMargin": 0.12174,
+      "error": null
+     },
+     {
+      "op": 6997250,
+      "budget": 7580000,
+      "margin": 0.07688,
+      "capMargin": 0.12892,
+      "error": null
+     },
+     {
+      "op": 6625744,
+      "budget": 7049600,
+      "margin": 0.06012,
+      "capMargin": 0.17516,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7041174,
+       "capMargin": 0.12345,
+       "error": null
+      },
+      {
+       "op": 6985582,
+       "capMargin": 0.13037,
+       "error": null
+      },
+      {
+       "op": 6605880,
+       "capMargin": 0.17764,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7078806,
+       "capMargin": 0.11876,
+       "error": null
+      },
+      {
+       "op": 7023214,
+       "capMargin": 0.12568,
+       "error": null
+      },
+      {
+       "op": 6643000,
+       "capMargin": 0.17302,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b shield #22",
+   "pv": "1037956255320",
+   "sign": "0",
+   "publicInputs": [
+    "2715756597033331386102781508641530081912082794440085964195792015052771505205",
+    "5518160086265827182150007655961700746315574761931713243303950733764674515732"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    366
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8709
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6996472,
+      "budget": 7579200,
+      "margin": 0.07689,
+      "capMargin": 0.12901,
+      "error": null
+     },
+     {
+      "op": 6968709,
+      "budget": 7580000,
+      "margin": 0.08065,
+      "capMargin": 0.13247,
+      "error": null
+     },
+     {
+      "op": 6543568,
+      "budget": 7000000,
+      "margin": 0.0652,
+      "capMargin": 0.18539,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7031416,
+      "budget": 7579200,
+      "margin": 0.07227,
+      "capMargin": 0.12466,
+      "error": null
+     },
+     {
+      "op": 7003653,
+      "budget": 7580000,
+      "margin": 0.07604,
+      "capMargin": 0.12812,
+      "error": null
+     },
+     {
+      "op": 6578000,
+      "budget": 7000000,
+      "margin": 0.06029,
+      "capMargin": 0.18111,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7016056,
+       "capMargin": 0.12657,
+       "error": null
+      },
+      {
+       "op": 6989445,
+       "capMargin": 0.12989,
+       "error": null
+      },
+      {
+       "op": 6556726,
+       "capMargin": 0.18376,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7053688,
+       "capMargin": 0.12189,
+       "error": null
+      },
+      {
+       "op": 7027077,
+       "capMargin": 0.1252,
+       "error": null
+      },
+      {
+       "op": 6593846,
+       "capMargin": 0.17913,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b unshield #23",
+   "pv": "606340977687",
+   "sign": "1",
+   "publicInputs": [
+    "3091598618214249367839671055980624672808801964969368175761182264309691525515",
+    "1670302312954558264745606989377583802872458027615890815578416042916089153342"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    134
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8860
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6997498,
+      "budget": 7579200,
+      "margin": 0.07675,
+      "capMargin": 0.12888,
+      "error": null
+     },
+     {
+      "op": 6958642,
+      "budget": 7580000,
+      "margin": 0.08197,
+      "capMargin": 0.13372,
+      "error": null
+     },
+     {
+      "op": 6657721,
+      "budget": 7120800,
+      "margin": 0.06503,
+      "capMargin": 0.17118,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7032826,
+      "budget": 7579200,
+      "margin": 0.07209,
+      "capMargin": 0.12449,
+      "error": null
+     },
+     {
+      "op": 6993970,
+      "budget": 7580000,
+      "margin": 0.07731,
+      "capMargin": 0.12932,
+      "error": null
+     },
+     {
+      "op": 6692537,
+      "budget": 7120800,
+      "margin": 0.06014,
+      "capMargin": 0.16685,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7015732,
+       "capMargin": 0.12661,
+       "error": null
+      },
+      {
+       "op": 6978560,
+       "capMargin": 0.13124,
+       "error": null
+      },
+      {
+       "op": 6668934,
+       "capMargin": 0.16979,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7053364,
+       "capMargin": 0.12193,
+       "error": null
+      },
+      {
+       "op": 7016192,
+       "capMargin": 0.12656,
+       "error": null
+      },
+      {
+       "op": 6706054,
+       "capMargin": 0.16517,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b transfer #24",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "7060971987717849605867187856749788914252273535930777689268979389246874687165",
+    "1733608505062899469716550780896840634337341576372238380404302752081783836608"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    245
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8779
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6984025,
+      "budget": 7579200,
+      "margin": 0.07853,
+      "capMargin": 0.13056,
+      "error": null
+     },
+     {
+      "op": 6950839,
+      "budget": 7580000,
+      "margin": 0.083,
+      "capMargin": 0.13469,
+      "error": null
+     },
+     {
+      "op": 6597741,
+      "budget": 7056000,
+      "margin": 0.06495,
+      "capMargin": 0.17865,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7019225,
+      "budget": 7579200,
+      "margin": 0.07388,
+      "capMargin": 0.12618,
+      "error": null
+     },
+     {
+      "op": 6986039,
+      "budget": 7580000,
+      "margin": 0.07836,
+      "capMargin": 0.13031,
+      "error": null
+     },
+     {
+      "op": 6632429,
+      "budget": 7056000,
+      "margin": 0.06003,
+      "capMargin": 0.17433,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7003421,
+       "capMargin": 0.12815,
+       "error": null
+      },
+      {
+       "op": 6969695,
+       "capMargin": 0.13235,
+       "error": null
+      },
+      {
+       "op": 6608456,
+       "capMargin": 0.17732,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7041053,
+       "capMargin": 0.12346,
+       "error": null
+      },
+      {
+       "op": 7007327,
+       "capMargin": 0.12766,
+       "error": null
+      },
+      {
+       "op": 6645576,
+       "capMargin": 0.17269,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b shield #25",
+   "pv": "991306825420",
+   "sign": "0",
+   "publicInputs": [
+    "7165432744094137254730085481385309840996359325917221913939859824615059896798",
+    "10394027089087089551987568981276265618868043110835413145315687622759204794315"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    225
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8759
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6992198,
+      "budget": 7579200,
+      "margin": 0.07745,
+      "capMargin": 0.12954,
+      "error": null
+     },
+     {
+      "op": 6969197,
+      "budget": 7580000,
+      "margin": 0.08058,
+      "capMargin": 0.13241,
+      "error": null
+     },
+     {
+      "op": 6581346,
+      "budget": 7040000,
+      "margin": 0.06515,
+      "capMargin": 0.18069,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7027270,
+      "budget": 7579200,
+      "margin": 0.07282,
+      "capMargin": 0.12518,
+      "error": null
+     },
+     {
+      "op": 7004269,
+      "budget": 7580000,
+      "margin": 0.07595,
+      "capMargin": 0.12804,
+      "error": null
+     },
+     {
+      "op": 6615906,
+      "budget": 7040000,
+      "margin": 0.06024,
+      "capMargin": 0.17639,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7011112,
+       "capMargin": 0.12719,
+       "error": null
+      },
+      {
+       "op": 6990305,
+       "capMargin": 0.12978,
+       "error": null
+      },
+      {
+       "op": 6596228,
+       "capMargin": 0.17884,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7048744,
+       "capMargin": 0.1225,
+       "error": null
+      },
+      {
+       "op": 7027937,
+       "capMargin": 0.12509,
+       "error": null
+      },
+      {
+       "op": 6633348,
+       "capMargin": 0.17422,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b unshield #26",
+   "pv": "253580037582",
+   "sign": "1",
+   "publicInputs": [
+    "2078038700273526516392835970376700519011044126918814660046464344639813954886",
+    "8727895663881921220494190534834307084537441764017229696905539946761030219601"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    393
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8736
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7001902,
+      "budget": 7579200,
+      "margin": 0.07617,
+      "capMargin": 0.12834,
+      "error": null
+     },
+     {
+      "op": 6959690,
+      "budget": 7580000,
+      "margin": 0.08184,
+      "capMargin": 0.13359,
+      "error": null
+     },
+     {
+      "op": 6563013,
+      "budget": 7021600,
+      "margin": 0.06531,
+      "capMargin": 0.18297,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7036974,
+      "budget": 7579200,
+      "margin": 0.07154,
+      "capMargin": 0.12397,
+      "error": null
+     },
+     {
+      "op": 6994762,
+      "budget": 7580000,
+      "margin": 0.07721,
+      "capMargin": 0.12922,
+      "error": null
+     },
+     {
+      "op": 6597573,
+      "budget": 7021600,
+      "margin": 0.06039,
+      "capMargin": 0.17867,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7023156,
+       "capMargin": 0.12569,
+       "error": null
+      },
+      {
+       "op": 6981772,
+       "capMargin": 0.13084,
+       "error": null
+      },
+      {
+       "op": 6576996,
+       "capMargin": 0.18123,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7060788,
+       "capMargin": 0.12101,
+       "error": null
+      },
+      {
+       "op": 7019404,
+       "capMargin": 0.12616,
+       "error": null
+      },
+      {
+       "op": 6614116,
+       "capMargin": 0.17661,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b transfer #27",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "4955296710218682574070462893274541742988424124986651540349188904178316531904",
+    "9572243688444273092431876335745954475760834284813368796839837902777503847861"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    179
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8809
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6997790,
+      "budget": 7579200,
+      "margin": 0.07671,
+      "capMargin": 0.12885,
+      "error": null
+     },
+     {
+      "op": 6969477,
+      "budget": 7580000,
+      "margin": 0.08054,
+      "capMargin": 0.13237,
+      "error": null
+     },
+     {
+      "op": 6619886,
+      "budget": 7080000,
+      "margin": 0.06499,
+      "capMargin": 0.17589,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7032990,
+      "budget": 7579200,
+      "margin": 0.07207,
+      "capMargin": 0.12447,
+      "error": null
+     },
+     {
+      "op": 7004677,
+      "budget": 7580000,
+      "margin": 0.0759,
+      "capMargin": 0.12799,
+      "error": null
+     },
+     {
+      "op": 6654574,
+      "budget": 7080000,
+      "margin": 0.06009,
+      "capMargin": 0.17157,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7015712,
+       "capMargin": 0.12662,
+       "error": null
+      },
+      {
+       "op": 6990068,
+       "capMargin": 0.12981,
+       "error": null
+      },
+      {
+       "op": 6631843,
+       "capMargin": 0.1744,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7053344,
+       "capMargin": 0.12193,
+       "error": null
+      },
+      {
+       "op": 7027700,
+       "capMargin": 0.12512,
+       "error": null
+      },
+      {
+       "op": 6668963,
+       "capMargin": 0.16978,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b shield #28",
+   "pv": "459481860487",
+   "sign": "0",
+   "publicInputs": [
+    "6589636981585197967832309579695598185760168427168733122475964935865127993311",
+    "2173960305089981251136267549792513762645142741691695128287308604161011612242"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    179
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8809
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010181,
+      "budget": 7579200,
+      "margin": 0.07508,
+      "capMargin": 0.12731,
+      "error": null
+     },
+     {
+      "op": 6963097,
+      "budget": 7580000,
+      "margin": 0.08139,
+      "capMargin": 0.13317,
+      "error": null
+     },
+     {
+      "op": 6620146,
+      "budget": 7080000,
+      "margin": 0.06495,
+      "capMargin": 0.17586,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7045381,
+      "budget": 7579200,
+      "margin": 0.07043,
+      "capMargin": 0.12292,
+      "error": null
+     },
+     {
+      "op": 6998297,
+      "budget": 7580000,
+      "margin": 0.07674,
+      "capMargin": 0.12878,
+      "error": null
+     },
+     {
+      "op": 6654834,
+      "budget": 7080000,
+      "margin": 0.06005,
+      "capMargin": 0.17154,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028178,
+       "capMargin": 0.12506,
+       "error": null
+      },
+      {
+       "op": 6983672,
+       "capMargin": 0.13061,
+       "error": null
+      },
+      {
+       "op": 6632567,
+       "capMargin": 0.17431,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7065810,
+       "capMargin": 0.12038,
+       "error": null
+      },
+      {
+       "op": 7021304,
+       "capMargin": 0.12592,
+       "error": null
+      },
+      {
+       "op": 6669687,
+       "capMargin": 0.16969,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b unshield #29",
+   "pv": "727040687936",
+   "sign": "1",
+   "publicInputs": [
+    "5485700554313960328474464746587216763766929045166682093884582282265072851637",
+    "8110222351915052436326968335823707483413671920704751673608713837058465049076"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    227
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8761
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6990702,
+      "budget": 7579200,
+      "margin": 0.07765,
+      "capMargin": 0.12973,
+      "error": null
+     },
+     {
+      "op": 6931397,
+      "budget": 7580000,
+      "margin": 0.08557,
+      "capMargin": 0.13711,
+      "error": null
+     },
+     {
+      "op": 6583570,
+      "budget": 7041600,
+      "margin": 0.06505,
+      "capMargin": 0.18041,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7025774,
+      "budget": 7579200,
+      "margin": 0.07302,
+      "capMargin": 0.12536,
+      "error": null
+     },
+     {
+      "op": 6966469,
+      "budget": 7580000,
+      "margin": 0.08094,
+      "capMargin": 0.13275,
+      "error": null
+     },
+     {
+      "op": 6618130,
+      "budget": 7041600,
+      "margin": 0.06014,
+      "capMargin": 0.17611,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7009592,
+       "capMargin": 0.12738,
+       "error": null
+      },
+      {
+       "op": 6952531,
+       "capMargin": 0.13448,
+       "error": null
+      },
+      {
+       "op": 6596395,
+       "capMargin": 0.17882,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7047224,
+       "capMargin": 0.12269,
+       "error": null
+      },
+      {
+       "op": 6990163,
+       "capMargin": 0.1298,
+       "error": null
+      },
+      {
+       "op": 6633515,
+       "capMargin": 0.1742,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b transfer #30",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "12069715375946316092529906756417560024411000069875058483158141837204560509935",
+    "4435653859123507373434523276449682169114420752866518025195566857971261308007"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    172
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8802
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7017148,
+      "budget": 7579200,
+      "margin": 0.07416,
+      "capMargin": 0.12644,
+      "error": null
+     },
+     {
+      "op": 6951803,
+      "budget": 7580000,
+      "margin": 0.08288,
+      "capMargin": 0.13457,
+      "error": null
+     },
+     {
+      "op": 6614000,
+      "budget": 7074400,
+      "margin": 0.06508,
+      "capMargin": 0.17663,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7052348,
+      "budget": 7579200,
+      "margin": 0.06951,
+      "capMargin": 0.12206,
+      "error": null
+     },
+     {
+      "op": 6987003,
+      "budget": 7580000,
+      "margin": 0.07823,
+      "capMargin": 0.13019,
+      "error": null
+     },
+     {
+      "op": 6648688,
+      "budget": 7074400,
+      "margin": 0.06018,
+      "capMargin": 0.17231,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7035471,
+       "capMargin": 0.12416,
+       "error": null
+      },
+      {
+       "op": 6972075,
+       "capMargin": 0.13205,
+       "error": null
+      },
+      {
+       "op": 6626396,
+       "capMargin": 0.17508,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7073103,
+       "capMargin": 0.11947,
+       "error": null
+      },
+      {
+       "op": 7009707,
+       "capMargin": 0.12736,
+       "error": null
+      },
+      {
+       "op": 6663516,
+       "capMargin": 0.17046,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-ours-v1b shield #31",
+   "pv": "1069118741823",
+   "sign": "0",
+   "publicInputs": [
+    "3359676746839884151591128441400258038391886054217803872938761289377660689703",
+    "603955237119523949092165347048068568167397944828236368322934567169039570256"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    154
+   ],
+   "unlocking": [
+    9433,
+    9434,
+    8784
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7011393,
+      "budget": 7579200,
+      "margin": 0.07492,
+      "capMargin": 0.12715,
+      "error": null
+     },
+     {
+      "op": 6951393,
+      "budget": 7580000,
+      "margin": 0.08293,
+      "capMargin": 0.13462,
+      "error": null
+     },
+     {
+      "op": 6601230,
+      "budget": 7060000,
+      "margin": 0.06498,
+      "capMargin": 0.17822,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7046593,
+      "budget": 7579200,
+      "margin": 0.07027,
+      "capMargin": 0.12277,
+      "error": null
+     },
+     {
+      "op": 6986593,
+      "budget": 7580000,
+      "margin": 0.07829,
+      "capMargin": 0.13024,
+      "error": null
+     },
+     {
+      "op": 6635918,
+      "budget": 7060000,
+      "margin": 0.06007,
+      "capMargin": 0.1739,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028896,
+       "capMargin": 0.12498,
+       "error": null
+      },
+      {
+       "op": 6971071,
+       "capMargin": 0.13217,
+       "error": null
+      },
+      {
+       "op": 6613064,
+       "capMargin": 0.17674,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066528,
+       "capMargin": 0.12029,
+       "error": null
+      },
+      {
+       "op": 7008703,
+       "capMargin": 0.12749,
+       "error": null
+      },
+      {
+       "op": 6650184,
+       "capMargin": 0.17212,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  }
+ ]
+}

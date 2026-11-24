@@ -185,13 +185,20 @@ makes a public-input-binding test vacuous, so a green run proves nothing. The ch
   covenant sibling and a fee input, so the route is to extend its **third role** with the pool
   rules — the integration the artifact documents ("applications that release funds add output
   rules in role 2").
-- **Not swept under our VK.** The red team is done (4b), but `sweep.mjs` mints new proofs through
-  the densless-fixtures trapdoor, which does not exist for our VK — liveness over a sweep needs a
-  snarkjs-based minter. What we have is the measured margins on our five real proofs (6.03%
-  standard / 6.49% consensus), not a 424-case sweep.
-- **`worstCaseProof` is absent from our vectors.** That entry requires minting a proof with every
-  GT-GLS nibble 15 under the trapdoor; we cannot mint under our VK. So the forced op-cost worst
-  case is UNMEASURED for our program.
+- **Swept under our VK since 2026-11-24 (later session) — but only over REAL proofs.** The stock
+  `sweep.mjs` mints proofs for chosen public inputs through the densless-fixtures trapdoor, which
+  does not exist for our ceremony VK. The snarkjs minter (`gen-sweep-proofs.mjs`) + `sweep-ours.mjs`
+  ran the sweep over 70 cases (5 fixtures + lattice-shifted witness + 64 random real proofs):
+  **0 failed** — every case accepted in consensus AND standard at prover-sized fills and at the
+  10,000 B cap, cap rule `op ≤ 7,550,832` everywhere. Min margins 6.00% std / 6.45% cons; max
+  at-cap op 7,076,392 std (input 0, cap margin 11.91%); nq range 99-123. The trapdoor-forced
+  extremes (every-nibble-15 etc.) remain unreachable under our VK — those are measured only under
+  the reference VK (stock `sweep.json`), and their transfer to our build is an argument (identical
+  code layout, fixed-size constants ⇒ VK-independent op cost), not a measurement.
+- **`worstCaseProof` is now measured for our key** (smallest input-0 standard margin, the bench
+  definition): **`sweep-ours-v1a shield #13`**, exported into `our-vectors.json` by the updated
+  `export-our.mjs` (steps + 4 extraValidProofs + worstCaseProof — the bench shape, complete).
+  It is the worst case reachable by REAL proofs, not the forced extreme the trapdoor would allow.
 - **The covenant sibling pin (commit `61777c6`) is still undeployed.** Every live pool carries
   the unpinned covenant, which accepts a one-byte `OP_1` at the genesis index
   (`pin-sibling-test.mjs`, 6/6).
@@ -222,9 +229,14 @@ makes a public-input-binding test vacuous, so a green run proves nothing. The ch
    0 accepted** (5 filler-tamper scenarios inexpressible: inputs 0/1 have empty fillers),
    both positive controls accepted. The layering confirmed: public-input claims die at the
    hook (`r2:p4`), proof tampering dies in the graph (`G1C@17`, `r2:t:endpoint`).
-   ⬜ Independent review (new bytes = new review). ⬜ One combined redeploy.
-   ⬜ snarkjs-based minter for the liveness sweep under our VK; `worstCaseProof` for our
-   key still UNMEASURED (the densless-fixtures trapdoor does not exist for our zkey).
+   ✅ **snarkjs-based minter + liveness sweep under our VK** (2026-11-24, later session):
+   `gen-sweep-proofs.mjs` (repo root) mints seeded random REAL proofs against our zkey
+   (~35-50 s each); `sweep-ours.mjs` (plain, 70 cases) and `pool-sweep.mjs` (HOOKED program,
+   pool-shaped funded scenarios, 69 cases) both ran **0 failed**, cap rule everywhere; the
+   hooked program binds at input 2 with 6.00% std margin, exactly the design target
+   (`wip-role2-hook/sweep-ours-report.json`, `pool-sweep-report.json`, `REVIEW.md`).
+   ⬜ Independent review (new bytes = new review — package prepared: `wip-role2-hook/REVIEW.md`).
+   ⬜ One combined redeploy — BLOCKED on the review.
 3. Get the extended program reviewed — it is new bytes, which is exactly how F6 and the v2 layout
    bug happened.
 4. Redeploy the pool with the pinned covenant **and** the extended verifier, in one deploy.

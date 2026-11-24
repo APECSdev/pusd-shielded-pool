@@ -10,8 +10,13 @@ of budget, `pool-tx.mjs`), the hook priced at **33,156 op standard / 32,260 op c
 427 B** (statement→slices difference, `pool-cost.mjs`), and the extended red team — the
 stock 151-scenario list evaluated against the honest pool shape, **146 runs, 0 accepted**
 (5 filler-tamper scenarios inexpressible: inputs 0/1 have empty fillers in this build),
-both positive controls accepted (`pool-redteam.mjs`). **Still not independently reviewed,
-not deployed.**
+both positive controls accepted (`pool-redteam.mjs`). A later session the same day added the
+liveness sweep under our VK with REAL snarkjs-minted proofs (`gen-sweep-proofs.mjs`): the plain
+program over 70 cases and the HOOKED program over pool-shaped funded scenarios across 69 cases —
+**both 0 failed**, cap rule everywhere, input 2 binding at exactly the 6% design margin, and
+`worstCaseProof` measured for our key (`sweep-ours-v1a shield #13`) and exported into
+`our-vectors.json` (`sweep-ours.mjs`, `pool-sweep.mjs`, `wip-role2-hook/REVIEW.md`).
+**Still not independently reviewed, not deployed — the review package is `REVIEW.md`.**
 
 This document is the design of record. One addition came out of implementation (not anticipated
 here): **check 8b, `TXOUTPUTCOUNT == 2 + sign`** — the shield-mints-payout test showed that

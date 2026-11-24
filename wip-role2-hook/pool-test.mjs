@@ -42,6 +42,10 @@ const scenarioOf = (p) => {
     return { s, n0 };
 };
 
+/* the deposit tag of a DIFFERENT fixture's action — for the theft-replay rejections: a valid
+   proof of action A must not consume fuel locked for action B's nullifiers (hook check 4g). */
+const foreignTag = (idx) => new Uint8Array(sha(carrierOf(scenarioOf(proofs[idx]).s).subarray(0, 64)));
+
 const run = (label, expect, { proofIdx, mutate = {}, txMutate = {} }) => {
     const { s, n0 } = scenarioOf(proofs[proofIdx]);
     const sc = { ...s, ...mutate };
@@ -56,6 +60,8 @@ const run = (label, expect, { proofIdx, mutate = {}, txMutate = {} }) => {
     const newCommit = Buffer.concat([to32LE(sc.newRoot), newNull]);
     /*  tx-level tamper knobs — every field a plain Uint8Array (Node Buffers alias via slice()
         and the VM's REVERSEBYTES writes through the views). */
+    /* deposit tag (hook checks 4c/4g): SHA256(carrier[0..64]) — the action's own nullifiers */
+    const tag = sha(carr.subarray(0, 64));
     const tx = {
         sourceCategory: new Uint8Array(CATEGORY_DISPLAY),
         stateCommit: new Uint8Array(stateCommit),
@@ -63,14 +69,25 @@ const run = (label, expect, { proofIdx, mutate = {}, txMutate = {} }) => {
         newCommit: new Uint8Array(newCommit),
         out1Amount: newBal,
         payout: sc.sign === 1n,
+        fuelCat0: new Uint8Array(CATEGORY_DISPLAY),
+        fuelCat1: new Uint8Array(CATEGORY_DISPLAY),
+        fuelTag0: new Uint8Array(tag),
+        fuelTag1: new Uint8Array(tag),
+        fuelNaked0: false,
+        fuelNaked1: false,
         ...txMutate,
     };
 
     const T = transactionFor(FIXTURES.fixtures[proofIdx], prog);
     const inputs = T.unlockings.map((u, n) => ({ outpointIndex: n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(u) }));
+    /*  inputs 0/1 = the fuel/deposit pair, both tagged (chain shape: in0 carries the FT
+        deposit on a shield, sign==0); input 2 = the state NFT. */
+    const fuelOut = (n) => (tx['fuelNaked' + n]
+        ? { lockingBytecode: lock, valueSatoshis: 1000n }
+        : { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: tx['fuelCat' + n], amount: n === 0 && sc.sign === 0n ? sc.pv : 0n, nft: { capability: 'mutable', commitment: tx['fuelTag' + n] } } });
     const sourceOutputs = [
-        { lockingBytecode: lock, valueSatoshis: 1000n },
-        { lockingBytecode: lock, valueSatoshis: 1000n },
+        fuelOut(0),
+        fuelOut(1),
         { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: tx.sourceCategory, amount: balance, nft: { capability: 'mutable', commitment: tx.stateCommit } } },
     ];
     const outputs = [
@@ -130,6 +147,14 @@ R.push(run('out1 wrong amount (balance not conserved)', false, { proofIdx: 0, tx
 console.log('\n--- rejections: payout rules ---');
 R.push(run('unshield missing its payout', false, { proofIdx: 2, txMutate: { payout: false } }));
 R.push(run('shield minting a payout', false, { proofIdx: 0, txMutate: { payout: true } }));
+
+console.log('\n--- rejections: deposit tagging (hook 4c/4g) ---');
+R.push(run('fuel in0 tokenless (no tag NFT)', false, { proofIdx: 0, txMutate: { fuelNaked0: true } }));
+R.push(run('fuel in1 tokenless (no tag NFT)', false, { proofIdx: 0, txMutate: { fuelNaked1: true } }));
+R.push(run('fuel tags wrong (foreign nullifier-hash)', false, { proofIdx: 0, txMutate: { fuelTag0: new Uint8Array(sha(Buffer.alloc(64))), fuelTag1: new Uint8Array(sha(Buffer.alloc(64))) } }));
+R.push(run('fuel foreign category, honest tag', false, { proofIdx: 0, txMutate: { fuelCat0: new Uint8Array(32), fuelCat1: new Uint8Array(32) } }));
+R.push(run('THEFT replay: valid proof consuming fuel locked for ANOTHER action', false, { proofIdx: 0, txMutate: { fuelTag0: foreignTag(1), fuelTag1: foreignTag(1) } }));
+R.push(run('fuel tags asymmetric (in1 tagged for another action)', false, { proofIdx: 0, txMutate: { fuelTag1: foreignTag(1) } }));
 
 console.log(`\n${R.filter(Boolean).length}/${R.length} match expectation`);
 process.exit(R.every(Boolean) ? 0 : 1);

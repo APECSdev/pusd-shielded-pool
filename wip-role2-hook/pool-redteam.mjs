@@ -25,7 +25,7 @@ import {buildProgram, setCovenant} from './script.mjs';
 import {unlockingsFor, MARGIN} from './transaction.mjs';
 import {encodeUnlocking, VMS, p2sh32} from './vm.mjs';
 import {covenantHook, covenantParams} from './pool-hook.mjs';
-import {poolTransactionFor, poolScenario, poolOutputs} from './pool-tx.mjs';
+import {poolTransactionFor, poolScenario, poolOutputs, fuelSourceOutputs} from './pool-tx.mjs';
 
 const reportPath = process.argv[2] ?? 'pool-redteam-report.json';
 const CATEGORY_DISPLAY = Buffer.from('2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544', 'hex');
@@ -53,7 +53,15 @@ function poolSpendAll(locks, unlockings, mode, scenario = scenario0, args = scen
     return unlockings.map((u, i) => {
         const inputs = unlockings.map((q, n) => ({ outpointIndex: n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(q) }));
         const isPool2 = i === 2 && unlockings.length > 2 && Buffer.from(locks[2]).equals(Buffer.from(lock));
-        const sourceOutputs = locks.map((l, n) => ({ lockingBytecode: new Uint8Array(l), valueSatoshis: 1000n, ...(isPool2 && n === 2 ? { token: { category: new Uint8Array(CATEGORY_DISPLAY), amount: 1000n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } } : {}) }));
+        /*  inputs 0/1 carry the honest TAGGED fuel (hook 4c/4g) whenever they spend the pool
+            lock; foreign-locking inputs stay tokenless — those scenarios die in the graph
+            before the hook ever reads their token data. */
+        const fuel = fuelSourceOutputs(lock, scenario, args);
+        const sourceOutputs = locks.map((l, n) => {
+            if (isPool2 && n === 2) return { lockingBytecode: new Uint8Array(l), valueSatoshis: 1000n, token: { category: new Uint8Array(CATEGORY_DISPLAY), amount: 1000n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } };
+            if (isPool2 && n < 2 && Buffer.from(l).equals(Buffer.from(lock))) return fuel[n];
+            return { lockingBytecode: new Uint8Array(l), valueSatoshis: 1000n };
+        });
         const outputs = isPool2 ? poolOutputs(prog, scenario, args) : [{ lockingBytecode: Uint8Array.of(0x6a), valueSatoshis: 1000n }];
         const st = VMS[mode].evaluate({ inputIndex: i, sourceOutputs, transaction: { version: 2, locktime: 0, inputs, outputs } });
         const top = st.stack?.[st.stack.length - 1];
@@ -255,7 +263,12 @@ const marks = prog.marks.slice().sort((a, b) => a.roff - b.roff);
 const guardOf = (locks, unl, input) => {
   const pool2 = input === 2 && unl.length > 2 && Buffer.from(locks[2]).equals(Buffer.from(lock));
   const inputs = unl.map((q, n) => ({ outpointIndex: n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(q) }));
-  const sourceOutputs = locks.map((l, n) => ({ lockingBytecode: new Uint8Array(l), valueSatoshis: 1000n, ...(pool2 && n === 2 ? { token: { category: new Uint8Array(CATEGORY_DISPLAY), amount: 1000n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario0.stateCommit) } } } : {}) }));
+  const guardFuel = fuelSourceOutputs(lock, scenario0, scenarioArgsOf(0));
+  const sourceOutputs = locks.map((l, n) => {
+    if (pool2 && n === 2) return { lockingBytecode: new Uint8Array(l), valueSatoshis: 1000n, token: { category: new Uint8Array(CATEGORY_DISPLAY), amount: 1000n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario0.stateCommit) } } };
+    if (pool2 && n < 2 && Buffer.from(l).equals(Buffer.from(lock))) return guardFuel[n];
+    return { lockingBytecode: new Uint8Array(l), valueSatoshis: 1000n };
+  });
   const outputs = pool2 ? poolOutputs(prog, scenario0, scenarioArgsOf(0)) : [{ lockingBytecode: Uint8Array.of(0x6a), valueSatoshis: 1000n }];
   const tr = VMS.consensus.debug({ inputIndex: input, sourceOutputs, transaction: { version: 2, locktime: 0, inputs, outputs } });
   let sec = 'unlocking/redeem', fn = '';

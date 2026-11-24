@@ -12,7 +12,7 @@ import { buildProgram, setCovenant } from './script.mjs';
 import { transactionFor } from './transaction.mjs';
 import { FIXTURES } from '../sound-si-gls/math.mjs';
 import { covenantHook, covenantParams, carrierOf, carrierOutput } from './pool-hook.mjs';
-import { poolTransactionFor, poolScenario, poolOutputs } from './pool-tx.mjs';
+import { poolTransactionFor, poolScenario, poolOutputs, fuelSourceOutputs } from './pool-tx.mjs';
 
 const CATEGORY_DISPLAY = Buffer.from('2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544', 'hex');
 
@@ -43,7 +43,8 @@ const rangeCost = (prog, unlockings, mode, from, to) => {
     const lock = p2sh32(prog.R);
     const scenario = prog === hooked ? Th.scenario : poolScenario(scenarioArgs);
     const inputs = unlockings.map((u, n) => ({ outpointIndex: n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(u) }));
-    const sourceOutputs = [0, 1, 2].map((n) => ({ lockingBytecode: lock, valueSatoshis: 1000n, ...(n === 2 ? { token: { category: new Uint8Array(CATEGORY_DISPLAY), amount: 1000n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } } : {}) }));
+    const fuel = fuelSourceOutputs(lock, scenario, scenarioArgs);
+    const sourceOutputs = [...fuel, { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: new Uint8Array(CATEGORY_DISPLAY), amount: 1000n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } }];
     const outputs = poolOutputs(prog, scenario, scenarioArgs);
     const d = decodeAuthenticationInstructions(prog.funcCodes.role2);
     const offs = []; let x = 0;
@@ -73,7 +74,8 @@ const evalIn = (prog, unlockings, mode) => {
     const lock = p2sh32(prog.R);
     const scenario = prog === hooked ? Th.scenario : poolScenario(scenarioArgs);
     const inputs = unlockings.map((u, n) => ({ outpointIndex: n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(u) }));
-    const sourceOutputs = [0, 1, 2].map((n) => ({ lockingBytecode: lock, valueSatoshis: 1000n, ...(n === 2 ? { token: { category: new Uint8Array(CATEGORY_DISPLAY), amount: 1000n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } } : {}) }));
+    const fuel = fuelSourceOutputs(lock, scenario, scenarioArgs);
+    const sourceOutputs = [...fuel, { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: new Uint8Array(CATEGORY_DISPLAY), amount: 1000n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } }];
     const outputs = poolOutputs(prog, scenario, scenarioArgs);
     const st = VMS[mode].evaluate({ inputIndex: 2, sourceOutputs, transaction: { version: 2, locktime: 0, inputs, outputs } });
     const budget = (41 + unlockings[2].length) * 800;

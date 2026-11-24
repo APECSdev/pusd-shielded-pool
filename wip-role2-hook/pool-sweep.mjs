@@ -32,7 +32,7 @@ import {buildProgram, setCovenant} from './script.mjs';
 import {unlockingsFor, UNLOCK_CAP} from './transaction.mjs';
 import {VMS, p2sh32, budgetOf} from './vm.mjs';
 import {covenantHook, covenantParams, actionHashOf} from './pool-hook.mjs';
-import {poolTransactionFor, poolOutputs} from './pool-tx.mjs';
+import {poolTransactionFor, poolOutputs, fuelSourceOutputs} from './pool-tx.mjs';
 
 const [shard, shards] = (process.env.SWEEP_SHARD ?? '0/1').split('/').map(Number);
 const outPath = process.argv[2];
@@ -50,10 +50,11 @@ const prog = buildProgram();
 const lock = p2sh32(prog.R); const LOCKS = [lock, lock, lock];
 /* drift guard: the HOOKED program's own code hash. build.json holds the PLAIN build's hash
    (5fd6a4be…) and is asserted by sweep-ours.mjs; the hooked build has no build.json of its own.
-   This hash was measured live from this exact source (pool-hook.mjs + script.mjs setCovenant)
-   on 2026-11-24 and was previously unrecorded — pinning it here makes any silent change to
-   the hook (or the plain program underneath it) fail loudly. */
-assert.equal(createHash('sha256').update(prog.code).digest('hex'), '89a8ac1426e818a36ceae4308fcb65f15d578e1cbf0143f0dfc76f3e4889a3f3', 'the HOOKED program code changed — re-derive code/R/locking, re-run the red team, and update this pin + the docs');
+   Pinned here so any silent change to the hook (or the plain program underneath it) fails
+   loudly. History: 89a8ac14… = the pre-tagging hook (checks 1–11, 7,737 B, 2026-11-24);
+   d71851a1… = the deposit-tagging revision (adds 4c fuel-category + 4g tag checks,
+   7,834 B, 2026-11-24 PM) — re-derived live, red team + sweeps re-run for this pin. */
+assert.equal(createHash('sha256').update(prog.code).digest('hex'), 'd71851a1ce6d795c0aa40ab055faac1000755d474313f16e6cd34855ffbfff41', 'the HOOKED program code changed — re-derive code/R/locking, re-run the red team, and update this pin + the docs');
 
 const leToBig = (hex) => BigInt('0x' + Buffer.from(hex, 'hex').reverse().toString('hex') || '0');
 const scenarioArgsOf = (rec) => {
@@ -71,7 +72,9 @@ const scenarioArgsOf = (rec) => {
 function poolSpendAll(unlockings, mode, scenario, args) {
     return unlockings.map((u, i) => {
         const inputs = unlockings.map((q, n) => ({ outpointIndex: n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(q) }));
-        const sourceOutputs = LOCKS.map((l, n) => ({ lockingBytecode: new Uint8Array(l), valueSatoshis: 1000n, ...(n === 2 ? { token: { category: new Uint8Array(CATEGORY_DISPLAY), amount: args.balance, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } } : {}) }));
+        /*  inputs 0/1 = tagged fuel (hook 4c/4g); input 2 = the state NFT. */
+        const fuel = fuelSourceOutputs(LOCKS[0], scenario, args);
+        const sourceOutputs = [...fuel, { lockingBytecode: new Uint8Array(LOCKS[2]), valueSatoshis: 1000n, token: { category: new Uint8Array(CATEGORY_DISPLAY), amount: args.balance, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } }];
         const outputs = poolOutputs(prog, scenario, args);
         const st = VMS[mode].evaluate({ inputIndex: i, sourceOutputs, transaction: { version: 2, locktime: 0, inputs, outputs } });
         const top = st.stack?.[st.stack.length - 1];

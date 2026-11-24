@@ -125,6 +125,35 @@ export function covenantHook(P) {
         a.pick('sign').push(1).op(OP.LESSTHANOREQUAL, 2, 's1').op(OP.VERIFY, 1);
         a.mark('p4');
 
+        /* ── 4c. both fuel inputs carry the pool category as MUTABLE NFTs ──── */
+        /*  Deposit tagging: the lock tx tags every fuel/deposit UTXO with an NFT whose
+            commitment is SHA256(nf0 ‖ nf1) — the intended action's nullifiers — so standing
+            fuel cannot be consumed by any other action. This recreates, as a commitment,
+            the author binding the old pools got from their signed funding input. Inputs 0
+            and 1 are the fuel/deposit pair (in0 carries the FT deposit on a shield); the
+            tag NFTs are burned by the action — burn-by-omission is consensus-legal, the
+            same rule that let the deploy destroy the minting NFT. */
+        for (const j of [0, 1]) {
+            a.push(j).op(IX.UTXOTOKCAT, 1, 'fcat' + j);
+            a.pushBytes(P.catMutable).op(OP.EQUALVERIFY, 2);
+        }
+        a.mark('p4c');
+
+        /* ── 4g. both fuel commitments == SHA256(nf0 ‖ nf1) (the deposit tag) ─ */
+        /*  RAW LE limbs and the same SHA256 fold as check 7's nullifier hash: the tag is
+            literally SHA256(carrier[0..64]). The lock builder computes the identical digest
+            off-chain (pool-tx.mjs poolScenario) and stores it as each fuel output's NFT
+            commitment. An attacker holding a valid proof of their own cannot match a tag
+            locked for someone else's nullifiers — producing those nullifiers requires the
+            victim's note keys. */
+        a.pick('nf0').pick('nf1').op(OP.CAT, 2, 'tagPre');
+        a.pick('tagPre').op(OP.SHA256, 1, 'tag');
+        for (const j of [0, 1]) {
+            a.push(j).op(IX.UTXOTOKCOMMIT, 1, 'fcom' + j);
+            a.pick('fcom' + j).pick('tag').op(OP.EQUALVERIFY, 2);
+        }
+        a.mark('p4g');
+
         /* ── 5. n0 == the stored merkle root (active input's commitment[0..32)) ── */
         if (process.env.POOL_DEBUG) console.error('[hook] model stack top-> :', a.st.slice(-10).reverse().join(' | '));
         a.push(STATE_INDEX).op(IX.UTXOTOKCOMMIT, 1, 'com');

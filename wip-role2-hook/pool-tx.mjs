@@ -31,11 +31,22 @@ export const poolScenario = ({ sc, n0, balance = 1000n, oldNull = Buffer.alloc(3
     const carr = carrierOf(sc);
     /* deployed covenant folds the RAW LE covenant args: sha256(old ‖ nf0 ‖ nf1) (asset-pool.cash:148) */
     const newNull = sha(Buffer.concat([oldNull, carr.subarray(0, 32), carr.subarray(32, 64)]));
+    /* deposit tag (hook check 4g): SHA256 of the carrier's first 64 bytes = the intended
+       action's nullifiers — stored by the lock tx as both fuel outputs' NFT commitments */
+    const tag = sha(carr.subarray(0, 64));
     const newBal = balance + sc.pv - 2n * sc.sign * sc.pv;
     const stateCommit = Buffer.concat([to32LE(n0), oldNull]);
     const newCommit = Buffer.concat([to32LE(sc.newRoot), newNull]);
-    return { carr, newNull, newBal, stateCommit, newCommit };
+    return { carr, newNull, newBal, stateCommit, newCommit, tag };
 };
+
+/* the honest fuel/deposit source outputs for inputs 0/1 (hook checks 4c/4g): both carry
+   the pool category as a MUTABLE NFT tagged with the action's nullifier-hash; in0 carries
+   the FT deposit on a shield (chain shape: lock out0 = deposit, out1 = plain fuel). */
+export const fuelSourceOutputs = (lock, scenario, { sc, categoryDisplay }) => [
+    { lockingBytecode: new Uint8Array(lock), valueSatoshis: 1000n, token: { category: new Uint8Array(categoryDisplay), amount: sc.sign === 0n ? sc.pv : 0n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.tag) } } },
+    { lockingBytecode: new Uint8Array(lock), valueSatoshis: 1000n, token: { category: new Uint8Array(categoryDisplay), amount: 0n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.tag) } } },
+];
 
 export const poolOutputs = (prog, scenario, { sc, balance = 1000n, categoryDisplay }) => [
     { lockingBytecode: new Uint8Array(carrierOutput(scenario.carr)), valueSatoshis: 0n },
@@ -47,7 +58,8 @@ export const poolOutputs = (prog, scenario, { sc, balance = 1000n, categoryDispl
 const evalInput = (prog, unlockings, i, scenario, { sc, balance = 1000n, categoryDisplay }) => {
     const lock = p2sh32(prog.R);
     const inputs = unlockings.map((u, n) => ({ outpointIndex: n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(u) }));
-    const sourceOutputs = [0, 1, 2].map((n) => ({ lockingBytecode: lock, valueSatoshis: 1000n, ...(n === 2 ? { token: { category: new Uint8Array(categoryDisplay), amount: balance, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } } : {}) }));
+    const fuel = fuelSourceOutputs(lock, scenario, { sc, categoryDisplay });
+    const sourceOutputs = [...fuel, { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: new Uint8Array(categoryDisplay), amount: balance, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } }];
     const outputs = poolOutputs(prog, scenario, { sc, balance, categoryDisplay });
     const st = VMS.standard.evaluate({ inputIndex: i, sourceOutputs, transaction: { version: 2, locktime: 0, inputs, outputs } });
     const top = st.stack?.[st.stack.length - 1];

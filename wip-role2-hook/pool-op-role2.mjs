@@ -140,7 +140,8 @@ console.log(confirmed ? 'CONFIRMED (merkle proof available)' : 'still unconfirme
 const be32 = (v) => { const b = Buffer.alloc(32); let x = BigInt(v); for (let i = 31; i >= 0 && x > 0n; i--) { b[i] = Number(x & 0xffn); x >>= 8n; } return b; };
 const remaining = state.pool.notes.filter((_, i) => !op.inIdx.includes(i));
 state.outpoints = { ...state.outpoints, state: { txid, vout: 1, sats: Number(STATE_FLOAT), ftAmount: scenario.newBal.toString() }, actionInputs: [] };
-state.pool = { root: op.newRoot, rootLE: be32(op.newRoot).reverse().toString('hex'), oldNullHex: scenario.newNull.toString('hex'), balance: scenario.newBal.toString(), leaves: op.newLeaves, notes: [...remaining, ...op.outNotes] };
+state.pool = { root: op.newRoot, rootLE: be32(op.newRoot).reverse().toString('hex'), oldNullHex: scenario.newNull.toString('hex'), balance: scenario.newBal.toString(), leaves: op.newLeaves,
+    notes: [...remaining, ...op.outNotes.map((n) => ({ note: { value: n.value, ownerPub: n.ownerPub, rho: n.rho, r: n.r }, nk: n.nk, index: n.index }))] }; /* same wrapped shape as the bootstrap entries, tree indices preserved */
 state.ops = [...(state.ops ?? []), { action: op.action, txid, pv: sc.pv.toString(), sign: sc.sign.toString(), confirmed, at: new Date().toISOString() }];
 writeFileSync(STATE, JSON.stringify(state, null, 2) + '\n');
 console.log('state advanced: root ' + op.newRoot.slice(0, 18) + '… · balance ' + scenario.newBal + ' · notes ' + state.pool.notes.length + ' · next op needs an actionInputs refill');

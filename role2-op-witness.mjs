@@ -51,7 +51,8 @@ const leaves = state.pool.leaves.map(BigInt);
 const balance = BigInt(state.pool.balance);
 
 /* the two in-notes: the pool's recorded notes (bootstrap seeds for op 1) */
-const inRecs = IN_IDX.map((i) => state.pool.notes[i]);
+const inRecs = IN_IDX.map((ix) => state.pool.notes.find((n) => Number(n.index) === ix));
+if (inRecs.some((r) => !r)) throw new Error("no recorded note at tree index " + IN_IDX.join("/") + " — indices are TREE positions (bootstrap seeds live at 0/1)");
 if (inRecs.length !== 2) throw new Error("the circuit spends exactly 2 in-notes");
 const inNotes = inRecs.map((rec) => ({ value: BigInt(rec.note.value), ownerPub: BigInt(rec.note.ownerPub), rho: BigInt(rec.note.rho), r: BigInt(rec.note.r) }));
 const nks = inRecs.map((rec) => BigInt(rec.nk));
@@ -117,7 +118,7 @@ const cov = { nf0: Buffer.from(bigIntToVmNumber(nf0)).toString("hex"), nf1: Buff
     newMerkleRoot: Buffer.from(bigIntToVmNumber(newMerkleRoot)).toString("hex"), publicValueAbs: pv.toString(), isUnshield: sign.toString() };
 
 const op = { action: ACTION, pv: pv.toString(), sign: sign.toString(), proof, publicSignals, covenant: cov,
-    outNotes: outNotes.map((n) => ({ value: n.value.toString(), ownerPub: n.ownerPub.toString(), rho: n.rho.toString(), r: n.r.toString(), nk: n.nk.toString() })),
+    outNotes: outNotes.map((n, i) => ({ value: n.value.toString(), ownerPub: n.ownerPub.toString(), rho: n.rho.toString(), r: n.r.toString(), nk: n.nk.toString(), index: leaves.length + i })),
     newRoot: newMerkleRoot.toString(), newLeaves: newLeaves.map(String), inIdx: IN_IDX, balanceBefore: balance.toString() };
 writeFileSync(OUT, JSON.stringify(op, null, 2));
 console.log("wrote " + OUT);

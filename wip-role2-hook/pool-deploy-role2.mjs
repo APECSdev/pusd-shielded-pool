@@ -18,9 +18,14 @@
 //   tx 3 DEPLOY  — spends the minting NFT → the pool state NFT (MUTABLE, commitment =
 //                  seededRootLE ‖ 32 zero bytes — the PUBLIC bootstrap-seed root, verified
 //                  byte-for-byte against the chain-deployed v2/v4 genesis commitments) at the
-//                  program locking; plus the op-1 fee/deposit UTXOs at the same locking:
-//                  out1 = 1,000,000 FT holdings (op-1's SHIELD deposit), out2 = a plain
-//                  UTXO; out3 = the 99M FT supply back to the wallet; out4 = BCH change.
+//                  program locking. THE MINTING NFT IS PASSED FORWARD to the wallet (out1) —
+//                  required for deposit tagging: the lock txes spend BLANK mutable NFTs
+//                  minted from it (pool-tagbatch-role2.mjs) and re-tag them; the first
+//                  deployment destroyed the minting NFT, which is why that pool can never
+//                  tag. out2 = the full 100M FT supply back to the wallet; out3 = BCH change.
+//                  NO fuel outputs: EVERY action (op 1 included) gets its fuel from a TAGGED
+//                  LOCK (pool-refill-role2.mjs) built from its proved op file — the exact
+//                  client flow, prove → lock → act.
 //
 // Funding: the APECS faucet HOT wallet (chipnet, bchtest:qzmux3gx…, purpose: operational
 // drips, refillable) — key at /home/apecs/.secrets/faucet-hot-wallet.json on the VM (extracted
@@ -45,13 +50,12 @@ import { covenantHook, covenantParams } from './pool-hook.mjs';
 import { p2sh32 } from './vm.mjs';
 
 const DRY = process.argv.includes('--dry');
+/* DEPOSIT-TAGGING REDEPLOY: no deploy-time fuel/deposit outputs — op 1 locks its own. */
 const SECRETS = process.argv.includes('--secrets')
     ? process.argv[process.argv.indexOf('--secrets') + 1]
     : '/home/apecs/.secrets/faucet-hot-wallet.json';
 const STATE_OUT = '/home/apecs/cov/role2-pool-state.json';
-const SHIELD_DEPOSIT = 1_000_000n;          // FT units op 1 will shield
 const STATE_FLOAT = 10_000n;                // sats riding on the state NFT (fee float)
-const OP_INPUT_FLOAT = 16_000n;             // sats on each plain/holdings UTXO (fee share)
 const SUPPLY = 100_000_000n;
 
 /* ---- electrum (raw TLS JSON-RPC; chipnet.bch.ninja:50002 — Fulcrum 2.1.3, live-verified) ---- */
@@ -177,16 +181,14 @@ const deploy = {
     outputs: [
         /* out0: the POOL STATE — mutable NFT, genesis commitment (seededRootLE ‖ 32 zeros), 0 FT */
         { lockingBytecode: programLocking, valueSatoshis: STATE_FLOAT, token: { category: CAT_BYTES, amount: 0n, nft: { capability: 'mutable', commitment: hexToBin(SEEDS.genesisCommitment) } } },
-        /* out1: op-1's SHIELD deposit — SHIELD_DEPOSIT FT at the program locking */
-        { lockingBytecode: programLocking, valueSatoshis: OP_INPUT_FLOAT, token: { category: CAT_BYTES, amount: SHIELD_DEPOSIT } },
-        /* out2: op-1's second plain input (fee share) */
-        { lockingBytecode: programLocking, valueSatoshis: OP_INPUT_FLOAT },
-        /* out3: the remaining FT supply back to the wallet */
-        { lockingBytecode: fundLocking, valueSatoshis: 1000n, token: { category: CAT_BYTES, amount: SUPPLY - SHIELD_DEPOSIT } },
+        /* out1: the MINTING NFT PASSED FORWARD to the wallet — the tag supply's source */
+        { lockingBytecode: fundLocking, valueSatoshis: 1000n, token: { category: CAT_BYTES, amount: 0n, nft: { capability: 'minting', commitment: new Uint8Array(0) } } },
+        /* out2: the full FT supply back to the wallet (locks carry per-shield deposits from it) */
+        { lockingBytecode: fundLocking, valueSatoshis: 1000n, token: { category: CAT_BYTES, amount: SUPPLY } },
     ],
     locktime: 0,
 };
-const deployFixed = STATE_FLOAT + 2n * OP_INPUT_FLOAT + 1000n;
+const deployFixed = STATE_FLOAT + 1000n + 1000n;
 deploy.outputs.push({ lockingBytecode: fundLocking, valueSatoshis: BigInt(mint.outputs[2].valueSatoshis) - deployFixed - probeFee(deploy) });
 const deploySources = [
     { lockingBytecode: fundLocking, valueSatoshis: 1000n, token: { category: CAT_BYTES, amount: 0n, nft: { capability: 'minting', commitment: new Uint8Array(0) } } },
@@ -222,12 +224,11 @@ const state = {
     anchorTxid, mintTxid, deployTxid,
     outpoints: {
         state: { txid: deployTxid, vout: 0, sats: Number(STATE_FLOAT), ftAmount: '0', nft: 'mutable', commitment: SEEDS.genesisCommitment },
-        /* the two non-state inputs op 1 (SHIELD) spends: the FT deposit + a plain fee UTXO */
-        actionInputs: [
-            { txid: deployTxid, vout: 1, sats: Number(OP_INPUT_FLOAT), ftAmount: SHIELD_DEPOSIT.toString() },
-            { txid: deployTxid, vout: 2, sats: Number(OP_INPUT_FLOAT) },
-        ],
-        supply: { txid: deployTxid, vout: 3, ftAmount: (SUPPLY - SHIELD_DEPOSIT).toString() },
+        /* NO deploy-time fuel: run pool-tagbatch-role2.mjs once, then per action
+           role2-op-witness.mjs (prove) → pool-refill-role2.mjs (TAGGED lock) → pool-op-role2.mjs */
+        actionInputs: [],
+        mintingNFT: { txid: deployTxid, vout: 1, nft: 'minting' },
+        supply: { txid: deployTxid, vout: 2, ftAmount: SUPPLY.toString() },
     },
     pool: {
         root: SEEDS.seededRoot,
@@ -253,5 +254,5 @@ console.log('broadcasting mint…');
 console.log('MINT RESULT: ' + await rpc('blockchain.transaction.broadcast', [mintHex]));
 console.log('broadcasting deploy…');
 console.log('DEPLOY RESULT: ' + await rpc('blockchain.transaction.broadcast', [deployHex]));
-console.log('\nDEPLOYED. Poll for confirmations; then run role2-op-witness.mjs + pool-op-role2.mjs for op 1 (SHIELD ' + SHIELD_DEPOSIT + ').');
+console.log('\nDEPLOYED. Poll for confirmations; then pool-tagbatch-role2.mjs (mint tag blanks), then per action: role2-op-witness.mjs (prove) → pool-refill-role2.mjs (TAGGED lock) → pool-op-role2.mjs (build, VM-eval, broadcast).');
 process.exit(0);

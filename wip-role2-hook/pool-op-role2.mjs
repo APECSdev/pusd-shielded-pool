@@ -2,9 +2,10 @@
 //
 // Consumes the deployment state (role2-pool-state.json) + a proved op (role2-op.json from
 // role2-op-witness.mjs). The action transaction is the role-2 shape:
-//   inputs  0/1 — program-locking UTXOs (a SHIELD's FT deposit + a plain UTXO; two plains for
-//                  transfer/unshield) — NO SIGNATURES: the P2SH32(R) script satisfaction IS
-//                  the spend authorization (the graph pins TXINPUTCOUNT == 3, so fees ride
+//   inputs  0/1 — program-locking TAGGED fuel UTXOs (hook 4c/4g: pool-category mutable NFTs
+//                  whose commitments are SHA256(carrier[0..64]) of THIS action; a SHIELD's FT
+//                  deposit rides input 0) — NO SIGNATURES: the P2SH32(R) script satisfaction
+//                  IS the spend authorization (the graph pins TXINPUTCOUNT == 3, so fees ride
 //                  on the locked UTXOs' own sats).
 //   input   2   — the pool state NFT.
 //   outputs    — out0 the 169-byte OP_RETURN carrier, out1 the new state NFT at the program
@@ -77,6 +78,12 @@ console.log(`fills ${T.fills.join('/')} · unlockings ${T.unlockings.map((u) => 
 /* ---- assemble the REAL transaction ---- */
 const inA = state.outpoints.actionInputs[0], inB = state.outpoints.actionInputs[1], inS = state.outpoints.state;
 if (!inA || !inB) throw new Error('state.outpoints.actionInputs must hold the two non-state inputs (refill first if consumed)');
+if (!inA.tag || !inB.tag) throw new Error('actionInputs lack tags — fuel from a pre-tagging build; run pool-refill-role2.mjs (the tagged lock)');
+/* the fuel tags MUST be this op's own nullifier-hash: running an op against a lock built for
+   a DIFFERENT action is exactly the theft the tags exist to prevent (hook check 4g). */
+const opTag = createHash('sha256').update(Buffer.concat([hexToBin(c.nf0), hexToBin(c.nf1)])).digest('hex');
+assert.equal(inA.tag, opTag, "fuel tag != this op's nullifier-hash (locked for ANOTHER action)");
+assert.equal(inB.tag, opTag, "fuel tag != this op's nullifier-hash (locked for ANOTHER action)");
 const mkIn = (spec, unlocking) => ({ outpointTransactionHash: hexToBin(spec.txid), outpointIndex: spec.vout, sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(unlocking) });
 const inputs = [mkIn(inA, T.unlockings[0]), mkIn(inB, T.unlockings[1]), mkIn(inS, T.unlockings[2])];
 const walletLocking = cashAddressToLockingBytecode(state.fundingAddress).bytecode;
@@ -87,11 +94,13 @@ const outputs = [
 if (sc.sign === 1n) outputs.push({ lockingBytecode: new Uint8Array(walletLocking), valueSatoshis: 1000n, token: { category: new Uint8Array(CAT), amount: sc.pv } });
 const tx = { version: 2, locktime: 0, inputs, outputs };
 
-/* the REAL source outputs (for VM-eval) — tokens exactly as recorded on chain */
-const srcToken = (spec) => spec.ftAmount !== undefined && spec.ftAmount !== null && BigInt(spec.ftAmount) !== 0n ? { category: new Uint8Array(CAT), amount: BigInt(spec.ftAmount) } : undefined;
+/* the REAL source outputs (for VM-eval) — tokens exactly as recorded on chain: BOTH fuel
+   inputs carry the tagged mutable NFT (hook 4c/4g read their category and commitment);
+   input 0 additionally carries the FT deposit on a shield. */
+const fuelToken = (spec) => ({ category: new Uint8Array(CAT), amount: spec.ftAmount !== undefined && spec.ftAmount !== null ? BigInt(spec.ftAmount) : 0n, nft: { capability: 'mutable', commitment: hexToBin(spec.tag) } });
 const sources = [
-    { lockingBytecode: new Uint8Array(programLocking), valueSatoshis: BigInt(inA.sats), ...(srcToken(inA) ? { token: srcToken(inA) } : {}) },
-    { lockingBytecode: new Uint8Array(programLocking), valueSatoshis: BigInt(inB.sats), ...(srcToken(inB) ? { token: srcToken(inB) } : {}) },
+    { lockingBytecode: new Uint8Array(programLocking), valueSatoshis: BigInt(inA.sats), token: fuelToken(inA) },
+    { lockingBytecode: new Uint8Array(programLocking), valueSatoshis: BigInt(inB.sats), token: fuelToken(inB) },
     { lockingBytecode: new Uint8Array(programLocking), valueSatoshis: BigInt(inS.sats), token: { category: new Uint8Array(CAT), amount: balance, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } },
 ];
 
@@ -108,7 +117,7 @@ for (const mode of ['consensus', 'standard']) {
 }
 
 /* ---- conservation + fee sanity (consensus token rules) ---- */
-const ftIn = (srcToken(inA) ? BigInt(inA.ftAmount) : 0n) + (srcToken(inB) ? BigInt(inB.ftAmount) : 0n) + balance;
+const ftIn = BigInt(inA.ftAmount ?? '0') + BigInt(inB.ftAmount ?? '0') + balance;
 const ftOut = scenario.newBal + (sc.sign === 1n ? sc.pv : 0n);
 assert.equal(ftIn, ftOut, 'fungible conservation violated');
 const satsIn = BigInt(inA.sats) + BigInt(inB.sats) + BigInt(inS.sats);

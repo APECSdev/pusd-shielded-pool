@@ -210,12 +210,57 @@ mint with `node gen-sweep-proofs.mjs <count> <seed> <out>` from `~/zkb/pusd-shie
    after the action (the current pool holds no standing deposits/fuel). Client rule until
    fixed: broadcast the lock and the action TOGETHER — the action may spend the lock's
    UNCONFIRMED outputs (standard relay accepts mempool chains; first-seen wins the state
-   double-spend), closing the window to ~zero. The durable fix is a hook REVISION (not
-   implemented; must pass the full build/red-team/sweep gates first): tag the lock outputs
-   with an NFT commitment = H(nf0‖nf1) of the intended action, and add hook checks requiring
-   the carrier's nullifiers to hash to the tags (the hook already introspects input token
-   commitments via UTXOTOKCOMMIT — checks 2/9 use it). Until then, DO NOT leave deposits
-   standing.
+   double-spend), closing the window to ~zero. The durable fix — ✅ IMPLEMENTED AND DEPLOYED
+   2026-11-24 PM (the v2 record below): hook checks 4c+4g tag the lock outputs with an NFT
+   commitment = SHA256(carrier[0..64]) = H(nf0‖nf1) of the intended action; all gates re-run
+   (20/20 acceptance incl. the theft replay, 146/0 red team, 69/0 sweep). v1 (the untagged
+   pool, b6ee4196…) is SUPERSEDED — and its minting NFT was burned in the deploy, so it can
+   never mint tag blanks; its 750,000 shielded FT remain spendable (state backup
+   role2-pool-state-v1-untagged.json).
+
+   ### ✅ THE DURABLE FIX IS DEPLOYED — chipnet-role2-pool-v2-tagged (2026-11-24 PM, blocks 345,467+).
+   Hook revision: check 4c (both fuel inputs carry the pool category as MUTABLE NFTs) +
+   check 4g (both fuel commitments == SHA256(nf0‖nf1) — the same raw-LE fold as the
+   nullifier hash, literally SHA256 of the carrier's first 64 bytes). Program 7,834 B
+   (+97 B), drift pin d71851a1…; hook price 37,198 op std / 36,046 cons (524 B of role-2
+   code). Gates: acceptance 20/20 (the THEFT replay — a valid proof consuming fuel tagged
+   for ANOTHER action — REJECTS at the 4g compare); red team 146 runs / 0 accepted, both
+   controls accepted; sweep 69 cases / 0 failed, input 2 binding at 6.00% std, max at-cap
+   6,754,094 op = 15.92% cap margin.
+
+   Deployment (runner-free, APECS faucet hot wallet): anchor `480e30ff…` (= the category) →
+   mint `5ea499ff…` → deploy `2eaeb97f…` (block 345,467) — state NFT at :0, **the MINTING
+   NFT PASSED FORWARD at :1** (v1 burned it — that was WHY v1 could never tag), 100M FT
+   supply at :2. Tag-batch `b087507b…`: 32 blank mutable NFTs minted from the minting NFT
+   (recreated in the same tx) — the blank pool every lock spends 2 of.
+
+   Full lifecycle, every op = prove (role2-op-witness.mjs, real witness under our ceremony
+   zkey) → TAGGED LOCK (pool-refill-role2.mjs: tag = SHA256 of the proved op's carrier,
+   stamped into 2 blanks, 15k×2 fuel, FT deposit on out0 for shields) → action
+   (pool-op-role2.mjs: complete tagged program VM-ACCEPTED consensus+standard on all 3
+   inputs pre-broadcast), each action broadcast ATOMICALLY with its lock (the lock
+   unconfirmed; the client rule — theft window ~zero):
+   • SHIELD 1,000,000 — lock `97d135f9…` (tag 9b15436a…) + action `9d9aa97a…`, fee 30,000
+     sats = 1.067 sat/B, block-confirmed; balance 0 → 1,000,000.
+   • TRANSFER (notes 2,3 → 4,5) — lock `5db06be7…` (tag 620e2824…) + action `5262417b…`,
+     fee 30,000 sats = 1.063 sat/B; balance 1,000,000.
+   • UNSHIELD 250,000 (payout executed, 250,000 FT to the wallet) — lock `70ab2a1f…`
+     (tag cec1170e…) + action `e54d19fb…`, fee 29,000 sats = 1.029 sat/B; balance 750,000.
+   FT conserved exactly at every step; 2 tag NFTs burned per action (burn-by-omission —
+   consensus-proven 3× on chain). Final state: root `1829766…`, balance 750,000, notes at
+   tree 6,7 (450,000 + 300,000).
+
+   Fee policy (user directive, recorded): BARE — no fee-market headroom (blocks empty);
+   15k×2 fuel covers every real action (~28.1 KB) at 1.03–1.07 sat/B; the prove-first flow
+   makes exact per-action sizing possible. Wallet ledger: 310,334 → 168,166 sats (142,168
+   total for the v2 chain: deploy chain + 33k blank batch + 3 locks' fuel+fees); the wallet
+   also holds this category's 99M FT supply + the 250,000 FT payout.
+
+   Tooling (all committed): pool-deploy-role2.mjs (minting-NFT passthrough, no deploy-time
+   fuel), pool-tagbatch-role2.mjs (NEW — mint blanks), pool-refill-role2.mjs (rewritten —
+   the TAGGED LOCK: computes the tag from the proved op, mutates 2 blanks, carries the FT
+   deposit), pool-op-role2.mjs (tag assertions + tagged VM-eval sources + the atomic
+   broadcast path).
 
    ### FUNDING & TERMINOLOGY (user-clarified 2026-11-24 PM). The funder
    `bchtest:qzmux3gx…` is the APECS FAUCET HOT WALLET (faucet-hot-wallet.json — the

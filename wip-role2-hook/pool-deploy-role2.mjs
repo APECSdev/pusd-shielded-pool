@@ -47,6 +47,7 @@ import {
 } from '@bitauth/libauth';
 import { buildProgram, setCovenant } from './script.mjs';
 import { covenantHook, covenantParams } from './pool-hook.mjs';
+import { guardRedeem } from './minting-guard.mjs';
 import { p2sh32 } from './vm.mjs';
 
 const DRY = process.argv.includes('--dry');
@@ -154,6 +155,15 @@ const programLockingHex = binToHex(programLocking);
 console.log('program:     code ' + prog.code.length + 'B sha256 ' + Buffer.from(prog.code).toString('hex').slice(0, 16) + '… · R ' + prog.R.length + 'B · pieces ' + prog.pieces.map((p) => p.length).join('/'));
 console.log('program locking: ' + programLockingHex);
 
+/* ---- the MINTING GUARD, built for the REAL category: future pools are BORN GUARDED —
+   the deploy locks the minting NFT straight into the guard (out1), so burn and FT-mint
+   are consensus-impossible from genesis. The live v2 pool adopted this retroactively
+   (pool-guard-adopt-role2.mjs, adopt a5d73b4e…). Suite: minting-guard.mjs 14/14. */
+const GUARD_K = 64;
+const guardRedeemBytes = guardRedeem({ categoryDisplayHex: CATEGORY, K: GUARD_K, operatorLocking: fundLocking, operatorPubkey: publicKey });
+const guardLockingBytes = p2sh32(guardRedeemBytes);
+console.log('guard:        redeem ' + guardRedeemBytes.length + 'B · locking ' + binToHex(guardLockingBytes) + ' (K=' + GUARD_K + ')');
+
 /* ---- tx 2: the MINT (genesis token rules, live-verified 2026-11-22) ---- */
 const mint = {
     version: 2,
@@ -181,8 +191,8 @@ const deploy = {
     outputs: [
         /* out0: the POOL STATE — mutable NFT, genesis commitment (seededRootLE ‖ 32 zeros), 0 FT */
         { lockingBytecode: programLocking, valueSatoshis: STATE_FLOAT, token: { category: CAT_BYTES, amount: 0n, nft: { capability: 'mutable', commitment: hexToBin(SEEDS.genesisCommitment) } } },
-        /* out1: the MINTING NFT PASSED FORWARD to the wallet — the tag supply's source */
-        { lockingBytecode: fundLocking, valueSatoshis: 1000n, token: { category: CAT_BYTES, amount: 0n, nft: { capability: 'minting', commitment: new Uint8Array(0) } } },
+        /* out1: the MINTING NFT, BORN INSIDE THE GUARD — burn and FT-mint are impossible from genesis */
+        { lockingBytecode: guardLockingBytes, valueSatoshis: 1000n, token: { category: CAT_BYTES, amount: 0n, nft: { capability: 'minting', commitment: new Uint8Array(0) } } },
         /* out2: the full FT supply back to the wallet (locks carry per-shield deposits from it) */
         { lockingBytecode: fundLocking, valueSatoshis: 1000n, token: { category: CAT_BYTES, amount: SUPPLY } },
     ],
@@ -228,6 +238,7 @@ const state = {
            role2-op-witness.mjs (prove) → pool-refill-role2.mjs (TAGGED lock) → pool-op-role2.mjs */
         actionInputs: [],
         mintingNFT: { txid: deployTxid, vout: 1, nft: 'minting' },
+        guard: { adoptTxid: deployTxid, txid: deployTxid, vout: 1, sats: 1000, locking: binToHex(guardLockingBytes), redeemLength: guardRedeemBytes.length, K: GUARD_K, bornGuarded: true, policy: 'only possible spend: recreate the minting NFT at the guard + mint K NFT-only empty-commitment blanks to the operator; burn and FT-mint are consensus-impossible (minting-guard.mjs 14/14)' },
         supply: { txid: deployTxid, vout: 2, ftAmount: SUPPLY.toString() },
     },
     pool: {

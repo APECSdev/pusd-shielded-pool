@@ -341,3 +341,106 @@ mint with `node gen-sweep-proofs.mjs <count> <seed> <out>` from `~/zkb/pusd-shie
      the priced role-2 slice is 427 B), hooked R sha256 `14ab8983…78b` (65 B), pieces
      3,981/3,756, hooked P2SH32 locking
      `aa208caa897c21a9cd65fd617efec64d06c91f766d72334d3e2c51b96b280ea7b10487`.
+
+## ✅ THE MINTING GUARD — deployed (2026-11-24 PM; adopt block 345,503; first guarded batch block 345,504)
+
+WHY: while the minting NFT sits at a plain P2PKH, the operator key IS the minting policy —
+a careless spend burns it (exactly how the v1 pool lost it: not a deliberate burn, just no
+passthrough output in the deploy), and a compromised key mints unlimited FT.
+
+THE FIX — a P2SH32 covenant (minting-guard.mjs) that the minting NFT is locked to. The ONLY
+possible spend: in0 = the guard UTXO, in1 = operator sats; out0 = the minting NFT RECREATED
+at the guard's own locking (read back via UTXOBYTECODE — the guard follows the NFT forever);
+out1..K = blanks (category + MUTABLE + EMPTY commitment + 0 FT) at the operator P2PKH;
+out[K+1] = ONE tokenless change output at the operator P2PKH; + operator signature (gates
+batch TIMING only — anti-griefing, NOT the security boundary).
+
+CONSENSUS-IMPOSSIBLE, FOREVER: burning the minting NFT; minting ANY fungible amount (every
+category output is amount-pinned to 0, the change must be tokenless — the 100M supply is
+frozen); pre-tagged/wrong-capability blanks; redirecting blanks; substituting another token
+at the guard locking (the active input's own category/capability/commitment/amount are
+self-checked first); extra inputs/outputs (counts pinned).
+
+GATES: suite 14/14 on the BCH-2026 VM (control accepts; burns, de-guard, all four FT-mint
+variants incl. foreign-category-on-change, blank shape/redirect, token substitution, extra
+input, no signature — all REJECT). Two landmines en route, both recorded in the source:
+pushNum(0) must be OP_0 (0x50 is OP_RESERVED — first run died on it), and OP_SIZE is
+NON-POPPING (STATUS finding 1 struck AGAIN — commitment/emptiness checks now compare by
+direct byte equality against OP_0, no SIZE). Probe-verified introspection bytes
+(probe-cap.mjs): minting = reverse(category)+0x02, mutable = +0x01, none/bare = bare
+reversed category, tokenless = empty push; commitments push as-stored; amounts push
+minimal. (The probe's FIRST run hit the Buffer-aliasing landmine — the recorded symptom,
+per-call alternation, appeared exactly as documented; fresh plain Uint8Arrays fixed it.)
+
+DEPLOYED LIVE, NO REDEPLOY (adoption is a custody upgrade; program/state/notes untouched):
+- adopt a5d73b4e… (404 B, block 345,503): minting NFT b087507b:0 → guard aa2066a2….
+  Guard: redeem 5,103 B, locking aa2066a238ad4109a3093c34fd4cf9b4167b0058375d4ad1c5cc44cd253d3664f0c187, K=64.
+- first guarded batch ad1d7845… (9,830 B, block 345,504): the guard script executed on
+  chain — consensus 157,733 op / standard 178,853 op, both ACCEPT — minted 64 blanks
+  (reserve now 90 = 45 actions) and passed the minting NFT forward at the guard.
+- fee gotcha (recorded): the batch's first broadcast died on min-relay (code 66) — the
+  100-B signed-size placeholder underestimates the 5,103-B redeem push; the probe now uses
+  the EXACT deterministic unlocking length (65-B sig push + redeem push), BARE 1 sat/B + 600.
+- pool-deploy-role2.mjs updated: FUTURE POOLS ARE BORN GUARDED — deploy out1 locks the
+  minting NFT straight into the guard.
+
+TOOLING: minting-guard.mjs (builder + 14/14 suite), probe-cap.mjs,
+pool-guard-adopt-role2.mjs, pool-tagbatch-role2.mjs (rewritten as the guarded batch — the
+only path post-adoption). Blanks remain plain P2PKH UTXOs — the LOCK tool is unchanged.
+
+## ✅ BLANK VENDING — permissionless acquisition LIVE (2026-11-24 night; load block 345,663; buys 345,664/345,666)
+
+THE GAP (user directive): "No automated distribution mechanism is built — that is a BIG problem.
+We cannot allow ONE party to CONTROL the use of the pool. There MUST be an efficient and
+permissionless way to acquire BLANKS."
+
+THE CONSTRAINT: the deployed minting guard pins every batch-minted blank to the operator's
+P2PKH FOREVER — its covenant is self-pinning (out0's locking == the active input's own
+UTXOBYTECODE) and immortal, so the LIVE category's mint can never be re-pointed. The
+permissionless layer must therefore sit AFTER the mint.
+
+THE FIX — the blank-vending covenant (blank-vending.mjs, suite **18/18** on the BCH-2026 VM,
+consensus + standard): a P2SH32 "vending machine" per blank UTXO with NO SIGNATURE anywhere.
+Shape: in0 = the machine's blank; in1 = the buyer's TOKENLESS funding input; out0 = the blank
+recreated at the FUNDING INPUT'S OWN LOCKING (the blank follows the money); out1 = EXACTLY
+priceSats tokenless to the operator's P2PKH; out2 = tokenless change anywhere. The script is
+the authorization: pay the exact price, the blank is yours — first-come-first-served, no
+permission, no operator involvement per blank. Rejection suite: underpay AND overpay (the
+price is exact), payment redirect, token-in-payment, third-party delivery, pre-tagged blank,
+wrong capability/category, FT-in-blank, float siphon both directions, token in the funding
+input, foreign token at the machine, extra input, wrong output counts, token in change.
+Blanks are INERT at a P2PKH (they authorize nothing alone — actions still need proof
+knowledge of notes + tags + the user's own sats), so blank inflation is NOT value inflation;
+spam-resistance comes from fees.
+
+LIVE PROOF — the definitive test: load `460a6f2a…` (657 B, block 345,663) put 2 blanks in
+the machine AND funded a FRESH OS-CSPRNG stranger key `bchtest:qpes4zff…` (never seen by the
+operator) with 50,000 sats in the same tx. The stranger then bought BOTH blanks with ONLY its
+own key — buys `bc2c326e…` (block 345,664) and `49b184f5…` (block 345,666), each 487 B, the
+vending script executing ON CHAIN (7,545 op consensus / 8,057 op standard, both ACCEPT). The
+only signature in each buy tx is the stranger's own. Stranger wallet now: 2 blanks + 45,826
+sats — fully equipped for one complete action, acquired with zero permission.
+
+Tooling: blank-vending.mjs (covenant + 18/18 suite), pool-vend-load-role2.mjs (operator loads
+N blanks, optionally funds a demo stranger in the same tx; records state.vending),
+blank-buy.mjs (buyer-side self-service: rebuilds the covenant from PUBLISHED params, pins the
+rebuilt locking against state.vending.locking — source-drift refusal; VM-evals input 0 both
+modes pre-broadcast). Machine: locking `aa206b51396304b3bd4e0e9c254f84d1ee80d83a5c7ccaf3750883d00866480d981287`,
+redeem 157 B, price 1,000 sats.
+
+The operator's residual discretion is now ONLY stock depth: how many blanks sit in the
+machine. Blanks, once bought, are held at the BUYER's P2PKH — resellable, giftable,
+postage-stamp transferable — and the machine can be reloaded by anyone the operator sends
+blanks to (they can load THEIR OWN vending covenant with the same published script).
+
+Landmines en route (both recorded in source): (1) a fully-passing signature-free covenant
+ends with an EMPTY stack unless it pushes its own success bit — all our checks are *VERIFY
+(nothing pushed), so the redeem ends with an explicit OP_1; (2) electrum scripthash = SINGLE
+sha256 of the locking, byte-reversed — hash256 (double) returns an empty machine; (3) this
+libauth's hash160 takes {ripemd160, sha256} objects and encodeCashAddress may return an object
+({address}) — both forms handled.
+
+FUTURE-POOL DESIGN OPTION (not deployed): a born-permissionless guard — batch blanks paid to
+the funding input's locking (the guard's own in1) and no operator signature; the mint itself
+becomes self-service. Only new categories can adopt it (the live guard is immortal); the
+vending layer fully serves the live pool.

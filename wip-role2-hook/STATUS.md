@@ -516,3 +516,39 @@ set, no encrypted note delivery; Gate 7 remains mandatory for mainnet.
 3. `pool-refill-role2.mjs` sizes from `plain[0]` only; the K=64 tag batch and
    the 15k×2 fuel need a single plain UTXO of ~30,400+ sats. Consolidate the
    wallet (and recover blank/demo-token sats) before locking.
+
+---
+
+## FINDING R2-NULLIFIER-DOUBLING — 2026-11-26 (post-gates): the nullifier fold permits a full-balance drain
+
+**Status: MEASURED, PROVEN, NOT BROADCAST.** Valid Groth16 proofs exist that
+use ONE note as BOTH in-notes; both verify `snarkjs groth16 verify` against
+their own DEPLOYED VKs (`role2-probe-nullifier-doubling-3out.json` and
+`role2-probe-drain-2out.json` on the `apecsdev` VM, in `/home/apecs/cov/`,
+not committed; both re-verify after copy).
+
+Mechanism: neither `circuits/pool.circom` nor `circuits/pool3.circom` has ANY
+equality constraint on `nf` — the same recorded note loads twice; hook check 7
+(`pool-hook.mjs:225-228`) is a FOLD `SHA256(oldNull‖nf0‖nf1)` with no
+membership test; `nPublic 2` means `oldNull` is not a public input, so the
+circuit cannot constrain the set.
+
+Worst case (2-out pool, live): the 450,600-FT note as both in-notes gives
+inSum 901,200 ≥ balance 762,400 → **one UNSHIELD action pays out the entire
+762,400 FT**. The 3-out pool (700 FT) drains in three actions. The exploit
+was NOT executed on chain.
+
+**Scope note for every number on this page:** the acceptance suites (20/20,
+21/21), the red teams (146/0) and the sweeps (69/0, 69/69) all used DISTINCT
+in-notes — none covers same-note doubling. Those gates stand as measured, but
+they do NOT establish double-spend resistance. The v3 nullifier set (membership
+proofs in the circuit + a hook check) is the fix; the SMT-depth measurement
+decides in-circuit vs hook-level and precedes any ceremony.
+
+**Standing rule until the nullifier set ships: no valued asset may enter any
+pool running this hook. Gate 7 is not the only mainnet gate — the nullifier
+set is.**
+
+Full record: `hushyourmoney/docs/HANDOFF-2026-11-26-3OUT-NOTES-MANAGEMENT.md`
+§12; disclosure on `/research/shielded-pool`; `pool-registry.json`
+`knownFindings` on both live role-2 entries.

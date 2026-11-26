@@ -30,6 +30,7 @@ const argOf = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 ? pro
 const STATE = argOf('--state', '/home/apecs/cov/role2-pool-state.json');
 const OP = argOf('--op', '/home/apecs/cov/role2-op.json');
 const NO_BROADCAST = process.argv.includes('--no-broadcast');
+const OUTS = process.argv.includes('--3out') || process.env.POOL_3OUT === '1' ? 3 : 2;
 const STATE_FLOAT = 10_000n;
 
 /* electrum raw TLS */
@@ -51,7 +52,7 @@ const balance = BigInt(state.pool.balance);
 const oldNull = Buffer.from(state.pool.oldNullHex, 'hex');
 
 /* ---- rebuild the program with the deployed category; drift guards ---- */
-setCovenant(covenantHook(covenantParams({ categoryOnChain: binToHex(hexToBin(state.category).slice().reverse()) })));
+setCovenant(covenantHook(covenantParams({ categoryOnChain: binToHex(hexToBin(state.category).slice().reverse()) }), OUTS));
 const prog = buildProgram();
 const programLocking = p2sh32(prog.R);
 assert.equal(createHash('sha256').update(prog.code).digest('hex'), state.program.codeSha256, 'program code drifted from the deployed build');
@@ -60,11 +61,11 @@ assert.equal(binToHex(programLocking), state.program.locking, 'program locking d
 /* ---- the scenario (self-checked against the proof's own public inputs) ---- */
 const leToBig = (hex) => BigInt('0x' + Buffer.from(hex, 'hex').reverse().toString('hex') || '0');
 const c = op.covenant;
-const sc = { nf0: leToBig(c.nf0), nf1: leToBig(c.nf1), cm0: leToBig(c.cm0), cm1: leToBig(c.cm1), newRoot: leToBig(c.newMerkleRoot), pv: BigInt(c.publicValueAbs), sign: BigInt(c.isUnshield) };
+const sc = { nf0: leToBig(c.nf0), nf1: leToBig(c.nf1), cm0: leToBig(c.cm0), cm1: leToBig(c.cm1), ...(OUTS === 3 ? { cm2: leToBig(c.cm2) } : {}), newRoot: leToBig(c.newMerkleRoot), pv: BigInt(c.publicValueAbs), sign: BigInt(c.isUnshield) };
 const n0 = BigInt(op.publicSignals[0]);
 assert.equal(n0.toString(), state.pool.root, 'proof n0 != current pool root');
-assert.equal(actionHashOf({ ...sc, categoryDisplay: state.category }).toString(), BigInt(op.publicSignals[1]).toString(), 'actionHash mismatch — op is not self-consistent');
-const scenarioArgs = { sc, n0, balance, oldNull, categoryDisplay: Buffer.from(state.category, 'hex') };
+assert.equal(actionHashOf({ ...sc, categoryDisplay: state.category }, OUTS).toString(), BigInt(op.publicSignals[1]).toString(), 'actionHash mismatch — op is not self-consistent');
+const scenarioArgs = { sc, n0, balance, oldNull, categoryDisplay: Buffer.from(state.category, 'hex'), outs: OUTS };
 const scenario = poolScenario(scenarioArgs);
 console.log(`${op.action} pv=${sc.pv} sign=${sc.sign} · balance ${balance} → ${scenario.newBal} · newNull ${scenario.newNull.toString('hex').slice(0, 16)}…`);
 

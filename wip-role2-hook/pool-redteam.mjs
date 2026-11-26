@@ -30,15 +30,16 @@ import {poolTransactionFor, poolScenario, poolOutputs, fuelSourceOutputs} from '
 const reportPath = process.argv[2] ?? 'pool-redteam-report.json';
 const CATEGORY_DISPLAY = Buffer.from('2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544', 'hex');
 
-setCovenant(covenantHook(covenantParams({categoryOnChain: Buffer.from(CATEGORY_DISPLAY).reverse().toString('hex')})));
+const OUTS = process.env.POOL_3OUT === '1' ? 3 : 2;
+setCovenant(covenantHook(covenantParams({categoryOnChain: Buffer.from(CATEGORY_DISPLAY).reverse().toString('hex')}), OUTS));
 const prog = buildProgram();
 const lock = p2sh32(prog.R); const LOCKS = [lock, lock, lock];
 
-const proofs = JSON.parse(readFileSync('/home/apecs/cov/our-proofs.json', 'utf8'));
+const proofs = JSON.parse(readFileSync(OUTS === 3 ? '/home/apecs/cov/our-3out-proofs.json' : '/home/apecs/cov/our-proofs.json', 'utf8'));
 const leToBig = (hex) => BigInt('0x' + Buffer.from(hex, 'hex').reverse().toString('hex') || '0');
 const scenarioArgsOf = (i) => {
     const c = proofs[i].covenant;
-    return { sc: { nf0: leToBig(c.nf0), nf1: leToBig(c.nf1), cm0: leToBig(c.cm0), cm1: leToBig(c.cm1), newRoot: leToBig(c.newMerkleRoot), pv: BigInt(c.publicValueAbs), sign: BigInt(c.isUnshield) }, n0: BigInt(proofs[i].publicSignals[0]), categoryDisplay: CATEGORY_DISPLAY };
+    return { sc: { nf0: leToBig(c.nf0), nf1: leToBig(c.nf1), cm0: leToBig(c.cm0), cm1: leToBig(c.cm1), ...(OUTS === 3 ? { cm2: leToBig(c.cm2) } : {}), newRoot: leToBig(c.newMerkleRoot), pv: BigInt(c.publicValueAbs), sign: BigInt(c.isUnshield) }, n0: BigInt(proofs[i].publicSignals[0]), categoryDisplay: CATEGORY_DISPLAY, outs: OUTS };
 };
 
 const fx0 = FIXTURES.fixtures[0], fx1 = FIXTURES.fixtures[1];

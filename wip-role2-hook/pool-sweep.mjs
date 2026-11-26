@@ -45,7 +45,8 @@ const CAP_BUDGET = budgetOf(new Uint8Array(10000)), CAP_RULE = Math.floor(0.94 *
    working correctly on an underfunded scenario, not a hook defect. */
 
 const CATEGORY_DISPLAY = Buffer.from('2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544', 'hex');
-setCovenant(covenantHook(covenantParams({categoryOnChain: Buffer.from(CATEGORY_DISPLAY).reverse().toString('hex')})));
+const OUTS = process.env.POOL_3OUT === '1' ? 3 : 2;
+setCovenant(covenantHook(covenantParams({categoryOnChain: Buffer.from(CATEGORY_DISPLAY).reverse().toString('hex')}), OUTS));
 const prog = buildProgram();
 const lock = p2sh32(prog.R); const LOCKS = [lock, lock, lock];
 /* drift guard: the HOOKED program's own code hash. build.json holds the PLAIN build's hash
@@ -54,15 +55,18 @@ const lock = p2sh32(prog.R); const LOCKS = [lock, lock, lock];
    loudly. History: 89a8ac14… = the pre-tagging hook (checks 1–11, 7,737 B, 2026-11-24);
    d71851a1… = the deposit-tagging revision (adds 4c fuel-category + 4g tag checks,
    7,834 B, 2026-11-24 PM) — re-derived live, red team + sweeps re-run for this pin. */
-assert.equal(createHash('sha256').update(prog.code).digest('hex'), 'd71851a1ce6d795c0aa40ab055faac1000755d474313f16e6cd34855ffbfff41', 'the HOOKED program code changed — re-derive code/R/locking, re-run the red team, and update this pin + the docs');
+const CODE_PIN = OUTS === 3
+    ? '628207b197ae2cea8b069198f9b454d12fa7e50a19bb1ffa5822cfe5ab533f73'
+    : 'd71851a1ce6d795c0aa40ab055faac1000755d474313f16e6cd34855ffbfff41';
+assert.equal(createHash('sha256').update(prog.code).digest('hex'), CODE_PIN, 'the HOOKED program code changed — re-derive code/R/locking, re-run the red team, and update this pin + the docs');
 
 const leToBig = (hex) => BigInt('0x' + Buffer.from(hex, 'hex').reverse().toString('hex') || '0');
 const scenarioArgsOf = (rec) => {
     const c = rec.covenant;
-    const sc = { nf0: leToBig(c.nf0), nf1: leToBig(c.nf1), cm0: leToBig(c.cm0), cm1: leToBig(c.cm1), newRoot: leToBig(c.newMerkleRoot), pv: BigInt(c.publicValueAbs), sign: BigInt(c.isUnshield) };
+    const sc = { nf0: leToBig(c.nf0), nf1: leToBig(c.nf1), cm0: leToBig(c.cm0), cm1: leToBig(c.cm1), ...(OUTS === 3 ? { cm2: leToBig(c.cm2) } : {}), newRoot: leToBig(c.newMerkleRoot), pv: BigInt(c.publicValueAbs), sign: BigInt(c.isUnshield) };
     const n0 = BigInt(rec.publicSignals[0]);
-    assert.equal(actionHashOf({ ...sc, categoryDisplay: CATEGORY_DISPLAY.toString('hex') }).toString(), BigInt(rec.publicSignals[1]).toString(), 'actionHash mismatch — fixture is not self-consistent');
-    return { sc, n0, categoryDisplay: CATEGORY_DISPLAY, balance: 1000n + sc.pv };
+    assert.equal(actionHashOf({ ...sc, categoryDisplay: CATEGORY_DISPLAY.toString('hex') }, OUTS).toString(), BigInt(rec.publicSignals[1]).toString(), 'actionHash mismatch — fixture is not self-consistent');
+    return { sc, n0, categoryDisplay: CATEGORY_DISPLAY, balance: 1000n + sc.pv, outs: OUTS };
 };
 
 /* pool-aware spendAll: input 2 spends the pool lock, its source output carries the state NFT
@@ -88,7 +92,7 @@ const capFills = (core) => unlockingsFor(core, prog, [0, 0, 0]).unlockings.map((
 
 /* the committed fixtures' covenant args live in /home/apecs/cov/our-proofs.json (the same
    self-consistent shape the minter writes); index order matches FIXTURES.fixtures. */
-const committedCovenant = JSON.parse(readFileSync('/home/apecs/cov/our-proofs.json', 'utf8')).map((p) => p.covenant);
+const committedCovenant = JSON.parse(readFileSync(OUTS === 3 ? '/home/apecs/cov/our-3out-proofs.json' : '/home/apecs/cov/our-proofs.json', 'utf8')).map((p) => p.covenant);
 
 /* cases: the 5 committed fixtures (controls) + every minted random scenario.
    Minted records carry the snarkjs proof shape; convert like mkfixtures.mjs. */

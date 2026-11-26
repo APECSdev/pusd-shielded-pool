@@ -9,20 +9,21 @@ import { decodeAuthenticationInstructions, encodeAuthenticationInstruction } fro
 import { buildProgram, setCovenant } from './script.mjs';
 import { transactionFor } from './transaction.mjs';
 import { FIXTURES } from '../sound-si-gls/math.mjs';
-import { covenantHook, covenantParams, carrierOf, carrierOutput, actionHashOf, CARRIER_LEN } from './pool-hook.mjs';
+import { covenantHook, covenantParams, carrierOf, carrierOutput, actionHashOf, CARRIER_LEN, CARRIER_LEN_3OUT } from './pool-hook.mjs';
 
 /* libauth's Output.token.category is in DISPLAY order; OP_UTXOTOKENCATEGORY returns the
    ON-CHAIN (reversed) order followed by the capability byte. The hook's ctor arg is the
    reversed form; the source outputs must carry the display form. */
 const CATEGORY_DISPLAY = Buffer.from('2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544', 'hex');
 const CATEGORY_ONCHAIN = Buffer.from(CATEGORY_DISPLAY).reverse();
-setCovenant(covenantHook(covenantParams({ categoryOnChain: CATEGORY_ONCHAIN.toString('hex') })));
+const OUTS = process.env.POOL_3OUT === '1' ? 3 : 2;
+setCovenant(covenantHook(covenantParams({ categoryOnChain: CATEGORY_ONCHAIN.toString('hex') }), OUTS));
 const prog = buildProgram();
 const lock = p2sh32(prog.R);
 const LOCKS = [lock, lock, lock];
 
 /* our real proofs carry the covenant args (LE VM-number hex) that hash to their own n1 */
-const proofs = JSON.parse(readFileSync('/home/apecs/cov/our-proofs.json', 'utf8'));
+const proofs = JSON.parse(readFileSync(OUTS === 3 ? '/home/apecs/cov/our-3out-proofs.json' : '/home/apecs/cov/our-proofs.json', 'utf8'));
 const sha = (b) => createHash('sha256').update(b).digest();
 const leToBig = (hex) => BigInt('0x' + Buffer.from(hex, 'hex').reverse().toString('hex') || '0');
 const be32 = (v) => { const b = Buffer.alloc(32); let x = BigInt(v); for (let i = 31; i >= 0 && x > 0n; i--) { b[i] = Number(x & 0xffn); x >>= 8n; } return b; };
@@ -34,17 +35,17 @@ const catDisplay = Buffer.from(CATEGORY_ONCHAIN).reverse().toString('hex');
 const scenarioOf = (p) => {
     const c = p.covenant;
     const s = {
-        nf0: leToBig(c.nf0), nf1: leToBig(c.nf1), cm0: leToBig(c.cm0), cm1: leToBig(c.cm1),
+        nf0: leToBig(c.nf0), nf1: leToBig(c.nf1), cm0: leToBig(c.cm0), cm1: leToBig(c.cm1), ...(OUTS === 3 ? { cm2: leToBig(c.cm2) } : {}),
         newRoot: leToBig(c.newMerkleRoot), pv: BigInt(c.publicValueAbs), sign: BigInt(c.isUnshield),
     };
     const n0 = BigInt(p.publicSignals[0]);
-    assert.equal(actionHashOf({ ...s, categoryDisplay: catDisplay }).toString(), BigInt(p.publicSignals[1]).toString(), 'actionHash mismatch — fixture is not self-consistent');
+    assert.equal(actionHashOf({ ...s, categoryDisplay: catDisplay }, OUTS).toString(), BigInt(p.publicSignals[1]).toString(), 'actionHash mismatch — fixture is not self-consistent');
     return { s, n0 };
 };
 
 /* the deposit tag of a DIFFERENT fixture's action — for the theft-replay rejections: a valid
    proof of action A must not consume fuel locked for action B's nullifiers (hook check 4g). */
-const foreignTag = (idx) => new Uint8Array(sha(carrierOf(scenarioOf(proofs[idx]).s).subarray(0, 64)));
+const foreignTag = (idx) => new Uint8Array(sha(carrierOf(scenarioOf(proofs[idx]).s, OUTS).subarray(0, 64)));
 
 const run = (label, expect, { proofIdx, mutate = {}, txMutate = {} }) => {
     const { s, n0 } = scenarioOf(proofs[proofIdx]);
@@ -53,7 +54,7 @@ const run = (label, expect, { proofIdx, mutate = {}, txMutate = {} }) => {
     const oldNull = Buffer.alloc(32);
     /*  the deployed covenant folds the RAW covenant args: sha256(old ‖ nf0 ‖ nf1) with the
         32-byte LE VM-number forms (asset-pool.cash line 148) — NOT the BE preimage forms. */
-    const carr = carrierOf(sc);
+    const carr = carrierOf(sc, OUTS);
     const newNull = sha(Buffer.concat([oldNull, carr.subarray(0, 32), carr.subarray(32, 64)]));
     const newBal = balance + sc.pv - 2n * sc.sign * sc.pv;
     const stateCommit = Buffer.concat([to32LE(n0), oldNull]);
@@ -91,7 +92,7 @@ const run = (label, expect, { proofIdx, mutate = {}, txMutate = {} }) => {
         { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: tx.sourceCategory, amount: balance, nft: { capability: 'mutable', commitment: tx.stateCommit } } },
     ];
     const outputs = [
-        { lockingBytecode: new Uint8Array(carrierOutput(carrierOf(sc))), valueSatoshis: 0n },
+        { lockingBytecode: new Uint8Array(carrierOutput(carrierOf(sc, OUTS))), valueSatoshis: 0n },
         { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: tx.out1Category, amount: tx.out1Amount, nft: { capability: 'mutable', commitment: tx.newCommit } } },
     ];
     if (tx.payout) outputs.push({ lockingBytecode: Buffer.from([0x76, 0xa9, 0x14, ...Buffer.alloc(20), 0x88, 0xac]), valueSatoshis: 546n, token: { category: new Uint8Array(CATEGORY_DISPLAY)  /* plain Uint8Array: Buffer.slice() returns a VIEW and REVERSEBYTES writes through it */, amount: sc.pv } });
@@ -134,6 +135,8 @@ R.push(run('carrier newRoot changed (actionHash no longer matches n1)', false, {
 R.push(run('carrier pv changed', false, { proofIdx: 0, mutate: { pv: 1n } }));
 R.push(run('carrier sign flipped', false, { proofIdx: 0, mutate: { sign: 1n } }));
 R.push(run('carrier nf0 changed', false, { proofIdx: 0, mutate: { nf0: 7n } }));
+/* 3-out only: cm2 is bound exactly as cm0/cm1 (the 9-field actionHash). */
+if (OUTS === 3) R.push(run('carrier cm2 changed (actionHash no longer matches n1)', false, { proofIdx: 0, mutate: { cm2: 0x1234n } }));
 
 console.log('\n--- rejections: state input tampering ---');
 R.push(run('state input wrong category', false, { proofIdx: 0, txMutate: { sourceCategory: new Uint8Array(32) } }));

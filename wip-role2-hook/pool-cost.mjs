@@ -20,16 +20,17 @@ const CATEGORY_DISPLAY = Buffer.from('2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9
 const plain = buildProgram();
 
 /* then the hooked program under the same VK */
-setCovenant(covenantHook(covenantParams({ categoryOnChain: Buffer.from(CATEGORY_DISPLAY).reverse().toString('hex') })));
+const OUTS = process.env.POOL_3OUT === '1' ? 3 : 2;
+setCovenant(covenantHook(covenantParams({ categoryOnChain: Buffer.from(CATEGORY_DISPLAY).reverse().toString('hex') }), OUTS));
 const hooked = buildProgram();
 
 /* fixture 0 (transfer pv=0) — the honest scenario */
-const proofs = JSON.parse(readFileSync('/home/apecs/cov/our-proofs.json', 'utf8'));
+const proofs = JSON.parse(readFileSync(OUTS === 3 ? '/home/apecs/cov/our-3out-proofs.json' : '/home/apecs/cov/our-proofs.json', 'utf8'));
 const c = proofs[0].covenant;
 const leToBig = (hex) => BigInt('0x' + Buffer.from(hex, 'hex').reverse().toString('hex') || '0');
-const sc = { nf0: leToBig(c.nf0), nf1: leToBig(c.nf1), cm0: leToBig(c.cm0), cm1: leToBig(c.cm1), newRoot: leToBig(c.newMerkleRoot), pv: BigInt(c.publicValueAbs), sign: BigInt(c.isUnshield) };
+const sc = { nf0: leToBig(c.nf0), nf1: leToBig(c.nf1), cm0: leToBig(c.cm0), cm1: leToBig(c.cm1), ...(OUTS === 3 ? { cm2: leToBig(c.cm2) } : {}), newRoot: leToBig(c.newMerkleRoot), pv: BigInt(c.publicValueAbs), sign: BigInt(c.isUnshield) };
 const n0 = BigInt(proofs[0].publicSignals[0]);
-const scenarioArgs = { sc, n0, categoryDisplay: CATEGORY_DISPLAY };
+const scenarioArgs = { sc, n0, categoryDisplay: CATEGORY_DISPLAY, outs: OUTS };
 
 /* sized witnesses: the hooked program needs pool-shaped sizing; the plain program's stock sizer
    is correct as-is (no hook to reject the default shape) */

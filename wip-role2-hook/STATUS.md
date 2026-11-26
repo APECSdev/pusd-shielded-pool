@@ -444,3 +444,75 @@ FUTURE-POOL DESIGN OPTION (not deployed): a born-permissionless guard — batch 
 the funding input's locking (the guard's own in1) and no operator signature; the mint itself
 becomes self-service. Only new categories can adopt it (the live guard is immortal); the
 vending layer fully serves the live pool.
+
+## 3-OUT V3 — NOTES MANAGEMENT (2026-11-26, later session)
+
+The 3-output circuit (`circuits/pool3.circom`, 184,528 constraints, 2 public
+inputs, 112 private inputs) now has a full build + gate + deployment record.
+The 2-out generation is untouched: the hook is parameterized by `outs` (2|3),
+and the 2-out hooked program rebuilds byte-identically (code sha256
+`d71851a1…`, 7,834 B) — the live 2-out pool's tooling still passes its pins.
+
+**Build + gates (all on the apecsdev VM, `BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json`):**
+
+| Gate | Result |
+|---|---|
+| Plain sound verifier under the new VK | code 7,310 B sha256 `6ec7ca8e…`; R 65 B; fixture-0 margins 6.46% consensus / 6.01% standard; unlocking 9,313 / 9,243 / 8,763 B |
+| Hooked 3-out program (fixture category) | code 7,848 B sha256 `628207b1…`; R 65 B; locking `aa200240…`; role code 804 / 720 / 2,911 B |
+| Hook price (201-B carrier) | 39,082 op standard / 37,930 op consensus; 537 B of role-2 code |
+| Acceptance | 21/21 (3 controls + 18 rejection classes; the 3-out adds the cm2 carrier tamper) |
+| Red team | 146 runs / 0 accepted; both positive controls accepted (`pool-redteam-3out-report.json`) |
+| Liveness sweep (full) | **69 cases / 0 failed** — 5 committed fixtures + 64 minted random proofs (seeds `sweep-3out-v1a` / `sweep-3out-v1b`); consensus min margins 7.86% / 8.54% / 6.49% (inputs 0/1/2), standard 7.40% / 8.07% / 6.00%; max at-cap 7,080,373 op (11.86% cap margin); cap rule all true (`pool3-sweep-report.json`) |
+| Liveness sweep (5-fixture subset) | 5 cases / 0 failed; min margin 6.00% standard (input 2); at-cap max 6,716,000 op (16.39% cap margin) (`pool3-sweep-fixtures.json`) |
+
+The hook changes: `CARRIER_LEN_3OUT = 201`; the carrier splits
+`nf0|nf1|cm0|cm1|cm2|newRoot|pv(8)|sign(1)`; the actionHash preimage grows to
+288 bytes (9 fields); the `OP_SIZE` check expects 288. The deposit tag
+`SHA256(carrier[0..64])` is unchanged. The 3-out hook uses the same 12 checks;
+the added `cm2` split/preimage pushes account for the +1,884 op / +13 B of
+role-2 code.
+
+**Tooling added:** `pool-info.mjs` (the hooked build's code/R/locking, since
+stock `build.mjs` cannot smoke-test the hook's token shape); `pool-hook.mjs`
+`outs` parameter; `pool-tx.mjs` `outs`; `pool-test/pool-redteam/pool-sweep/
+pool-cost/pool-op-role2/pool-deploy-role2` `POOL_3OUT=1` / `--3out` paths;
+`wallet-consolidate.mjs`, `blank-sweep.mjs`, `token-sats-recover.mjs` (sats
+management for the `plain[0]`-only bench scripts). Committed evidence:
+`pool-redteam-3out-report.json`, `pool3-sweep-report.json` (69 cases),
+`pool3-sweep-fixtures.json` (5 cases), `build.3out-plain.json`,
+`our-3out.fixtures.json`, `our-3out-proofs.json`, `our-3out-sweep-a.json`,
+`our-3out-sweep-b.json` (the 64 minted proofs).
+
+**Exact sweep command (from `bn-native-sound/`):**
+`BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 node
+pool-sweep.mjs /home/apecs/cov/pool3-sweep-report.json
+/home/apecs/cov/our-3out-sweep-a.json /home/apecs/cov/our-3out-sweep-b.json`.
+The minted proofs were produced by `node gen-sweep-proofs-3out.mjs 32
+sweep-3out-v1a /home/apecs/cov/our-3out-sweep-a.json` (and `v1b`).
+
+**Deployed 3-out demo pool (chipnet, 2026-11-26):** category
+`bc607a96…` (anchor), mint `62d91e4c…`, deploy `2f650791…`; program 7,848 B
+sha256 `73cb0ccb…`, locking `aa204a6c…`; guard `aa20e33c…` (K=64); tag batch
+`8e3eaf71…` (64 blanks). SHIELD 1,000 `e847ef56…` (28,326 B, 30,000 sats,
+1.059 sat/B; out 400+300+300) → TRANSFER `ef64f3dd…` (28,389 B, 30,000 sats,
+1.057 sat/B; spends notes 2+3; out 280+210+210); every input VM-ACCEPTED
+consensus+standard. Final state root
+`3271108787199986663014643111346367083348315666322274808145127686880774309637`,
+balance 1,000 FT, notes 300 (index 4) / 280 (5) / 210 (6) / 210 (7), 8 leaves.
+The two actions are the note-management proof: one action creates three notes;
+the next spends two and creates three with change splitting. Demo only:
+1-of-1 setup, public bootstrap in-notes on the first action, no real nullifier
+set, no encrypted note delivery; Gate 7 remains mandatory for mainnet.
+
+**New landmines:**
+1. `pool-tagbatch-role2.mjs` reads `state.guard` (top-level); the adopt script
+   writes it there, but a born-guarded deploy wrote only `outpoints.guard`.
+   Fixed in `pool-deploy-role2.mjs` (top-level alias) + the live state file.
+2. A token-spending P2PKH signature must include each source output's token
+   data in the signing serialization; a tokenless `sourceOutputs` entry
+   produces a signature the network rejects with code 16 (Signature must be
+   zero for failed CHECK(MULTI)SIG). Fixed in `blank-sweep.mjs` /
+   `token-sats-recover.mjs`.
+3. `pool-refill-role2.mjs` sizes from `plain[0]` only; the K=64 tag batch and
+   the 15k×2 fuel need a single plain UTXO of ~30,400+ sats. Consolidate the
+   wallet (and recover blank/demo-token sats) before locking.

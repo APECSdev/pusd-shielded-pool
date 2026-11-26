@@ -27,8 +27,8 @@ const be32 = (v) => { const b = Buffer.alloc(32); let x = BigInt(v); for (let i 
 const to32LE = (v) => Buffer.from(be32(v)).reverse();
 
 /* the honest pool scenario for one fixture: carrier, state commitment, new commitment, outputs */
-export const poolScenario = ({ sc, n0, balance = 1000n, oldNull = Buffer.alloc(32), categoryDisplay }) => {
-    const carr = carrierOf(sc);
+export const poolScenario = ({ sc, n0, balance = 1000n, oldNull = Buffer.alloc(32), categoryDisplay, outs = 2 }) => {
+    const carr = carrierOf(sc, outs);
     /* deployed covenant folds the RAW LE covenant args: sha256(old ‖ nf0 ‖ nf1) (asset-pool.cash:148) */
     const newNull = sha(Buffer.concat([oldNull, carr.subarray(0, 32), carr.subarray(32, 64)]));
     /* deposit tag (hook check 4g): SHA256 of the carrier's first 64 bytes = the intended

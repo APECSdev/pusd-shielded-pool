@@ -1,0 +1,7947 @@
+{
+ "inputs": [
+  "/home/apecs/cov/our-3out-sweep-a.json",
+  "/home/apecs/cov/our-3out-sweep-b.json"
+ ],
+ "shard": "0/1",
+ "capBudget": 8032800,
+ "capRule": 7550832,
+ "balanceRule": "per case: balance = 1000n + pv (an unshield must be funded; hook check 8 requires newBalance >= 0)",
+ "results": [
+  {
+   "label": "fixture 0",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "7017148170027463748288882338239306895786272080659497705757329714043148680521",
+    "13991487841786351825366762628912799170262416794551198620764821616449822955582"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    192
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8822
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7004881,
+      "budget": 7623200,
+      "margin": 0.08111,
+      "capMargin": 0.12797,
+      "error": null
+     },
+     {
+      "op": 6951272,
+      "budget": 7624800,
+      "margin": 0.08833,
+      "capMargin": 0.13464,
+      "error": null
+     },
+     {
+      "op": 6629123,
+      "budget": 7090400,
+      "margin": 0.06506,
+      "capMargin": 0.17474,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7040209,
+      "budget": 7623200,
+      "margin": 0.07648,
+      "capMargin": 0.12357,
+      "error": null
+     },
+     {
+      "op": 6986600,
+      "budget": 7624800,
+      "margin": 0.0837,
+      "capMargin": 0.13024,
+      "error": null
+     },
+     {
+      "op": 6664195,
+      "budget": 7090400,
+      "margin": 0.06011,
+      "capMargin": 0.17038,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7021953,
+       "capMargin": 0.12584,
+       "error": null
+      },
+      {
+       "op": 6970563,
+       "capMargin": 0.13224,
+       "error": null
+      },
+      {
+       "op": 6639771,
+       "capMargin": 0.17342,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7059713,
+       "capMargin": 0.12114,
+       "error": null
+      },
+      {
+       "op": 7008323,
+       "capMargin": 0.12754,
+       "error": null
+      },
+      {
+       "op": 6677275,
+       "capMargin": 0.16875,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "fixture 1",
+   "pv": "250",
+   "sign": "0",
+   "publicInputs": [
+    "18134855945186975874533321084551720488887775869741704052778677533842794658896",
+    "9415365458168843458099949059862399401962413717894233525682722258960993584384"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    188
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8818
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6967517,
+      "budget": 7623200,
+      "margin": 0.08601,
+      "capMargin": 0.13262,
+      "error": null
+     },
+     {
+      "op": 6958069,
+      "budget": 7624800,
+      "margin": 0.08744,
+      "capMargin": 0.13379,
+      "error": null
+     },
+     {
+      "op": 6625777,
+      "budget": 7087200,
+      "margin": 0.06511,
+      "capMargin": 0.17516,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7002845,
+      "budget": 7623200,
+      "margin": 0.08138,
+      "capMargin": 0.12822,
+      "error": null
+     },
+     {
+      "op": 6993397,
+      "budget": 7624800,
+      "margin": 0.08281,
+      "capMargin": 0.12939,
+      "error": null
+     },
+     {
+      "op": 6660849,
+      "budget": 7087200,
+      "margin": 0.06016,
+      "capMargin": 0.17079,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 6983874,
+       "capMargin": 0.13058,
+       "error": null
+      },
+      {
+       "op": 6976504,
+       "capMargin": 0.1315,
+       "error": null
+      },
+      {
+       "op": 6636118,
+       "capMargin": 0.17387,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7021634,
+       "capMargin": 0.12588,
+       "error": null
+      },
+      {
+       "op": 7014264,
+       "capMargin": 0.1268,
+       "error": null
+      },
+      {
+       "op": 6673622,
+       "capMargin": 0.1692,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "fixture 2",
+   "pv": "400",
+   "sign": "1",
+   "publicInputs": [
+    "8542031303966532818753416209175473194459110143378558709312593476033005657266",
+    "2339645486753123460525607709761199704063754489882264963461078965934460046866"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    341
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8780
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6986597,
+      "budget": 7623200,
+      "margin": 0.08351,
+      "capMargin": 0.13024,
+      "error": null
+     },
+     {
+      "op": 6951111,
+      "budget": 7624800,
+      "margin": 0.08835,
+      "capMargin": 0.13466,
+      "error": null
+     },
+     {
+      "op": 6596442,
+      "budget": 7056800,
+      "margin": 0.06524,
+      "capMargin": 0.17881,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7021925,
+      "budget": 7623200,
+      "margin": 0.07887,
+      "capMargin": 0.12584,
+      "error": null
+     },
+     {
+      "op": 6986439,
+      "budget": 7624800,
+      "margin": 0.08372,
+      "capMargin": 0.13026,
+      "error": null
+     },
+     {
+      "op": 6631514,
+      "budget": 7056800,
+      "margin": 0.06027,
+      "capMargin": 0.17445,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7005766,
+       "capMargin": 0.12786,
+       "error": null
+      },
+      {
+       "op": 6971940,
+       "capMargin": 0.13207,
+       "error": null
+      },
+      {
+       "op": 6609872,
+       "capMargin": 0.17714,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7043526,
+       "capMargin": 0.12315,
+       "error": null
+      },
+      {
+       "op": 7009700,
+       "capMargin": 0.12737,
+       "error": null
+      },
+      {
+       "op": 6647376,
+       "capMargin": 0.17247,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "fixture 3",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "5383319612191958920149385819760776027833519779158111144003659207213880015467",
+    "8981081619663631973174729928524773891911221091158886032707592414684104854787"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    245
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8779
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6997453,
+      "budget": 7623200,
+      "margin": 0.08208,
+      "capMargin": 0.12889,
+      "error": null
+     },
+     {
+      "op": 6951708,
+      "budget": 7624800,
+      "margin": 0.08828,
+      "capMargin": 0.13458,
+      "error": null
+     },
+     {
+      "op": 6597278,
+      "budget": 7056000,
+      "margin": 0.06501,
+      "capMargin": 0.17871,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7032781,
+      "budget": 7623200,
+      "margin": 0.07745,
+      "capMargin": 0.12449,
+      "error": null
+     },
+     {
+      "op": 6987036,
+      "budget": 7624800,
+      "margin": 0.08364,
+      "capMargin": 0.13019,
+      "error": null
+     },
+     {
+      "op": 6632350,
+      "budget": 7056000,
+      "margin": 0.06004,
+      "capMargin": 0.17434,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7014752,
+       "capMargin": 0.12674,
+       "error": null
+      },
+      {
+       "op": 6971322,
+       "capMargin": 0.13214,
+       "error": null
+      },
+      {
+       "op": 6609235,
+       "capMargin": 0.17722,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7052512,
+       "capMargin": 0.12204,
+       "error": null
+      },
+      {
+       "op": 7009082,
+       "capMargin": 0.12744,
+       "error": null
+      },
+      {
+       "op": 6646739,
+       "capMargin": 0.17255,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "fixture 4",
+   "pv": "125",
+   "sign": "0",
+   "publicInputs": [
+    "20793164852381915016012908699446545294200737898188796335595290720789487965511",
+    "10712160525086093769991218592430948977552750016384629859237456566132211846259"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    149
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8875
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6984753,
+      "budget": 7623200,
+      "margin": 0.08375,
+      "capMargin": 0.13047,
+      "error": null
+     },
+     {
+      "op": 6973706,
+      "budget": 7624800,
+      "margin": 0.08539,
+      "capMargin": 0.13185,
+      "error": null
+     },
+     {
+      "op": 6668939,
+      "budget": 7132800,
+      "margin": 0.06503,
+      "capMargin": 0.16979,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7020209,
+      "budget": 7623200,
+      "margin": 0.0791,
+      "capMargin": 0.12606,
+      "error": null
+     },
+     {
+      "op": 7009162,
+      "budget": 7624800,
+      "margin": 0.08074,
+      "capMargin": 0.12743,
+      "error": null
+     },
+     {
+      "op": 6704139,
+      "budget": 7132800,
+      "margin": 0.0601,
+      "capMargin": 0.1654,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7000406,
+       "capMargin": 0.12852,
+       "error": null
+      },
+      {
+       "op": 6989959,
+       "capMargin": 0.12982,
+       "error": null
+      },
+      {
+       "op": 6678329,
+       "capMargin": 0.16862,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7038166,
+       "capMargin": 0.12382,
+       "error": null
+      },
+      {
+       "op": 7027719,
+       "capMargin": 0.12512,
+       "error": null
+      },
+      {
+       "op": 6715833,
+       "capMargin": 0.16395,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a transfer #0",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "15523549280698361845350017652082461267264715036108835936814234719124974055716",
+    "322489156535094577751690273438763247416695738481753957825285963277836255971"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    151
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8877
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7004758,
+      "budget": 7623200,
+      "margin": 0.08113,
+      "capMargin": 0.12798,
+      "error": null
+     },
+     {
+      "op": 6965394,
+      "budget": 7624800,
+      "margin": 0.08648,
+      "capMargin": 0.13288,
+      "error": null
+     },
+     {
+      "op": 6668281,
+      "budget": 7134400,
+      "margin": 0.06533,
+      "capMargin": 0.16987,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7040214,
+      "budget": 7623200,
+      "margin": 0.07648,
+      "capMargin": 0.12357,
+      "error": null
+     },
+     {
+      "op": 7000850,
+      "budget": 7624800,
+      "margin": 0.08183,
+      "capMargin": 0.12847,
+      "error": null
+     },
+     {
+      "op": 6703481,
+      "budget": 7134400,
+      "margin": 0.0604,
+      "capMargin": 0.16549,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022180,
+       "capMargin": 0.12581,
+       "error": null
+      },
+      {
+       "op": 6984610,
+       "capMargin": 0.13049,
+       "error": null
+      },
+      {
+       "op": 6680465,
+       "capMargin": 0.16835,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7059940,
+       "capMargin": 0.12111,
+       "error": null
+      },
+      {
+       "op": 7022370,
+       "capMargin": 0.12579,
+       "error": null
+      },
+      {
+       "op": 6717969,
+       "capMargin": 0.16368,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a shield #1",
+   "pv": "704081581623",
+   "sign": "0",
+   "publicInputs": [
+    "957049933018923652940007489057010643619131955023761957591363361971638907049",
+    "11764285461470917517673861815271599210860074454077161955476140633019028018173"
+   ],
+   "nq": 99,
+   "fills": [
+    0,
+    0,
+    470
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8717
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7017926,
+      "budget": 7623200,
+      "margin": 0.0794,
+      "capMargin": 0.12634,
+      "error": null
+     },
+     {
+      "op": 6948200,
+      "budget": 7624800,
+      "margin": 0.08874,
+      "capMargin": 0.13502,
+      "error": null
+     },
+     {
+      "op": 6551054,
+      "budget": 7006400,
+      "margin": 0.06499,
+      "capMargin": 0.18446,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7053126,
+      "budget": 7623200,
+      "margin": 0.07478,
+      "capMargin": 0.12196,
+      "error": null
+     },
+     {
+      "op": 6983400,
+      "budget": 7624800,
+      "margin": 0.08412,
+      "capMargin": 0.13064,
+      "error": null
+     },
+     {
+      "op": 6585998,
+      "budget": 7006400,
+      "margin": 0.06,
+      "capMargin": 0.18011,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7035683,
+       "capMargin": 0.12413,
+       "error": null
+      },
+      {
+       "op": 6967238,
+       "capMargin": 0.13265,
+       "error": null
+      },
+      {
+       "op": 6563014,
+       "capMargin": 0.18297,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7073443,
+       "capMargin": 0.11943,
+       "error": null
+      },
+      {
+       "op": 7004998,
+       "capMargin": 0.12795,
+       "error": null
+      },
+      {
+       "op": 6600518,
+       "capMargin": 0.1783,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a unshield #2",
+   "pv": "391572031864",
+   "sign": "1",
+   "publicInputs": [
+    "4302770791809131616593346669839130100278561698631684892843547473152910213988",
+    "7893258929081238724554227155952475743130366023518098403409931215824526449617"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    237
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8771
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7004976,
+      "budget": 7623200,
+      "margin": 0.0811,
+      "capMargin": 0.12795,
+      "error": null
+     },
+     {
+      "op": 6969920,
+      "budget": 7624800,
+      "margin": 0.08589,
+      "capMargin": 0.13232,
+      "error": null
+     },
+     {
+      "op": 6591270,
+      "budget": 7049600,
+      "margin": 0.06502,
+      "capMargin": 0.17946,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7040176,
+      "budget": 7623200,
+      "margin": 0.07648,
+      "capMargin": 0.12357,
+      "error": null
+     },
+     {
+      "op": 7005120,
+      "budget": 7624800,
+      "margin": 0.08127,
+      "capMargin": 0.12794,
+      "error": null
+     },
+     {
+      "op": 6626214,
+      "budget": 7049600,
+      "margin": 0.06006,
+      "capMargin": 0.17511,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7024304,
+       "capMargin": 0.12555,
+       "error": null
+      },
+      {
+       "op": 6990653,
+       "capMargin": 0.12974,
+       "error": null
+      },
+      {
+       "op": 6604111,
+       "capMargin": 0.17786,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7062064,
+       "capMargin": 0.12085,
+       "error": null
+      },
+      {
+       "op": 7028413,
+       "capMargin": 0.12504,
+       "error": null
+      },
+      {
+       "op": 6641615,
+       "capMargin": 0.17319,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a transfer #3",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "6147719437256402438726184718095546139223278907115564763298695136535374027104",
+    "6702883587814130381438902214542907854605630935423011490955532335867509240256"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    394
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8737
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6998586,
+      "budget": 7623200,
+      "margin": 0.08194,
+      "capMargin": 0.12875,
+      "error": null
+     },
+     {
+      "op": 6964717,
+      "budget": 7624800,
+      "margin": 0.08657,
+      "capMargin": 0.13297,
+      "error": null
+     },
+     {
+      "op": 6566086,
+      "budget": 7022400,
+      "margin": 0.06498,
+      "capMargin": 0.18259,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7033786,
+      "budget": 7623200,
+      "margin": 0.07732,
+      "capMargin": 0.12437,
+      "error": null
+     },
+     {
+      "op": 6999917,
+      "budget": 7624800,
+      "margin": 0.08195,
+      "capMargin": 0.12858,
+      "error": null
+     },
+     {
+      "op": 6601030,
+      "budget": 7022400,
+      "margin": 0.06,
+      "capMargin": 0.17824,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7016502,
+       "capMargin": 0.12652,
+       "error": null
+      },
+      {
+       "op": 6984225,
+       "capMargin": 0.13054,
+       "error": null
+      },
+      {
+       "op": 6578117,
+       "capMargin": 0.18109,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7054262,
+       "capMargin": 0.12182,
+       "error": null
+      },
+      {
+       "op": 7021985,
+       "capMargin": 0.12584,
+       "error": null
+      },
+      {
+       "op": 6615621,
+       "capMargin": 0.17642,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a shield #4",
+   "pv": "1024313679443",
+   "sign": "0",
+   "publicInputs": [
+    "2578130611813781392955448671824233912433843521616789978265948259216591472507",
+    "781736889143839449924994991105487904389746693971275972465115743885769280337"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    350
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8789
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7005082,
+      "budget": 7623200,
+      "margin": 0.08108,
+      "capMargin": 0.12794,
+      "error": null
+     },
+     {
+      "op": 6965329,
+      "budget": 7624800,
+      "margin": 0.08649,
+      "capMargin": 0.13289,
+      "error": null
+     },
+     {
+      "op": 6603515,
+      "budget": 7064000,
+      "margin": 0.06519,
+      "capMargin": 0.17793,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7040410,
+      "budget": 7623200,
+      "margin": 0.07645,
+      "capMargin": 0.12354,
+      "error": null
+     },
+     {
+      "op": 7000657,
+      "budget": 7624800,
+      "margin": 0.08186,
+      "capMargin": 0.12849,
+      "error": null
+     },
+     {
+      "op": 6638587,
+      "budget": 7064000,
+      "margin": 0.06022,
+      "capMargin": 0.17357,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022411,
+       "capMargin": 0.12578,
+       "error": null
+      },
+      {
+       "op": 6984620,
+       "capMargin": 0.13049,
+       "error": null
+      },
+      {
+       "op": 6614842,
+       "capMargin": 0.17652,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7060171,
+       "capMargin": 0.12108,
+       "error": null
+      },
+      {
+       "op": 7022380,
+       "capMargin": 0.12579,
+       "error": null
+      },
+      {
+       "op": 6652346,
+       "capMargin": 0.17185,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a unshield #5",
+   "pv": "953799394426",
+   "sign": "1",
+   "publicInputs": [
+    "19273151274966698174402675318142847056856725907402562798891830625732380349221",
+    "12028053391200767190604247836110680288074174279440495861778765163110283040110"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    324
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8763
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7012074,
+      "budget": 7623200,
+      "margin": 0.08017,
+      "capMargin": 0.12707,
+      "error": null
+     },
+     {
+      "op": 6944867,
+      "budget": 7624800,
+      "margin": 0.08917,
+      "capMargin": 0.13544,
+      "error": null
+     },
+     {
+      "op": 6584597,
+      "budget": 7043200,
+      "margin": 0.06511,
+      "capMargin": 0.18029,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7047274,
+      "budget": 7623200,
+      "margin": 0.07555,
+      "capMargin": 0.12269,
+      "error": null
+     },
+     {
+      "op": 6980067,
+      "budget": 7624800,
+      "margin": 0.08456,
+      "capMargin": 0.13105,
+      "error": null
+     },
+     {
+      "op": 6619541,
+      "budget": 7043200,
+      "margin": 0.06015,
+      "capMargin": 0.17594,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028054,
+       "capMargin": 0.12508,
+       "error": null
+      },
+      {
+       "op": 6963282,
+       "capMargin": 0.13314,
+       "error": null
+      },
+      {
+       "op": 6595312,
+       "capMargin": 0.17895,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7065814,
+       "capMargin": 0.12038,
+       "error": null
+      },
+      {
+       "op": 7001042,
+       "capMargin": 0.12844,
+       "error": null
+      },
+      {
+       "op": 6632816,
+       "capMargin": 0.17428,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a transfer #6",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "18805674428691317213714430678123013148480780144672670031698263737044292048565",
+    "3709243213509667102666817838699403517219876666964298630630220363372632138045"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    390
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8733
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6991059,
+      "budget": 7623200,
+      "margin": 0.08292,
+      "capMargin": 0.12969,
+      "error": null
+     },
+     {
+      "op": 6951001,
+      "budget": 7624800,
+      "margin": 0.08837,
+      "capMargin": 0.13467,
+      "error": null
+     },
+     {
+      "op": 6562226,
+      "budget": 7019200,
+      "margin": 0.0651,
+      "capMargin": 0.18307,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7026259,
+      "budget": 7623200,
+      "margin": 0.07831,
+      "capMargin": 0.1253,
+      "error": null
+     },
+     {
+      "op": 6986201,
+      "budget": 7624800,
+      "margin": 0.08375,
+      "capMargin": 0.13029,
+      "error": null
+     },
+     {
+      "op": 6597170,
+      "budget": 7019200,
+      "margin": 0.06013,
+      "capMargin": 0.17872,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7008987,
+       "capMargin": 0.12745,
+       "error": null
+      },
+      {
+       "op": 6971481,
+       "capMargin": 0.13212,
+       "error": null
+      },
+      {
+       "op": 6573684,
+       "capMargin": 0.18164,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7046747,
+       "capMargin": 0.12275,
+       "error": null
+      },
+      {
+       "op": 7009241,
+       "capMargin": 0.12742,
+       "error": null
+      },
+      {
+       "op": 6611188,
+       "capMargin": 0.17698,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a shield #7",
+   "pv": "782661273164",
+   "sign": "0",
+   "publicInputs": [
+    "13763932439859610876660319023395529547861751565158167668370008903678047327500",
+    "703423664867019874869022357958343496823103549319248295137508633414509225906"
+   ],
+   "nq": 99,
+   "fills": [
+    0,
+    0,
+    429
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8676
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7017136,
+      "budget": 7623200,
+      "margin": 0.0795,
+      "capMargin": 0.12644,
+      "error": null
+     },
+     {
+      "op": 6964921,
+      "budget": 7624800,
+      "margin": 0.08654,
+      "capMargin": 0.13294,
+      "error": null
+     },
+     {
+      "op": 6519713,
+      "budget": 6973600,
+      "margin": 0.06509,
+      "capMargin": 0.18836,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7052208,
+      "budget": 7623200,
+      "margin": 0.0749,
+      "capMargin": 0.12207,
+      "error": null
+     },
+     {
+      "op": 6999993,
+      "budget": 7624800,
+      "margin": 0.08194,
+      "capMargin": 0.12857,
+      "error": null
+     },
+     {
+      "op": 6554529,
+      "budget": 6973600,
+      "margin": 0.06009,
+      "capMargin": 0.18403,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7034201,
+       "capMargin": 0.12432,
+       "error": null
+      },
+      {
+       "op": 6984500,
+       "capMargin": 0.1305,
+       "error": null
+      },
+      {
+       "op": 6532195,
+       "capMargin": 0.18681,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7071961,
+       "capMargin": 0.11961,
+       "error": null
+      },
+      {
+       "op": 7022260,
+       "capMargin": 0.1258,
+       "error": null
+      },
+      {
+       "op": 6569699,
+       "capMargin": 0.18214,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a unshield #8",
+   "pv": "129308829434",
+   "sign": "1",
+   "publicInputs": [
+    "2539917541764273366518307661800196613050137994910323118735985754489835246520",
+    "2500635371022493377939598676403237290463436313457050317048036235155952289237"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    151
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8877
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7019074,
+      "budget": 7623200,
+      "margin": 0.07925,
+      "capMargin": 0.1262,
+      "error": null
+     },
+     {
+      "op": 6971722,
+      "budget": 7624800,
+      "margin": 0.08565,
+      "capMargin": 0.13209,
+      "error": null
+     },
+     {
+      "op": 6671016,
+      "budget": 7134400,
+      "margin": 0.06495,
+      "capMargin": 0.16953,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7054530,
+      "budget": 7623200,
+      "margin": 0.0746,
+      "capMargin": 0.12178,
+      "error": null
+     },
+     {
+      "op": 7007178,
+      "budget": 7624800,
+      "margin": 0.081,
+      "capMargin": 0.12768,
+      "error": null
+     },
+     {
+      "op": 6706216,
+      "budget": 7134400,
+      "margin": 0.06002,
+      "capMargin": 0.16515,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7035434,
+       "capMargin": 0.12416,
+       "error": null
+      },
+      {
+       "op": 6989873,
+       "capMargin": 0.12983,
+       "error": null
+      },
+      {
+       "op": 6681593,
+       "capMargin": 0.16821,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7073194,
+       "capMargin": 0.11946,
+       "error": null
+      },
+      {
+       "op": 7027633,
+       "capMargin": 0.12513,
+       "error": null
+      },
+      {
+       "op": 6719097,
+       "capMargin": 0.16354,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a transfer #9",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "12557727093417501140288766369429410869834688392839190742305262637504709638317",
+    "6804483811823457142431331532975514346359260714485933176353872798339977765753"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    326
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8765
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6997160,
+      "budget": 7623200,
+      "margin": 0.08212,
+      "capMargin": 0.12893,
+      "error": null
+     },
+     {
+      "op": 6971586,
+      "budget": 7624800,
+      "margin": 0.08567,
+      "capMargin": 0.13211,
+      "error": null
+     },
+     {
+      "op": 6585482,
+      "budget": 7044800,
+      "margin": 0.0652,
+      "capMargin": 0.18018,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7032360,
+      "budget": 7623200,
+      "margin": 0.07751,
+      "capMargin": 0.12454,
+      "error": null
+     },
+     {
+      "op": 7006786,
+      "budget": 7624800,
+      "margin": 0.08105,
+      "capMargin": 0.12773,
+      "error": null
+     },
+     {
+      "op": 6620426,
+      "budget": 7044800,
+      "margin": 0.06024,
+      "capMargin": 0.17583,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7015528,
+       "capMargin": 0.12664,
+       "error": null
+      },
+      {
+       "op": 6991567,
+       "capMargin": 0.12962,
+       "error": null
+      },
+      {
+       "op": 6597991,
+       "capMargin": 0.17862,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7053288,
+       "capMargin": 0.12194,
+       "error": null
+      },
+      {
+       "op": 7029327,
+       "capMargin": 0.12492,
+       "error": null
+      },
+      {
+       "op": 6635495,
+       "capMargin": 0.17395,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a shield #10",
+   "pv": "887063321656",
+   "sign": "0",
+   "publicInputs": [
+    "827455161261079613056759759335926816271350574682821742031258988364465576790",
+    "2708707742798182122284527528386852855696622003840590203680399916884172210758"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    179
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8809
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6985974,
+      "budget": 7623200,
+      "margin": 0.08359,
+      "capMargin": 0.13032,
+      "error": null
+     },
+     {
+      "op": 6945943,
+      "budget": 7624800,
+      "margin": 0.08903,
+      "capMargin": 0.1353,
+      "error": null
+     },
+     {
+      "op": 6620101,
+      "budget": 7080000,
+      "margin": 0.06496,
+      "capMargin": 0.17587,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7021302,
+      "budget": 7623200,
+      "margin": 0.07896,
+      "capMargin": 0.12592,
+      "error": null
+     },
+     {
+      "op": 6981271,
+      "budget": 7624800,
+      "margin": 0.0844,
+      "capMargin": 0.1309,
+      "error": null
+     },
+     {
+      "op": 6655173,
+      "budget": 7080000,
+      "margin": 0.06,
+      "capMargin": 0.1715,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7003300,
+       "capMargin": 0.12816,
+       "error": null
+      },
+      {
+       "op": 6965295,
+       "capMargin": 0.13289,
+       "error": null
+      },
+      {
+       "op": 6632053,
+       "capMargin": 0.17438,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7041060,
+       "capMargin": 0.12346,
+       "error": null
+      },
+      {
+       "op": 7003055,
+       "capMargin": 0.12819,
+       "error": null
+      },
+      {
+       "op": 6669557,
+       "capMargin": 0.16971,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a unshield #11",
+   "pv": "252590563137",
+   "sign": "1",
+   "publicInputs": [
+    "15700743260113358835490546169636862976742379216561106383509987930327694702799",
+    "12361064084166683924622648212860778206060888830220920919476107965320984557578"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    393
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8736
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010297,
+      "budget": 7623200,
+      "margin": 0.0804,
+      "capMargin": 0.12729,
+      "error": null
+     },
+     {
+      "op": 6970451,
+      "budget": 7624800,
+      "margin": 0.08582,
+      "capMargin": 0.13225,
+      "error": null
+     },
+     {
+      "op": 6565018,
+      "budget": 7021600,
+      "margin": 0.06503,
+      "capMargin": 0.18272,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7045497,
+      "budget": 7623200,
+      "margin": 0.07578,
+      "capMargin": 0.12291,
+      "error": null
+     },
+     {
+      "op": 7005651,
+      "budget": 7624800,
+      "margin": 0.0812,
+      "capMargin": 0.12787,
+      "error": null
+     },
+     {
+      "op": 6599962,
+      "budget": 7021600,
+      "margin": 0.06005,
+      "capMargin": 0.17837,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7025236,
+       "capMargin": 0.12543,
+       "error": null
+      },
+      {
+       "op": 6986676,
+       "capMargin": 0.13023,
+       "error": null
+      },
+      {
+       "op": 6573920,
+       "capMargin": 0.18162,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7062996,
+       "capMargin": 0.12073,
+       "error": null
+      },
+      {
+       "op": 7024436,
+       "capMargin": 0.12553,
+       "error": null
+      },
+      {
+       "op": 6611424,
+       "capMargin": 0.17695,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a transfer #12",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "6515917337223853957527740115515159852471110255293505014015268031062137652562",
+    "8504005258729117388613715219045840653814486201656516348097450838240498682829"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    121
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8847
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6986789,
+      "budget": 7623200,
+      "margin": 0.08348,
+      "capMargin": 0.13022,
+      "error": null
+     },
+     {
+      "op": 6951793,
+      "budget": 7624800,
+      "margin": 0.08827,
+      "capMargin": 0.13457,
+      "error": null
+     },
+     {
+      "op": 6648552,
+      "budget": 7110400,
+      "margin": 0.06495,
+      "capMargin": 0.17232,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7022245,
+      "budget": 7623200,
+      "margin": 0.07883,
+      "capMargin": 0.1258,
+      "error": null
+     },
+     {
+      "op": 6987249,
+      "budget": 7624800,
+      "margin": 0.08362,
+      "capMargin": 0.13016,
+      "error": null
+     },
+     {
+      "op": 6683752,
+      "budget": 7110400,
+      "margin": 0.06,
+      "capMargin": 0.16794,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7002650,
+       "capMargin": 0.12824,
+       "error": null
+      },
+      {
+       "op": 6969840,
+       "capMargin": 0.13233,
+       "error": null
+      },
+      {
+       "op": 6659057,
+       "capMargin": 0.17102,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7040410,
+       "capMargin": 0.12354,
+       "error": null
+      },
+      {
+       "op": 7007600,
+       "capMargin": 0.12763,
+       "error": null
+      },
+      {
+       "op": 6696561,
+       "capMargin": 0.16635,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a shield #13",
+   "pv": "531866157477",
+   "sign": "0",
+   "publicInputs": [
+    "21561598079068484783312160677406955166477230255264229571555315344373437420148",
+    "10173242053762071809209843973701109759375003431220033478855326127184153171512"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    245
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8779
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7011900,
+      "budget": 7623200,
+      "margin": 0.08019,
+      "capMargin": 0.12709,
+      "error": null
+     },
+     {
+      "op": 6958312,
+      "budget": 7624800,
+      "margin": 0.08741,
+      "capMargin": 0.13376,
+      "error": null
+     },
+     {
+      "op": 6596642,
+      "budget": 7056000,
+      "margin": 0.0651,
+      "capMargin": 0.17879,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7047228,
+      "budget": 7623200,
+      "margin": 0.07556,
+      "capMargin": 0.12269,
+      "error": null
+     },
+     {
+      "op": 6993640,
+      "budget": 7624800,
+      "margin": 0.08278,
+      "capMargin": 0.12936,
+      "error": null
+     },
+     {
+      "op": 6631714,
+      "budget": 7056000,
+      "margin": 0.06013,
+      "capMargin": 0.17442,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028466,
+       "capMargin": 0.12503,
+       "error": null
+      },
+      {
+       "op": 6977247,
+       "capMargin": 0.13141,
+       "error": null
+      },
+      {
+       "op": 6608172,
+       "capMargin": 0.17735,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066226,
+       "capMargin": 0.12033,
+       "error": null
+      },
+      {
+       "op": 7015007,
+       "capMargin": 0.1267,
+       "error": null
+      },
+      {
+       "op": 6645676,
+       "capMargin": 0.17268,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a unshield #14",
+   "pv": "377802809448",
+   "sign": "1",
+   "publicInputs": [
+    "8387709194860683874248645151911635257764809083808998149975910357241055950776",
+    "13141535382690132516067539906466559327392699616065963110162705591760281557854"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    367
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8710
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6997608,
+      "budget": 7623200,
+      "margin": 0.08206,
+      "capMargin": 0.12887,
+      "error": null
+     },
+     {
+      "op": 6970168,
+      "budget": 7624800,
+      "margin": 0.08586,
+      "capMargin": 0.13229,
+      "error": null
+     },
+     {
+      "op": 6544339,
+      "budget": 7000800,
+      "margin": 0.0652,
+      "capMargin": 0.1853,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7032680,
+      "budget": 7623200,
+      "margin": 0.07746,
+      "capMargin": 0.1245,
+      "error": null
+     },
+     {
+      "op": 7005240,
+      "budget": 7624800,
+      "margin": 0.08126,
+      "capMargin": 0.12792,
+      "error": null
+     },
+     {
+      "op": 6579155,
+      "budget": 7000800,
+      "margin": 0.06023,
+      "capMargin": 0.18096,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7016098,
+       "capMargin": 0.12657,
+       "error": null
+      },
+      {
+       "op": 6991110,
+       "capMargin": 0.12968,
+       "error": null
+      },
+      {
+       "op": 6558119,
+       "capMargin": 0.18358,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7053858,
+       "capMargin": 0.12187,
+       "error": null
+      },
+      {
+       "op": 7028870,
+       "capMargin": 0.12498,
+       "error": null
+      },
+      {
+       "op": 6595623,
+       "capMargin": 0.17891,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a transfer #15",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "5427199993194898003356590756680269986602973833985633018202266468997722992699",
+    "1621368644369197843640802801420847486623243720914249032307044554541751416289"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    392
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8735
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6985246,
+      "budget": 7623200,
+      "margin": 0.08369,
+      "capMargin": 0.13041,
+      "error": null
+     },
+     {
+      "op": 6940074,
+      "budget": 7624800,
+      "margin": 0.0898,
+      "capMargin": 0.13603,
+      "error": null
+     },
+     {
+      "op": 6563300,
+      "budget": 7020800,
+      "margin": 0.06516,
+      "capMargin": 0.18294,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7020446,
+      "budget": 7623200,
+      "margin": 0.07907,
+      "capMargin": 0.12603,
+      "error": null
+     },
+     {
+      "op": 6975274,
+      "budget": 7624800,
+      "margin": 0.08519,
+      "capMargin": 0.13165,
+      "error": null
+     },
+     {
+      "op": 6598244,
+      "budget": 7020800,
+      "margin": 0.06019,
+      "capMargin": 0.17859,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7003335,
+       "capMargin": 0.12816,
+       "error": null
+      },
+      {
+       "op": 6960519,
+       "capMargin": 0.13349,
+       "error": null
+      },
+      {
+       "op": 6576120,
+       "capMargin": 0.18134,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7041095,
+       "capMargin": 0.12346,
+       "error": null
+      },
+      {
+       "op": 6998279,
+       "capMargin": 0.12879,
+       "error": null
+      },
+      {
+       "op": 6613624,
+       "capMargin": 0.17667,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a shield #16",
+   "pv": "767830671710",
+   "sign": "0",
+   "publicInputs": [
+    "8457434659429960210971924032646470567031348880114011581782508714148428996314",
+    "2249586146827453188065332408575831328692298817678618025165293096059602235264"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    334
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8773
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010752,
+      "budget": 7623200,
+      "margin": 0.08034,
+      "capMargin": 0.12723,
+      "error": null
+     },
+     {
+      "op": 6970922,
+      "budget": 7624800,
+      "margin": 0.08576,
+      "capMargin": 0.13219,
+      "error": null
+     },
+     {
+      "op": 6591982,
+      "budget": 7051200,
+      "margin": 0.06513,
+      "capMargin": 0.17937,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7045952,
+      "budget": 7623200,
+      "margin": 0.07572,
+      "capMargin": 0.12285,
+      "error": null
+     },
+     {
+      "op": 7006122,
+      "budget": 7624800,
+      "margin": 0.08114,
+      "capMargin": 0.12781,
+      "error": null
+     },
+     {
+      "op": 6626926,
+      "budget": 7051200,
+      "margin": 0.06017,
+      "capMargin": 0.17502,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028888,
+       "capMargin": 0.12498,
+       "error": null
+      },
+      {
+       "op": 6990389,
+       "capMargin": 0.12977,
+       "error": null
+      },
+      {
+       "op": 6603624,
+       "capMargin": 0.17792,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066648,
+       "capMargin": 0.12028,
+       "error": null
+      },
+      {
+       "op": 7028149,
+       "capMargin": 0.12507,
+       "error": null
+      },
+      {
+       "op": 6641128,
+       "capMargin": 0.17325,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a unshield #17",
+   "pv": "610960833039",
+   "sign": "1",
+   "publicInputs": [
+    "20859552169426095267086607579770398156956310119949513453763480162968858829511",
+    "1043383738890422714994121117605215934218855591227216131153494609971070767361"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    352
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8791
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7004959,
+      "budget": 7623200,
+      "margin": 0.0811,
+      "capMargin": 0.12796,
+      "error": null
+     },
+     {
+      "op": 6946049,
+      "budget": 7624800,
+      "margin": 0.08902,
+      "capMargin": 0.13529,
+      "error": null
+     },
+     {
+      "op": 6605717,
+      "budget": 7065600,
+      "margin": 0.06509,
+      "capMargin": 0.17766,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7040287,
+      "budget": 7623200,
+      "margin": 0.07647,
+      "capMargin": 0.12356,
+      "error": null
+     },
+     {
+      "op": 6981377,
+      "budget": 7624800,
+      "margin": 0.08439,
+      "capMargin": 0.13089,
+      "error": null
+     },
+     {
+      "op": 6640789,
+      "budget": 7065600,
+      "margin": 0.06012,
+      "capMargin": 0.17329,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022374,
+       "capMargin": 0.12579,
+       "error": null
+      },
+      {
+       "op": 6964659,
+       "capMargin": 0.13297,
+       "error": null
+      },
+      {
+       "op": 6616759,
+       "capMargin": 0.17628,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7060134,
+       "capMargin": 0.12109,
+       "error": null
+      },
+      {
+       "op": 7002419,
+       "capMargin": 0.12827,
+       "error": null
+      },
+      {
+       "op": 6654263,
+       "capMargin": 0.17161,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a transfer #18",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "9544405652257635424583374241662192845427859226586714126746620618300129251647",
+    "3577296542949137413739040188580604378928920804740647295609240902986872230610"
+   ],
+   "nq": 99,
+   "fills": [
+    0,
+    0,
+    452
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8699
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6997320,
+      "budget": 7623200,
+      "margin": 0.0821,
+      "capMargin": 0.12891,
+      "error": null
+     },
+     {
+      "op": 6968697,
+      "budget": 7624800,
+      "margin": 0.08605,
+      "capMargin": 0.13247,
+      "error": null
+     },
+     {
+      "op": 6533021,
+      "budget": 6992000,
+      "margin": 0.06564,
+      "capMargin": 0.18671,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7032392,
+      "budget": 7623200,
+      "margin": 0.0775,
+      "capMargin": 0.12454,
+      "error": null
+     },
+     {
+      "op": 7003769,
+      "budget": 7624800,
+      "margin": 0.08145,
+      "capMargin": 0.1281,
+      "error": null
+     },
+     {
+      "op": 6567837,
+      "budget": 6992000,
+      "margin": 0.06066,
+      "capMargin": 0.18237,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7017396,
+       "capMargin": 0.12641,
+       "error": null
+      },
+      {
+       "op": 6990718,
+       "capMargin": 0.12973,
+       "error": null
+      },
+      {
+       "op": 6548780,
+       "capMargin": 0.18475,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7055156,
+       "capMargin": 0.12171,
+       "error": null
+      },
+      {
+       "op": 7028478,
+       "capMargin": 0.12503,
+       "error": null
+      },
+      {
+       "op": 6586284,
+       "capMargin": 0.18008,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a shield #19",
+   "pv": "657927350048",
+   "sign": "0",
+   "publicInputs": [
+    "19016592251873769385556436276396593007782875903546093351745123929405897936082",
+    "7842733700197261577224671662093196876602407736431491408679885851596419753588"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    171
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8801
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6991623,
+      "budget": 7623200,
+      "margin": 0.08285,
+      "capMargin": 0.12962,
+      "error": null
+     },
+     {
+      "op": 6931449,
+      "budget": 7624800,
+      "margin": 0.09093,
+      "capMargin": 0.13711,
+      "error": null
+     },
+     {
+      "op": 6613132,
+      "budget": 7073600,
+      "margin": 0.0651,
+      "capMargin": 0.17673,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7026951,
+      "budget": 7623200,
+      "margin": 0.07822,
+      "capMargin": 0.12522,
+      "error": null
+     },
+     {
+      "op": 6966777,
+      "budget": 7624800,
+      "margin": 0.0863,
+      "capMargin": 0.13271,
+      "error": null
+     },
+     {
+      "op": 6648204,
+      "budget": 7073600,
+      "margin": 0.06014,
+      "capMargin": 0.17237,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7010254,
+       "capMargin": 0.1273,
+       "error": null
+      },
+      {
+       "op": 6952241,
+       "capMargin": 0.13452,
+       "error": null
+      },
+      {
+       "op": 6626034,
+       "capMargin": 0.17513,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7048014,
+       "capMargin": 0.1226,
+       "error": null
+      },
+      {
+       "op": 6990001,
+       "capMargin": 0.12982,
+       "error": null
+      },
+      {
+       "op": 6663538,
+       "capMargin": 0.17046,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a unshield #20",
+   "pv": "1019723239654",
+   "sign": "1",
+   "publicInputs": [
+    "10352173220267472392605304806274310242221607270754764778496464371611673846796",
+    "9253875715205403724796640869362437402864181597307099931168327218525375614577"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    179
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8809
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7012882,
+      "budget": 7623200,
+      "margin": 0.08006,
+      "capMargin": 0.12697,
+      "error": null
+     },
+     {
+      "op": 6958436,
+      "budget": 7624800,
+      "margin": 0.08739,
+      "capMargin": 0.13375,
+      "error": null
+     },
+     {
+      "op": 6619847,
+      "budget": 7080000,
+      "margin": 0.06499,
+      "capMargin": 0.1759,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7048210,
+      "budget": 7623200,
+      "margin": 0.07543,
+      "capMargin": 0.12257,
+      "error": null
+     },
+     {
+      "op": 6993764,
+      "budget": 7624800,
+      "margin": 0.08276,
+      "capMargin": 0.12935,
+      "error": null
+     },
+     {
+      "op": 6654919,
+      "budget": 7080000,
+      "margin": 0.06004,
+      "capMargin": 0.17153,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028927,
+       "capMargin": 0.12497,
+       "error": null
+      },
+      {
+       "op": 6978379,
+       "capMargin": 0.13126,
+       "error": null
+      },
+      {
+       "op": 6630909,
+       "capMargin": 0.17452,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066687,
+       "capMargin": 0.12027,
+       "error": null
+      },
+      {
+       "op": 7016139,
+       "capMargin": 0.12656,
+       "error": null
+      },
+      {
+       "op": 6668413,
+       "capMargin": 0.16985,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a transfer #21",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "17371547983852374168105687938023357137462609257774097961005884946992571519821",
+    "745310263789651694780781935157713762347312251211743711056584781002858814019"
+   ],
+   "nq": 117,
+   "fills": [
+    0,
+    0,
+    73
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8894
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7005721,
+      "budget": 7623200,
+      "margin": 0.081,
+      "capMargin": 0.12786,
+      "error": null
+     },
+     {
+      "op": 6972439,
+      "budget": 7624800,
+      "margin": 0.08556,
+      "capMargin": 0.132,
+      "error": null
+     },
+     {
+      "op": 6683609,
+      "budget": 7148000,
+      "margin": 0.06497,
+      "capMargin": 0.16796,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7041177,
+      "budget": 7623200,
+      "margin": 0.07635,
+      "capMargin": 0.12345,
+      "error": null
+     },
+     {
+      "op": 7007895,
+      "budget": 7624800,
+      "margin": 0.08091,
+      "capMargin": 0.12759,
+      "error": null
+     },
+     {
+      "op": 6718809,
+      "budget": 7148000,
+      "margin": 0.06004,
+      "capMargin": 0.16358,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022507,
+       "capMargin": 0.12577,
+       "error": null
+      },
+      {
+       "op": 6989559,
+       "capMargin": 0.12987,
+       "error": null
+      },
+      {
+       "op": 6694750,
+       "capMargin": 0.16657,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7060267,
+       "capMargin": 0.12107,
+       "error": null
+      },
+      {
+       "op": 7027319,
+       "capMargin": 0.12517,
+       "error": null
+      },
+      {
+       "op": 6732254,
+       "capMargin": 0.1619,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a shield #22",
+   "pv": "79266465471",
+   "sign": "0",
+   "publicInputs": [
+    "8595476598100749138360034108437420874462144735998558600017680346570490701299",
+    "485191600371255851898093403632035506550070840653046173348890006655544958208"
+   ],
+   "nq": 117,
+   "fills": [
+    0,
+    0,
+    85
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8907
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7006098,
+      "budget": 7623200,
+      "margin": 0.08095,
+      "capMargin": 0.12781,
+      "error": null
+     },
+     {
+      "op": 6952892,
+      "budget": 7624800,
+      "margin": 0.08812,
+      "capMargin": 0.13444,
+      "error": null
+     },
+     {
+      "op": 6691892,
+      "budget": 7158400,
+      "margin": 0.06517,
+      "capMargin": 0.16693,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7041682,
+      "budget": 7623200,
+      "margin": 0.07628,
+      "capMargin": 0.12338,
+      "error": null
+     },
+     {
+      "op": 6988476,
+      "budget": 7624800,
+      "margin": 0.08345,
+      "capMargin": 0.13001,
+      "error": null
+     },
+     {
+      "op": 6727220,
+      "budget": 7158400,
+      "margin": 0.06023,
+      "capMargin": 0.16253,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022530,
+       "capMargin": 0.12577,
+       "error": null
+      },
+      {
+       "op": 6972146,
+       "capMargin": 0.13204,
+       "error": null
+      },
+      {
+       "op": 6702956,
+       "capMargin": 0.16555,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7060290,
+       "capMargin": 0.12107,
+       "error": null
+      },
+      {
+       "op": 7009906,
+       "capMargin": 0.12734,
+       "error": null
+      },
+      {
+       "op": 6740460,
+       "capMargin": 0.16088,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a unshield #23",
+   "pv": "1234049422000",
+   "sign": "1",
+   "publicInputs": [
+    "16229595569452565734353018851582368786720723616469261224980043270961308636355",
+    "6143382066525772613457739476375548811938404388138524671438722911117502011227"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    262
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8797
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7012515,
+      "budget": 7623200,
+      "margin": 0.08011,
+      "capMargin": 0.12701,
+      "error": null
+     },
+     {
+      "op": 6954447,
+      "budget": 7624800,
+      "margin": 0.08792,
+      "capMargin": 0.13424,
+      "error": null
+     },
+     {
+      "op": 6610033,
+      "budget": 7070400,
+      "margin": 0.06511,
+      "capMargin": 0.17712,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7047843,
+      "budget": 7623200,
+      "margin": 0.07547,
+      "capMargin": 0.12262,
+      "error": null
+     },
+     {
+      "op": 6989775,
+      "budget": 7624800,
+      "margin": 0.08328,
+      "capMargin": 0.12985,
+      "error": null
+     },
+     {
+      "op": 6645105,
+      "budget": 7070400,
+      "margin": 0.06015,
+      "capMargin": 0.17275,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7029824,
+       "capMargin": 0.12486,
+       "error": null
+      },
+      {
+       "op": 6973729,
+       "capMargin": 0.13184,
+       "error": null
+      },
+      {
+       "op": 6622650,
+       "capMargin": 0.17555,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7067584,
+       "capMargin": 0.12016,
+       "error": null
+      },
+      {
+       "op": 7011489,
+       "capMargin": 0.12714,
+       "error": null
+      },
+      {
+       "op": 6660154,
+       "capMargin": 0.17088,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a transfer #24",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "13653958337118941777918073410569361701154913296010715905319851188060732686615",
+    "2123500277530816785902009227497034369523883877122685154330841585725097640006"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    138
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8864
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6998753,
+      "budget": 7623200,
+      "margin": 0.08191,
+      "capMargin": 0.12873,
+      "error": null
+     },
+     {
+      "op": 6952520,
+      "budget": 7624800,
+      "margin": 0.08817,
+      "capMargin": 0.13448,
+      "error": null
+     },
+     {
+      "op": 6661107,
+      "budget": 7124000,
+      "margin": 0.06498,
+      "capMargin": 0.17076,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7034209,
+      "budget": 7623200,
+      "margin": 0.07726,
+      "capMargin": 0.12431,
+      "error": null
+     },
+     {
+      "op": 6987976,
+      "budget": 7624800,
+      "margin": 0.08352,
+      "capMargin": 0.13007,
+      "error": null
+     },
+     {
+      "op": 6696307,
+      "budget": 7124000,
+      "margin": 0.06004,
+      "capMargin": 0.16638,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7016750,
+       "capMargin": 0.12649,
+       "error": null
+      },
+      {
+       "op": 6971977,
+       "capMargin": 0.13206,
+       "error": null
+      },
+      {
+       "op": 6672685,
+       "capMargin": 0.16932,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7054510,
+       "capMargin": 0.12179,
+       "error": null
+      },
+      {
+       "op": 7009737,
+       "capMargin": 0.12736,
+       "error": null
+      },
+      {
+       "op": 6710189,
+       "capMargin": 0.16465,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a shield #25",
+   "pv": "498632380596",
+   "sign": "0",
+   "publicInputs": [
+    "21606463383958822689410080403274235798740525763928831106067401588823852240513",
+    "10817343479637232621648060290015890762570309133856630787845731735980369454254"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    238
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8772
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7016902,
+      "budget": 7623200,
+      "margin": 0.07953,
+      "capMargin": 0.12647,
+      "error": null
+     },
+     {
+      "op": 6957855,
+      "budget": 7624800,
+      "margin": 0.08747,
+      "capMargin": 0.13382,
+      "error": null
+     },
+     {
+      "op": 6591665,
+      "budget": 7050400,
+      "margin": 0.06507,
+      "capMargin": 0.17941,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7052102,
+      "budget": 7623200,
+      "margin": 0.07492,
+      "capMargin": 0.12209,
+      "error": null
+     },
+     {
+      "op": 6993055,
+      "budget": 7624800,
+      "margin": 0.08285,
+      "capMargin": 0.12944,
+      "error": null
+     },
+     {
+      "op": 6626609,
+      "budget": 7050400,
+      "margin": 0.06011,
+      "capMargin": 0.17506,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7034504,
+       "capMargin": 0.12428,
+       "error": null
+      },
+      {
+       "op": 6977881,
+       "capMargin": 0.13133,
+       "error": null
+      },
+      {
+       "op": 6603990,
+       "capMargin": 0.17787,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7072264,
+       "capMargin": 0.11958,
+       "error": null
+      },
+      {
+       "op": 7015641,
+       "capMargin": 0.12663,
+       "error": null
+      },
+      {
+       "op": 6641494,
+       "capMargin": 0.1732,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a unshield #26",
+   "pv": "187078960371",
+   "sign": "1",
+   "publicInputs": [
+    "7692052084202834204968950758831686604135453739811131371773690537727465090309",
+    "3734222861479038983386708039896584031322407789909643349594234642403523800461"
+   ],
+   "nq": 117,
+   "fills": [
+    0,
+    0,
+    84
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8906
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6973808,
+      "budget": 7623200,
+      "margin": 0.08519,
+      "capMargin": 0.13183,
+      "error": null
+     },
+     {
+      "op": 6972771,
+      "budget": 7624800,
+      "margin": 0.08551,
+      "capMargin": 0.13196,
+      "error": null
+     },
+     {
+      "op": 6691694,
+      "budget": 7157600,
+      "margin": 0.06509,
+      "capMargin": 0.16695,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7009392,
+      "budget": 7623200,
+      "margin": 0.08052,
+      "capMargin": 0.1274,
+      "error": null
+     },
+     {
+      "op": 7008355,
+      "budget": 7624800,
+      "margin": 0.08085,
+      "capMargin": 0.12753,
+      "error": null
+     },
+     {
+      "op": 6727022,
+      "budget": 7157600,
+      "margin": 0.06016,
+      "capMargin": 0.16256,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 6989667,
+       "capMargin": 0.12986,
+       "error": null
+      },
+      {
+       "op": 6990583,
+       "capMargin": 0.12975,
+       "error": null
+      },
+      {
+       "op": 6702734,
+       "capMargin": 0.16558,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7027427,
+       "capMargin": 0.12516,
+       "error": null
+      },
+      {
+       "op": 7028343,
+       "capMargin": 0.12504,
+       "error": null
+      },
+      {
+       "op": 6740238,
+       "capMargin": 0.16091,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a transfer #27",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "17546704681155969110410239751606622278562602117737317496132649323390363650651",
+    "4483728415269124425111460513312486269612156708021716361244118294280942444834"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    142
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8868
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7006575,
+      "budget": 7623200,
+      "margin": 0.08089,
+      "capMargin": 0.12775,
+      "error": null
+     },
+     {
+      "op": 6953858,
+      "budget": 7624800,
+      "margin": 0.08799,
+      "capMargin": 0.13432,
+      "error": null
+     },
+     {
+      "op": 6664256,
+      "budget": 7127200,
+      "margin": 0.06495,
+      "capMargin": 0.17037,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7042031,
+      "budget": 7623200,
+      "margin": 0.07624,
+      "capMargin": 0.12334,
+      "error": null
+     },
+     {
+      "op": 6989314,
+      "budget": 7624800,
+      "margin": 0.08334,
+      "capMargin": 0.1299,
+      "error": null
+     },
+     {
+      "op": 6699456,
+      "budget": 7127200,
+      "margin": 0.06002,
+      "capMargin": 0.16599,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022405,
+       "capMargin": 0.12578,
+       "error": null
+      },
+      {
+       "op": 6971288,
+       "capMargin": 0.13215,
+       "error": null
+      },
+      {
+       "op": 6674797,
+       "capMargin": 0.16906,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7060165,
+       "capMargin": 0.12108,
+       "error": null
+      },
+      {
+       "op": 7009048,
+       "capMargin": 0.12745,
+       "error": null
+      },
+      {
+       "op": 6712301,
+       "capMargin": 0.16439,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a shield #28",
+   "pv": "446774592100",
+   "sign": "0",
+   "publicInputs": [
+    "15949629320724259550299778103778705681950851156464799147997765518844803480334",
+    "5701322788125082015227683058362693907684713264077356744882345549118794922531"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    409
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8752
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7018133,
+      "budget": 7623200,
+      "margin": 0.07937,
+      "capMargin": 0.12632,
+      "error": null
+     },
+     {
+      "op": 6946622,
+      "budget": 7624800,
+      "margin": 0.08894,
+      "capMargin": 0.13522,
+      "error": null
+     },
+     {
+      "op": 6577301,
+      "budget": 7034400,
+      "margin": 0.06498,
+      "capMargin": 0.18119,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7053333,
+      "budget": 7623200,
+      "margin": 0.07475,
+      "capMargin": 0.12193,
+      "error": null
+     },
+     {
+      "op": 6981822,
+      "budget": 7624800,
+      "margin": 0.08433,
+      "capMargin": 0.13084,
+      "error": null
+     },
+     {
+      "op": 6612245,
+      "budget": 7034400,
+      "margin": 0.06001,
+      "capMargin": 0.17684,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7034535,
+       "capMargin": 0.12427,
+       "error": null
+      },
+      {
+       "op": 6965258,
+       "capMargin": 0.1329,
+       "error": null
+      },
+      {
+       "op": 6589376,
+       "capMargin": 0.17969,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7072295,
+       "capMargin": 0.11957,
+       "error": null
+      },
+      {
+       "op": 7003018,
+       "capMargin": 0.1282,
+       "error": null
+      },
+      {
+       "op": 6626880,
+       "capMargin": 0.17502,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a unshield #29",
+   "pv": "547157040587",
+   "sign": "1",
+   "publicInputs": [
+    "8788319660138908663660563820948926863759062128850962882230913448289868088775",
+    "1746307383216808604499106541986931527539291542269402780036103896265130392786"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    335
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8774
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7003396,
+      "budget": 7623200,
+      "margin": 0.0813,
+      "capMargin": 0.12815,
+      "error": null
+     },
+     {
+      "op": 6963130,
+      "budget": 7624800,
+      "margin": 0.08678,
+      "capMargin": 0.13316,
+      "error": null
+     },
+     {
+      "op": 6592486,
+      "budget": 7052000,
+      "margin": 0.06516,
+      "capMargin": 0.1793,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7038596,
+      "budget": 7623200,
+      "margin": 0.07669,
+      "capMargin": 0.12377,
+      "error": null
+     },
+     {
+      "op": 6998330,
+      "budget": 7624800,
+      "margin": 0.08216,
+      "capMargin": 0.12878,
+      "error": null
+     },
+     {
+      "op": 6627430,
+      "budget": 7052000,
+      "margin": 0.06021,
+      "capMargin": 0.17495,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022024,
+       "capMargin": 0.12583,
+       "error": null
+      },
+      {
+       "op": 6984065,
+       "capMargin": 0.13056,
+       "error": null
+      },
+      {
+       "op": 6605816,
+       "capMargin": 0.17764,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7059784,
+       "capMargin": 0.12113,
+       "error": null
+      },
+      {
+       "op": 7021825,
+       "capMargin": 0.12586,
+       "error": null
+      },
+      {
+       "op": 6643320,
+       "capMargin": 0.17298,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a transfer #30",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "3802094491674756197736622612444466270196246025984577999392752759487600961521",
+    "760092809927493341269810719930920854250040619117296888566858389582579853771"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    341
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8780
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7003394,
+      "budget": 7623200,
+      "margin": 0.08131,
+      "capMargin": 0.12815,
+      "error": null
+     },
+     {
+      "op": 6970949,
+      "budget": 7624800,
+      "margin": 0.08575,
+      "capMargin": 0.13219,
+      "error": null
+     },
+     {
+      "op": 6597668,
+      "budget": 7056800,
+      "margin": 0.06506,
+      "capMargin": 0.17866,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7038722,
+      "budget": 7623200,
+      "margin": 0.07667,
+      "capMargin": 0.12375,
+      "error": null
+     },
+     {
+      "op": 7006277,
+      "budget": 7624800,
+      "margin": 0.08112,
+      "capMargin": 0.12779,
+      "error": null
+     },
+     {
+      "op": 6632740,
+      "budget": 7056800,
+      "margin": 0.06009,
+      "capMargin": 0.17429,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022147,
+       "capMargin": 0.12582,
+       "error": null
+      },
+      {
+       "op": 6991287,
+       "capMargin": 0.12966,
+       "error": null
+      },
+      {
+       "op": 6609346,
+       "capMargin": 0.17721,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7059907,
+       "capMargin": 0.12112,
+       "error": null
+      },
+      {
+       "op": 7029047,
+       "capMargin": 0.12496,
+       "error": null
+      },
+      {
+       "op": 6646850,
+       "capMargin": 0.17254,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1a shield #31",
+   "pv": "19585213217",
+   "sign": "0",
+   "publicInputs": [
+    "9179251865069299919226962680789499038864735033907382310472200174743087224611",
+    "4573556533809503051836879607163386832425640073938584685657108533309270717489"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    198
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8828
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7005649,
+      "budget": 7623200,
+      "margin": 0.08101,
+      "capMargin": 0.12787,
+      "error": null
+     },
+     {
+      "op": 6952755,
+      "budget": 7624800,
+      "margin": 0.08814,
+      "capMargin": 0.13445,
+      "error": null
+     },
+     {
+      "op": 6632663,
+      "budget": 7095200,
+      "margin": 0.06519,
+      "capMargin": 0.1743,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7040977,
+      "budget": 7623200,
+      "margin": 0.07638,
+      "capMargin": 0.12347,
+      "error": null
+     },
+     {
+      "op": 6988083,
+      "budget": 7624800,
+      "margin": 0.08351,
+      "capMargin": 0.13006,
+      "error": null
+     },
+     {
+      "op": 6667735,
+      "budget": 7095200,
+      "margin": 0.06025,
+      "capMargin": 0.16994,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7023435,
+       "capMargin": 0.12566,
+       "error": null
+      },
+      {
+       "op": 6972391,
+       "capMargin": 0.13201,
+       "error": null
+      },
+      {
+       "op": 6644276,
+       "capMargin": 0.17286,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7061195,
+       "capMargin": 0.12095,
+       "error": null
+      },
+      {
+       "op": 7010151,
+       "capMargin": 0.12731,
+       "error": null
+      },
+      {
+       "op": 6681780,
+       "capMargin": 0.16819,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b transfer #0",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "19206291039649212804274873125533272169722854362151281803137475881762492081619",
+    "9383337626045361424825697009023402581792273316051105250212684363327388863474"
+   ],
+   "nq": 99,
+   "fills": [
+    0,
+    0,
+    443
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8690
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6996611,
+      "budget": 7623200,
+      "margin": 0.0822,
+      "capMargin": 0.12899,
+      "error": null
+     },
+     {
+      "op": 6937344,
+      "budget": 7624800,
+      "margin": 0.09016,
+      "capMargin": 0.13637,
+      "error": null
+     },
+     {
+      "op": 6527497,
+      "budget": 6984800,
+      "margin": 0.06547,
+      "capMargin": 0.18739,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7031683,
+      "budget": 7623200,
+      "margin": 0.07759,
+      "capMargin": 0.12463,
+      "error": null
+     },
+     {
+      "op": 6972416,
+      "budget": 7624800,
+      "margin": 0.08556,
+      "capMargin": 0.13201,
+      "error": null
+     },
+     {
+      "op": 6562313,
+      "budget": 6984800,
+      "margin": 0.06049,
+      "capMargin": 0.18306,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7016234,
+       "capMargin": 0.12655,
+       "error": null
+      },
+      {
+       "op": 6958496,
+       "capMargin": 0.13374,
+       "error": null
+      },
+      {
+       "op": 6541588,
+       "capMargin": 0.18564,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7053994,
+       "capMargin": 0.12185,
+       "error": null
+      },
+      {
+       "op": 6996256,
+       "capMargin": 0.12904,
+       "error": null
+      },
+      {
+       "op": 6579092,
+       "capMargin": 0.18097,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b shield #1",
+   "pv": "766479452604",
+   "sign": "0",
+   "publicInputs": [
+    "20975977003699177204052493779457589939105808485308310603657686118112376120354",
+    "14386699886649057541930673421135256526750391395076137763063433000747868482620"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    132
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8858
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7005928,
+      "budget": 7623200,
+      "margin": 0.08097,
+      "capMargin": 0.12783,
+      "error": null
+     },
+     {
+      "op": 6946767,
+      "budget": 7624800,
+      "margin": 0.08892,
+      "capMargin": 0.1352,
+      "error": null
+     },
+     {
+      "op": 6656714,
+      "budget": 7119200,
+      "margin": 0.06496,
+      "capMargin": 0.17131,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7041384,
+      "budget": 7623200,
+      "margin": 0.07632,
+      "capMargin": 0.12342,
+      "error": null
+     },
+     {
+      "op": 6982223,
+      "budget": 7624800,
+      "margin": 0.08427,
+      "capMargin": 0.13079,
+      "error": null
+     },
+     {
+      "op": 6691914,
+      "budget": 7119200,
+      "margin": 0.06002,
+      "capMargin": 0.16693,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022806,
+       "capMargin": 0.12573,
+       "error": null
+      },
+      {
+       "op": 6965311,
+       "capMargin": 0.13289,
+       "error": null
+      },
+      {
+       "op": 6668311,
+       "capMargin": 0.16986,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7060566,
+       "capMargin": 0.12103,
+       "error": null
+      },
+      {
+       "op": 7003071,
+       "capMargin": 0.12819,
+       "error": null
+      },
+      {
+       "op": 6705815,
+       "capMargin": 0.1652,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b unshield #2",
+   "pv": "34386231373",
+   "sign": "1",
+   "publicInputs": [
+    "15896374272505677022410145740735256516611366851580078649665620850755276109920",
+    "8903074611616928478164818264011167388036853443170219748531646065563359879753"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    256
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8791
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7024028,
+      "budget": 7623200,
+      "margin": 0.0786,
+      "capMargin": 0.12558,
+      "error": null
+     },
+     {
+      "op": 6964907,
+      "budget": 7624800,
+      "margin": 0.08655,
+      "capMargin": 0.13294,
+      "error": null
+     },
+     {
+      "op": 6604955,
+      "budget": 7065600,
+      "margin": 0.0652,
+      "capMargin": 0.17775,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7059356,
+      "budget": 7623200,
+      "margin": 0.07396,
+      "capMargin": 0.12118,
+      "error": null
+     },
+     {
+      "op": 7000235,
+      "budget": 7624800,
+      "margin": 0.08191,
+      "capMargin": 0.12854,
+      "error": null
+     },
+     {
+      "op": 6640027,
+      "budget": 7065600,
+      "margin": 0.06023,
+      "capMargin": 0.17339,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7042613,
+       "capMargin": 0.12327,
+       "error": null
+      },
+      {
+       "op": 6983567,
+       "capMargin": 0.13062,
+       "error": null
+      },
+      {
+       "op": 6616633,
+       "capMargin": 0.1763,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7080373,
+       "capMargin": 0.11857,
+       "error": null
+      },
+      {
+       "op": 7021327,
+       "capMargin": 0.12592,
+       "error": null
+      },
+      {
+       "op": 6654137,
+       "capMargin": 0.17163,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b transfer #3",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "6667720601451365453145374509082214077975597288642222736783427003359605462040",
+    "2821390724573549247810439004880507411879594739735840681589783741216008191878"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    238
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8772
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6997556,
+      "budget": 7623200,
+      "margin": 0.08207,
+      "capMargin": 0.12888,
+      "error": null
+     },
+     {
+      "op": 6945203,
+      "budget": 7624800,
+      "margin": 0.08913,
+      "capMargin": 0.13539,
+      "error": null
+     },
+     {
+      "op": 6591831,
+      "budget": 7050400,
+      "margin": 0.06504,
+      "capMargin": 0.17939,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7032756,
+      "budget": 7623200,
+      "margin": 0.07745,
+      "capMargin": 0.1245,
+      "error": null
+     },
+     {
+      "op": 6980403,
+      "budget": 7624800,
+      "margin": 0.08451,
+      "capMargin": 0.13101,
+      "error": null
+     },
+     {
+      "op": 6626775,
+      "budget": 7050400,
+      "margin": 0.06009,
+      "capMargin": 0.17504,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7015465,
+       "capMargin": 0.12665,
+       "error": null
+      },
+      {
+       "op": 6964514,
+       "capMargin": 0.13299,
+       "error": null
+      },
+      {
+       "op": 6604465,
+       "capMargin": 0.17781,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7053225,
+       "capMargin": 0.12195,
+       "error": null
+      },
+      {
+       "op": 7002274,
+       "capMargin": 0.12829,
+       "error": null
+      },
+      {
+       "op": 6641969,
+       "capMargin": 0.17314,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b shield #4",
+   "pv": "545630704539",
+   "sign": "0",
+   "publicInputs": [
+    "5563023632369942609885417459050315289761641568026403850553864344017946323629",
+    "1462047121575389524889245890291032340442082841120005733899416680909809053346"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    182
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8812
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7002424,
+      "budget": 7623200,
+      "margin": 0.08143,
+      "capMargin": 0.12827,
+      "error": null
+     },
+     {
+      "op": 6963113,
+      "budget": 7624800,
+      "margin": 0.08678,
+      "capMargin": 0.13316,
+      "error": null
+     },
+     {
+      "op": 6619169,
+      "budget": 7082400,
+      "margin": 0.06541,
+      "capMargin": 0.17598,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7037752,
+      "budget": 7623200,
+      "margin": 0.0768,
+      "capMargin": 0.12387,
+      "error": null
+     },
+     {
+      "op": 6998441,
+      "budget": 7624800,
+      "margin": 0.08215,
+      "capMargin": 0.12877,
+      "error": null
+     },
+     {
+      "op": 6654241,
+      "budget": 7082400,
+      "margin": 0.06045,
+      "capMargin": 0.17162,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022090,
+       "capMargin": 0.12582,
+       "error": null
+      },
+      {
+       "op": 6983998,
+       "capMargin": 0.13056,
+       "error": null
+      },
+      {
+       "op": 6633294,
+       "capMargin": 0.17422,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7059850,
+       "capMargin": 0.12112,
+       "error": null
+      },
+      {
+       "op": 7021758,
+       "capMargin": 0.12586,
+       "error": null
+      },
+      {
+       "op": 6670798,
+       "capMargin": 0.16956,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b unshield #5",
+   "pv": "460824488549",
+   "sign": "1",
+   "publicInputs": [
+    "17260463240394285895357381920648914899069917828081917323671592341682810645465",
+    "10682038372583901756087326160352384895943552167489288275784555058566326314938"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    255
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8789
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6992896,
+      "budget": 7623200,
+      "margin": 0.08268,
+      "capMargin": 0.12946,
+      "error": null
+     },
+     {
+      "op": 6939414,
+      "budget": 7624800,
+      "margin": 0.08989,
+      "capMargin": 0.13612,
+      "error": null
+     },
+     {
+      "op": 6604377,
+      "budget": 7064000,
+      "margin": 0.06507,
+      "capMargin": 0.17782,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7028224,
+      "budget": 7623200,
+      "margin": 0.07805,
+      "capMargin": 0.12506,
+      "error": null
+     },
+     {
+      "op": 6974742,
+      "budget": 7624800,
+      "margin": 0.08526,
+      "capMargin": 0.13172,
+      "error": null
+     },
+     {
+      "op": 6639449,
+      "budget": 7064000,
+      "margin": 0.0601,
+      "capMargin": 0.17346,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7010359,
+       "capMargin": 0.12728,
+       "error": null
+      },
+      {
+       "op": 6959647,
+       "capMargin": 0.1336,
+       "error": null
+      },
+      {
+       "op": 6616919,
+       "capMargin": 0.17626,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7048119,
+       "capMargin": 0.12258,
+       "error": null
+      },
+      {
+       "op": 6997407,
+       "capMargin": 0.1289,
+       "error": null
+      },
+      {
+       "op": 6654423,
+       "capMargin": 0.17159,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b transfer #6",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "16128692059949833902845181610939345211618887565369228427414866792197443607641",
+    "9147593438219019759915461265879829826646945251041560389479389838639442566163"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    123
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8849
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7006237,
+      "budget": 7623200,
+      "margin": 0.08093,
+      "capMargin": 0.1278,
+      "error": null
+     },
+     {
+      "op": 6959200,
+      "budget": 7624800,
+      "margin": 0.08729,
+      "capMargin": 0.13365,
+      "error": null
+     },
+     {
+      "op": 6648961,
+      "budget": 7112000,
+      "margin": 0.06511,
+      "capMargin": 0.17227,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7041693,
+      "budget": 7623200,
+      "margin": 0.07628,
+      "capMargin": 0.12338,
+      "error": null
+     },
+     {
+      "op": 6994656,
+      "budget": 7624800,
+      "margin": 0.08264,
+      "capMargin": 0.12924,
+      "error": null
+     },
+     {
+      "op": 6684161,
+      "budget": 7112000,
+      "margin": 0.06016,
+      "capMargin": 0.16789,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7022543,
+       "capMargin": 0.12577,
+       "error": null
+      },
+      {
+       "op": 6978370,
+       "capMargin": 0.13127,
+       "error": null
+      },
+      {
+       "op": 6659158,
+       "capMargin": 0.171,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7060303,
+       "capMargin": 0.12107,
+       "error": null
+      },
+      {
+       "op": 7016130,
+       "capMargin": 0.12656,
+       "error": null
+      },
+      {
+       "op": 6696662,
+       "capMargin": 0.16634,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b shield #7",
+   "pv": "720189986941",
+   "sign": "0",
+   "publicInputs": [
+    "9269369556094606574836257782178478916648181627717708857929213076529798095065",
+    "11828301362250669910996443258282066195721362873400709739206144171909763435251"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    401
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8744
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010037,
+      "budget": 7623200,
+      "margin": 0.08043,
+      "capMargin": 0.12732,
+      "error": null
+     },
+     {
+      "op": 6957200,
+      "budget": 7624800,
+      "margin": 0.08756,
+      "capMargin": 0.1339,
+      "error": null
+     },
+     {
+      "op": 6569692,
+      "budget": 7028000,
+      "margin": 0.06521,
+      "capMargin": 0.18214,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7045237,
+      "budget": 7623200,
+      "margin": 0.07582,
+      "capMargin": 0.12294,
+      "error": null
+     },
+     {
+      "op": 6992400,
+      "budget": 7624800,
+      "margin": 0.08294,
+      "capMargin": 0.12952,
+      "error": null
+     },
+     {
+      "op": 6604636,
+      "budget": 7028000,
+      "margin": 0.06024,
+      "capMargin": 0.17779,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7029160,
+       "capMargin": 0.12494,
+       "error": null
+      },
+      {
+       "op": 6978882,
+       "capMargin": 0.1312,
+       "error": null
+      },
+      {
+       "op": 6582621,
+       "capMargin": 0.18053,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066920,
+       "capMargin": 0.12024,
+       "error": null
+      },
+      {
+       "op": 7016642,
+       "capMargin": 0.1265,
+       "error": null
+      },
+      {
+       "op": 6620125,
+       "capMargin": 0.17586,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b unshield #8",
+   "pv": "396646071815",
+   "sign": "1",
+   "publicInputs": [
+    "15952458052782537824842756977891980027885949799269395828147627327708926206071",
+    "12616517234628769201035285348124176604047395619422924868051145028248681211792"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    391
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8734
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7017954,
+      "budget": 7623200,
+      "margin": 0.0794,
+      "capMargin": 0.12634,
+      "error": null
+     },
+     {
+      "op": 6939161,
+      "budget": 7624800,
+      "margin": 0.08992,
+      "capMargin": 0.13615,
+      "error": null
+     },
+     {
+      "op": 6563159,
+      "budget": 7020000,
+      "margin": 0.06508,
+      "capMargin": 0.18296,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7053154,
+      "budget": 7623200,
+      "margin": 0.07478,
+      "capMargin": 0.12196,
+      "error": null
+     },
+     {
+      "op": 6974361,
+      "budget": 7624800,
+      "margin": 0.08531,
+      "capMargin": 0.13176,
+      "error": null
+     },
+     {
+      "op": 6598103,
+      "budget": 7020000,
+      "margin": 0.0601,
+      "capMargin": 0.1786,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7035775,
+       "capMargin": 0.12412,
+       "error": null
+      },
+      {
+       "op": 6958580,
+       "capMargin": 0.13373,
+       "error": null
+      },
+      {
+       "op": 6574844,
+       "capMargin": 0.1815,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7073535,
+       "capMargin": 0.11942,
+       "error": null
+      },
+      {
+       "op": 6996340,
+       "capMargin": 0.12903,
+       "error": null
+      },
+      {
+       "op": 6612348,
+       "capMargin": 0.17683,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b transfer #9",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "7667778038453186746314568445584579697854669968259636999362016568327637207818",
+    "10780685489030033469864872832788716005279658671223269026347289039436791209465"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    306
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8745
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7016420,
+      "budget": 7623200,
+      "margin": 0.0796,
+      "capMargin": 0.12653,
+      "error": null
+     },
+     {
+      "op": 6970668,
+      "budget": 7624800,
+      "margin": 0.08579,
+      "capMargin": 0.13222,
+      "error": null
+     },
+     {
+      "op": 6571838,
+      "budget": 7028800,
+      "margin": 0.06501,
+      "capMargin": 0.18187,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7051620,
+      "budget": 7623200,
+      "margin": 0.07498,
+      "capMargin": 0.12215,
+      "error": null
+     },
+     {
+      "op": 7005868,
+      "budget": 7624800,
+      "margin": 0.08117,
+      "capMargin": 0.12784,
+      "error": null
+     },
+     {
+      "op": 6606782,
+      "budget": 7028800,
+      "margin": 0.06004,
+      "capMargin": 0.17752,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7035438,
+       "capMargin": 0.12416,
+       "error": null
+      },
+      {
+       "op": 6991393,
+       "capMargin": 0.12964,
+       "error": null
+      },
+      {
+       "op": 6584827,
+       "capMargin": 0.18026,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7073198,
+       "capMargin": 0.11946,
+       "error": null
+      },
+      {
+       "op": 7029153,
+       "capMargin": 0.12494,
+       "error": null
+      },
+      {
+       "op": 6622331,
+       "capMargin": 0.17559,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b shield #10",
+   "pv": "143199851176",
+   "sign": "0",
+   "publicInputs": [
+    "21798473090631496919834741772508677697756038604849765108741176283268083584293",
+    "6166293835820598175177915066341496189692983962408745479058224468244577408269"
+   ],
+   "nq": 117,
+   "fills": [
+    0,
+    0,
+    74
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8895
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7017387,
+      "budget": 7623200,
+      "margin": 0.07947,
+      "capMargin": 0.12641,
+      "error": null
+     },
+     {
+      "op": 6953467,
+      "budget": 7624800,
+      "margin": 0.08805,
+      "capMargin": 0.13437,
+      "error": null
+     },
+     {
+      "op": 6684629,
+      "budget": 7148800,
+      "margin": 0.06493,
+      "capMargin": 0.16783,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7052843,
+      "budget": 7623200,
+      "margin": 0.07482,
+      "capMargin": 0.12199,
+      "error": null
+     },
+     {
+      "op": 6988923,
+      "budget": 7624800,
+      "margin": 0.0834,
+      "capMargin": 0.12995,
+      "error": null
+     },
+     {
+      "op": 6719829,
+      "budget": 7148800,
+      "margin": 0.06001,
+      "capMargin": 0.16345,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7034719,
+       "capMargin": 0.12425,
+       "error": null
+      },
+      {
+       "op": 6971961,
+       "capMargin": 0.13206,
+       "error": null
+      },
+      {
+       "op": 6696563,
+       "capMargin": 0.16635,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7072479,
+       "capMargin": 0.11955,
+       "error": null
+      },
+      {
+       "op": 7009721,
+       "capMargin": 0.12736,
+       "error": null
+      },
+      {
+       "op": 6734067,
+       "capMargin": 0.16168,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b unshield #11",
+   "pv": "923484883182",
+   "sign": "1",
+   "publicInputs": [
+    "17545576056139412262385442975519697381152677624155045993996631411919003812209",
+    "11564287646600672191842718248919013629642956010133370361141860131745182785430"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    205
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8835
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7012388,
+      "budget": 7623200,
+      "margin": 0.08013,
+      "capMargin": 0.12703,
+      "error": null
+     },
+     {
+      "op": 6972514,
+      "budget": 7624800,
+      "margin": 0.08555,
+      "capMargin": 0.13199,
+      "error": null
+     },
+     {
+      "op": 6639086,
+      "budget": 7100800,
+      "margin": 0.06502,
+      "capMargin": 0.1735,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7047716,
+      "budget": 7623200,
+      "margin": 0.07549,
+      "capMargin": 0.12263,
+      "error": null
+     },
+     {
+      "op": 7007842,
+      "budget": 7624800,
+      "margin": 0.08091,
+      "capMargin": 0.1276,
+      "error": null
+     },
+     {
+      "op": 6674158,
+      "budget": 7100800,
+      "margin": 0.06008,
+      "capMargin": 0.16914,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028923,
+       "capMargin": 0.12497,
+       "error": null
+      },
+      {
+       "op": 6990356,
+       "capMargin": 0.12977,
+       "error": null
+      },
+      {
+       "op": 6650305,
+       "capMargin": 0.17211,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7066683,
+       "capMargin": 0.12027,
+       "error": null
+      },
+      {
+       "op": 7028116,
+       "capMargin": 0.12507,
+       "error": null
+      },
+      {
+       "op": 6687809,
+       "capMargin": 0.16744,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b transfer #12",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "13103447685810221217756674299724447682543024980062294525860090798446559062297",
+    "10538029189385440755040396667108756093781335637229805777771531930388043420587"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    255
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8789
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6998782,
+      "budget": 7623200,
+      "margin": 0.08191,
+      "capMargin": 0.12872,
+      "error": null
+     },
+     {
+      "op": 6958919,
+      "budget": 7624800,
+      "margin": 0.08733,
+      "capMargin": 0.13369,
+      "error": null
+     },
+     {
+      "op": 6605006,
+      "budget": 7064000,
+      "margin": 0.06498,
+      "capMargin": 0.17775,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7034110,
+      "budget": 7623200,
+      "margin": 0.07728,
+      "capMargin": 0.12433,
+      "error": null
+     },
+     {
+      "op": 6994247,
+      "budget": 7624800,
+      "margin": 0.0827,
+      "capMargin": 0.12929,
+      "error": null
+     },
+     {
+      "op": 6640078,
+      "budget": 7064000,
+      "margin": 0.06001,
+      "capMargin": 0.17338,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7015910,
+       "capMargin": 0.12659,
+       "error": null
+      },
+      {
+       "op": 6978213,
+       "capMargin": 0.13129,
+       "error": null
+      },
+      {
+       "op": 6615872,
+       "capMargin": 0.17639,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7053670,
+       "capMargin": 0.12189,
+       "error": null
+      },
+      {
+       "op": 7015973,
+       "capMargin": 0.12658,
+       "error": null
+      },
+      {
+       "op": 6653376,
+       "capMargin": 0.17172,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b shield #13",
+   "pv": "883551593051",
+   "sign": "0",
+   "publicInputs": [
+    "18717101430039422939282087308305570578914209143876316288414976455089983986181",
+    "12773428273941825561800727593693251027750903244870901987307723145586796455971"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    216
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8750
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7011637,
+      "budget": 7623200,
+      "margin": 0.08022,
+      "capMargin": 0.12712,
+      "error": null
+     },
+     {
+      "op": 6964827,
+      "budget": 7624800,
+      "margin": 0.08656,
+      "capMargin": 0.13295,
+      "error": null
+     },
+     {
+      "op": 6574624,
+      "budget": 7032800,
+      "margin": 0.06515,
+      "capMargin": 0.18153,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7046837,
+      "budget": 7623200,
+      "margin": 0.07561,
+      "capMargin": 0.12274,
+      "error": null
+     },
+     {
+      "op": 7000027,
+      "budget": 7624800,
+      "margin": 0.08194,
+      "capMargin": 0.12857,
+      "error": null
+     },
+     {
+      "op": 6609568,
+      "budget": 7032800,
+      "margin": 0.06018,
+      "capMargin": 0.17718,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7029496,
+       "capMargin": 0.1249,
+       "error": null
+      },
+      {
+       "op": 6983999,
+       "capMargin": 0.13056,
+       "error": null
+      },
+      {
+       "op": 6586200,
+       "capMargin": 0.18009,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7067256,
+       "capMargin": 0.1202,
+       "error": null
+      },
+      {
+       "op": 7021759,
+       "capMargin": 0.12586,
+       "error": null
+      },
+      {
+       "op": 6623704,
+       "capMargin": 0.17542,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b unshield #14",
+   "pv": "243918399484",
+   "sign": "1",
+   "publicInputs": [
+    "17611200260044797525652273643396624403500777849991419271614637450879535877320",
+    "9749228826506906069276736188046455883055248279585137347867666210474372244102"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    385
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8728
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7012078,
+      "budget": 7623200,
+      "margin": 0.08017,
+      "capMargin": 0.12707,
+      "error": null
+     },
+     {
+      "op": 6963991,
+      "budget": 7624800,
+      "margin": 0.08667,
+      "capMargin": 0.13306,
+      "error": null
+     },
+     {
+      "op": 6558342,
+      "budget": 7015200,
+      "margin": 0.06512,
+      "capMargin": 0.18355,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7047278,
+      "budget": 7623200,
+      "margin": 0.07555,
+      "capMargin": 0.12269,
+      "error": null
+     },
+     {
+      "op": 6999191,
+      "budget": 7624800,
+      "margin": 0.08205,
+      "capMargin": 0.12867,
+      "error": null
+     },
+     {
+      "op": 6593286,
+      "budget": 7015200,
+      "margin": 0.06014,
+      "capMargin": 0.1792,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7030834,
+       "capMargin": 0.12473,
+       "error": null
+      },
+      {
+       "op": 6984863,
+       "capMargin": 0.13046,
+       "error": null
+      },
+      {
+       "op": 6571311,
+       "capMargin": 0.18194,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7068594,
+       "capMargin": 0.12003,
+       "error": null
+      },
+      {
+       "op": 7022623,
+       "capMargin": 0.12576,
+       "error": null
+      },
+      {
+       "op": 6608815,
+       "capMargin": 0.17727,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b transfer #15",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "2595657277695482829312853063608417868753600556512663516421577979701253031565",
+    "187096843211439335341717730921626678660283200042392742433033459710982194114"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    262
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8797
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6993144,
+      "budget": 7623200,
+      "margin": 0.08265,
+      "capMargin": 0.12943,
+      "error": null
+     },
+     {
+      "op": 6964394,
+      "budget": 7624800,
+      "margin": 0.08661,
+      "capMargin": 0.13301,
+      "error": null
+     },
+     {
+      "op": 6611053,
+      "budget": 7070400,
+      "margin": 0.06497,
+      "capMargin": 0.17699,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7028472,
+      "budget": 7623200,
+      "margin": 0.07802,
+      "capMargin": 0.12503,
+      "error": null
+     },
+     {
+      "op": 6999722,
+      "budget": 7624800,
+      "margin": 0.08198,
+      "capMargin": 0.12861,
+      "error": null
+     },
+     {
+      "op": 6646125,
+      "budget": 7070400,
+      "margin": 0.06001,
+      "capMargin": 0.17263,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7011072,
+       "capMargin": 0.12719,
+       "error": null
+      },
+      {
+       "op": 6984351,
+       "capMargin": 0.13052,
+       "error": null
+      },
+      {
+       "op": 6622722,
+       "capMargin": 0.17554,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7048832,
+       "capMargin": 0.12249,
+       "error": null
+      },
+      {
+       "op": 7022111,
+       "capMargin": 0.12582,
+       "error": null
+      },
+      {
+       "op": 6660226,
+       "capMargin": 0.17087,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b shield #16",
+   "pv": "561479494021",
+   "sign": "0",
+   "publicInputs": [
+    "797981090706839915627806543469486219637147277909402053955885628562481304999",
+    "12521049615099537390987286402865813400974271707741738905924689385786205027508"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    246
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8780
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6991478,
+      "budget": 7623200,
+      "margin": 0.08287,
+      "capMargin": 0.12963,
+      "error": null
+     },
+     {
+      "op": 6945342,
+      "budget": 7624800,
+      "margin": 0.08911,
+      "capMargin": 0.13538,
+      "error": null
+     },
+     {
+      "op": 6597540,
+      "budget": 7056800,
+      "margin": 0.06508,
+      "capMargin": 0.17867,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7026806,
+      "budget": 7623200,
+      "margin": 0.07823,
+      "capMargin": 0.12524,
+      "error": null
+     },
+     {
+      "op": 6980670,
+      "budget": 7624800,
+      "margin": 0.08448,
+      "capMargin": 0.13098,
+      "error": null
+     },
+     {
+      "op": 6632612,
+      "budget": 7056800,
+      "margin": 0.06011,
+      "capMargin": 0.17431,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7010439,
+       "capMargin": 0.12727,
+       "error": null
+      },
+      {
+       "op": 6964779,
+       "capMargin": 0.13296,
+       "error": null
+      },
+      {
+       "op": 6609343,
+       "capMargin": 0.17721,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7048199,
+       "capMargin": 0.12257,
+       "error": null
+      },
+      {
+       "op": 7002539,
+       "capMargin": 0.12826,
+       "error": null
+      },
+      {
+       "op": 6646847,
+       "capMargin": 0.17254,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b unshield #17",
+   "pv": "381591657549",
+   "sign": "1",
+   "publicInputs": [
+    "11324231990889557189814379528941134076331762705172258086156077863625451983866",
+    "1417118469462446509980837410029898281219296876279668401809013461790500716520"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    116
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8842
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7004561,
+      "budget": 7623200,
+      "margin": 0.08115,
+      "capMargin": 0.12801,
+      "error": null
+     },
+     {
+      "op": 6965700,
+      "budget": 7624800,
+      "margin": 0.08644,
+      "capMargin": 0.13284,
+      "error": null
+     },
+     {
+      "op": 6643002,
+      "budget": 7106400,
+      "margin": 0.06521,
+      "capMargin": 0.17302,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7040017,
+      "budget": 7623200,
+      "margin": 0.0765,
+      "capMargin": 0.12359,
+      "error": null
+     },
+     {
+      "op": 7001156,
+      "budget": 7624800,
+      "margin": 0.08179,
+      "capMargin": 0.12843,
+      "error": null
+     },
+     {
+      "op": 6678202,
+      "budget": 7106400,
+      "margin": 0.06026,
+      "capMargin": 0.16863,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7023763,
+       "capMargin": 0.12561,
+       "error": null
+      },
+      {
+       "op": 6985033,
+       "capMargin": 0.13044,
+       "error": null
+      },
+      {
+       "op": 6656339,
+       "capMargin": 0.17136,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7061523,
+       "capMargin": 0.12091,
+       "error": null
+      },
+      {
+       "op": 7022793,
+       "capMargin": 0.12574,
+       "error": null
+      },
+      {
+       "op": 6693843,
+       "capMargin": 0.16669,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b transfer #18",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "10787913003002970134581059649698603728443293605226269336909535027410849336123",
+    "9783923234816422002141640169936469365971525897638091406107830061335150251859"
+   ],
+   "nq": 120,
+   "fills": [
+    0,
+    0,
+    4
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8921
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7011801,
+      "budget": 7623200,
+      "margin": 0.0802,
+      "capMargin": 0.1271,
+      "error": null
+     },
+     {
+      "op": 6960416,
+      "budget": 7624800,
+      "margin": 0.08713,
+      "capMargin": 0.1335,
+      "error": null
+     },
+     {
+      "op": 6703906,
+      "budget": 7169600,
+      "margin": 0.06495,
+      "capMargin": 0.16543,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7047385,
+      "budget": 7623200,
+      "margin": 0.07553,
+      "capMargin": 0.12267,
+      "error": null
+     },
+     {
+      "op": 6996000,
+      "budget": 7624800,
+      "margin": 0.08247,
+      "capMargin": 0.12907,
+      "error": null
+     },
+     {
+      "op": 6739234,
+      "budget": 7169600,
+      "margin": 0.06003,
+      "capMargin": 0.16104,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7028099,
+       "capMargin": 0.12507,
+       "error": null
+      },
+      {
+       "op": 6978778,
+       "capMargin": 0.13121,
+       "error": null
+      },
+      {
+       "op": 6715295,
+       "capMargin": 0.16402,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7065859,
+       "capMargin": 0.12037,
+       "error": null
+      },
+      {
+       "op": 7016538,
+       "capMargin": 0.12651,
+       "error": null
+      },
+      {
+       "op": 6752799,
+       "capMargin": 0.15935,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b shield #19",
+   "pv": "1078120916795",
+   "sign": "0",
+   "publicInputs": [
+    "1312904952252823397341059124745415768946352446935166408789883678144028036139",
+    "3060342976619144390885733693240736632965742392619537001637772594315803022601"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    326
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8765
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6999374,
+      "budget": 7623200,
+      "margin": 0.08183,
+      "capMargin": 0.12865,
+      "error": null
+     },
+     {
+      "op": 6951182,
+      "budget": 7624800,
+      "margin": 0.08835,
+      "capMargin": 0.13465,
+      "error": null
+     },
+     {
+      "op": 6585660,
+      "budget": 7044800,
+      "margin": 0.06517,
+      "capMargin": 0.18015,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7034574,
+      "budget": 7623200,
+      "margin": 0.07722,
+      "capMargin": 0.12427,
+      "error": null
+     },
+     {
+      "op": 6986382,
+      "budget": 7624800,
+      "margin": 0.08373,
+      "capMargin": 0.13027,
+      "error": null
+     },
+     {
+      "op": 6620604,
+      "budget": 7044800,
+      "margin": 0.06021,
+      "capMargin": 0.1758,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7018457,
+       "capMargin": 0.12628,
+       "error": null
+      },
+      {
+       "op": 6971373,
+       "capMargin": 0.13214,
+       "error": null
+      },
+      {
+       "op": 6598799,
+       "capMargin": 0.17852,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7056217,
+       "capMargin": 0.12157,
+       "error": null
+      },
+      {
+       "op": 7009133,
+       "capMargin": 0.12744,
+       "error": null
+      },
+      {
+       "op": 6636303,
+       "capMargin": 0.17385,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b unshield #20",
+   "pv": "192854786720",
+   "sign": "1",
+   "publicInputs": [
+    "12141077545894389215517220926583150173078435219928422246254871896019853163848",
+    "11406793429744574482761363095798991417821788603721836716174932069806660420516"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    205
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8835
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7006589,
+      "budget": 7623200,
+      "margin": 0.08089,
+      "capMargin": 0.12775,
+      "error": null
+     },
+     {
+      "op": 6964927,
+      "budget": 7624800,
+      "margin": 0.08654,
+      "capMargin": 0.13294,
+      "error": null
+     },
+     {
+      "op": 6638918,
+      "budget": 7100800,
+      "margin": 0.06505,
+      "capMargin": 0.17352,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7041917,
+      "budget": 7623200,
+      "margin": 0.07625,
+      "capMargin": 0.12335,
+      "error": null
+     },
+     {
+      "op": 7000255,
+      "budget": 7624800,
+      "margin": 0.08191,
+      "capMargin": 0.12854,
+      "error": null
+     },
+     {
+      "op": 6673990,
+      "budget": 7100800,
+      "margin": 0.06011,
+      "capMargin": 0.16916,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7021199,
+       "capMargin": 0.12593,
+       "error": null
+      },
+      {
+       "op": 6981773,
+       "capMargin": 0.13084,
+       "error": null
+      },
+      {
+       "op": 6648135,
+       "capMargin": 0.17238,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7058959,
+       "capMargin": 0.12123,
+       "error": null
+      },
+      {
+       "op": 7019533,
+       "capMargin": 0.12614,
+       "error": null
+      },
+      {
+       "op": 6685639,
+       "capMargin": 0.16771,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b transfer #21",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "12700502535568669369724746606734000340650550992870892384725287995496675913461",
+    "4673518313661877540160680736286894379608637951966464930484857156510556762195"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    200
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8830
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7019390,
+      "budget": 7623200,
+      "margin": 0.07921,
+      "capMargin": 0.12616,
+      "error": null
+     },
+     {
+      "op": 6958942,
+      "budget": 7624800,
+      "margin": 0.08733,
+      "capMargin": 0.13368,
+      "error": null
+     },
+     {
+      "op": 6634628,
+      "budget": 7096800,
+      "margin": 0.06512,
+      "capMargin": 0.17406,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7054718,
+      "budget": 7623200,
+      "margin": 0.07457,
+      "capMargin": 0.12176,
+      "error": null
+     },
+     {
+      "op": 6994270,
+      "budget": 7624800,
+      "margin": 0.08269,
+      "capMargin": 0.12929,
+      "error": null
+     },
+     {
+      "op": 6669700,
+      "budget": 7096800,
+      "margin": 0.06018,
+      "capMargin": 0.16969,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7034850,
+       "capMargin": 0.12423,
+       "error": null
+      },
+      {
+       "op": 6976323,
+       "capMargin": 0.13152,
+       "error": null
+      },
+      {
+       "op": 6644798,
+       "capMargin": 0.17279,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7072610,
+       "capMargin": 0.11953,
+       "error": null
+      },
+      {
+       "op": 7014083,
+       "capMargin": 0.12682,
+       "error": null
+      },
+      {
+       "op": 6682302,
+       "capMargin": 0.16812,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b shield #22",
+   "pv": "909237105519",
+   "sign": "0",
+   "publicInputs": [
+    "8260968733114932976682406896907282478734044075581502620798169439055021082208",
+    "10841960995345526903436488123399223901039524573257176786416680238982730639182"
+   ],
+   "nq": 111,
+   "fills": [
+    0,
+    0,
+    180
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8810
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6999292,
+      "budget": 7623200,
+      "margin": 0.08184,
+      "capMargin": 0.12866,
+      "error": null
+     },
+     {
+      "op": 6952873,
+      "budget": 7624800,
+      "margin": 0.08812,
+      "capMargin": 0.13444,
+      "error": null
+     },
+     {
+      "op": 6620534,
+      "budget": 7080800,
+      "margin": 0.065,
+      "capMargin": 0.17581,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7034620,
+      "budget": 7623200,
+      "margin": 0.07721,
+      "capMargin": 0.12426,
+      "error": null
+     },
+     {
+      "op": 6988201,
+      "budget": 7624800,
+      "margin": 0.08349,
+      "capMargin": 0.13004,
+      "error": null
+     },
+     {
+      "op": 6655606,
+      "budget": 7080800,
+      "margin": 0.06005,
+      "capMargin": 0.17145,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7016448,
+       "capMargin": 0.12653,
+       "error": null
+      },
+      {
+       "op": 6971954,
+       "capMargin": 0.13206,
+       "error": null
+      },
+      {
+       "op": 6632138,
+       "capMargin": 0.17437,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7054208,
+       "capMargin": 0.12182,
+       "error": null
+      },
+      {
+       "op": 7009714,
+       "capMargin": 0.12736,
+       "error": null
+      },
+      {
+       "op": 6669642,
+       "capMargin": 0.1697,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b unshield #23",
+   "pv": "433609907602",
+   "sign": "1",
+   "publicInputs": [
+    "8046657057247910131151168281015511199737192422686488784877510133508761329974",
+    "6803672070399511995775054556256364553869136421696529930310809073942202775390"
+   ],
+   "nq": 102,
+   "fills": [
+    0,
+    0,
+    384
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8727
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6993269,
+      "budget": 7623200,
+      "margin": 0.08263,
+      "capMargin": 0.12941,
+      "error": null
+     },
+     {
+      "op": 6951859,
+      "budget": 7624800,
+      "margin": 0.08826,
+      "capMargin": 0.13457,
+      "error": null
+     },
+     {
+      "op": 6558066,
+      "budget": 7014400,
+      "margin": 0.06506,
+      "capMargin": 0.18359,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7028469,
+      "budget": 7623200,
+      "margin": 0.07802,
+      "capMargin": 0.12503,
+      "error": null
+     },
+     {
+      "op": 6987059,
+      "budget": 7624800,
+      "margin": 0.08364,
+      "capMargin": 0.13018,
+      "error": null
+     },
+     {
+      "op": 6593010,
+      "budget": 7014400,
+      "margin": 0.06007,
+      "capMargin": 0.17924,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7007736,
+       "capMargin": 0.12761,
+       "error": null
+      },
+      {
+       "op": 6968355,
+       "capMargin": 0.13251,
+       "error": null
+      },
+      {
+       "op": 6566680,
+       "capMargin": 0.18252,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7045496,
+       "capMargin": 0.12291,
+       "error": null
+      },
+      {
+       "op": 7006115,
+       "capMargin": 0.12781,
+       "error": null
+      },
+      {
+       "op": 6604184,
+       "capMargin": 0.17785,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b transfer #24",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "10779779683753691348129683974767192210894643890622924021449931244454045189043",
+    "2534660956209795502278645557544325420619234213110126184529063047287994046206"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    231
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8765
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7006130,
+      "budget": 7623200,
+      "margin": 0.08095,
+      "capMargin": 0.12781,
+      "error": null
+     },
+     {
+      "op": 6970918,
+      "budget": 7624800,
+      "margin": 0.08576,
+      "capMargin": 0.13219,
+      "error": null
+     },
+     {
+      "op": 6587056,
+      "budget": 7044800,
+      "margin": 0.06498,
+      "capMargin": 0.17998,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7041330,
+      "budget": 7623200,
+      "margin": 0.07633,
+      "capMargin": 0.12343,
+      "error": null
+     },
+     {
+      "op": 7006118,
+      "budget": 7624800,
+      "margin": 0.08114,
+      "capMargin": 0.12781,
+      "error": null
+     },
+     {
+      "op": 6622000,
+      "budget": 7044800,
+      "margin": 0.06002,
+      "capMargin": 0.17563,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7023244,
+       "capMargin": 0.12568,
+       "error": null
+      },
+      {
+       "op": 6990580,
+       "capMargin": 0.12975,
+       "error": null
+      },
+      {
+       "op": 6598110,
+       "capMargin": 0.1786,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7061004,
+       "capMargin": 0.12098,
+       "error": null
+      },
+      {
+       "op": 7028340,
+       "capMargin": 0.12504,
+       "error": null
+      },
+      {
+       "op": 6635614,
+       "capMargin": 0.17394,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b shield #25",
+   "pv": "464145320419",
+   "sign": "0",
+   "publicInputs": [
+    "13891232369915053147829150834109432191188557350903331431724834014693971283027",
+    "14020926811747409231524884480755765240498816730239968599888156303696431677359"
+   ],
+   "nq": 99,
+   "fills": [
+    0,
+    0,
+    458
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8705
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6990989,
+      "budget": 7623200,
+      "margin": 0.08293,
+      "capMargin": 0.12969,
+      "error": null
+     },
+     {
+      "op": 6938573,
+      "budget": 7624800,
+      "margin": 0.09,
+      "capMargin": 0.13622,
+      "error": null
+     },
+     {
+      "op": 6541958,
+      "budget": 6996800,
+      "margin": 0.06501,
+      "capMargin": 0.18559,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7026061,
+      "budget": 7623200,
+      "margin": 0.07833,
+      "capMargin": 0.12533,
+      "error": null
+     },
+     {
+      "op": 6973645,
+      "budget": 7624800,
+      "margin": 0.0854,
+      "capMargin": 0.13185,
+      "error": null
+     },
+     {
+      "op": 6576774,
+      "budget": 6996800,
+      "margin": 0.06003,
+      "capMargin": 0.18126,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7009634,
+       "capMargin": 0.12737,
+       "error": null
+      },
+      {
+       "op": 6958129,
+       "capMargin": 0.13379,
+       "error": null
+      },
+      {
+       "op": 6554194,
+       "capMargin": 0.18407,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7047394,
+       "capMargin": 0.12267,
+       "error": null
+      },
+      {
+       "op": 6995889,
+       "capMargin": 0.12908,
+       "error": null
+      },
+      {
+       "op": 6591698,
+       "capMargin": 0.1794,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b unshield #26",
+   "pv": "57628864519",
+   "sign": "1",
+   "publicInputs": [
+    "13218464113215302976245053898240791126030791049822354995488392992359432122070",
+    "12316114742970812740739232739956954303241481058908098791542669275539491719403"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    346
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8785
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6999322,
+      "budget": 7623200,
+      "margin": 0.08184,
+      "capMargin": 0.12866,
+      "error": null
+     },
+     {
+      "op": 6958730,
+      "budget": 7624800,
+      "margin": 0.08736,
+      "capMargin": 0.13371,
+      "error": null
+     },
+     {
+      "op": 6600995,
+      "budget": 7060800,
+      "margin": 0.06512,
+      "capMargin": 0.17824,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7034650,
+      "budget": 7623200,
+      "margin": 0.07721,
+      "capMargin": 0.12426,
+      "error": null
+     },
+     {
+      "op": 6994058,
+      "budget": 7624800,
+      "margin": 0.08272,
+      "capMargin": 0.12931,
+      "error": null
+     },
+     {
+      "op": 6636067,
+      "budget": 7060800,
+      "margin": 0.06015,
+      "capMargin": 0.17388,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7016743,
+       "capMargin": 0.12649,
+       "error": null
+      },
+      {
+       "op": 6978506,
+       "capMargin": 0.13125,
+       "error": null
+      },
+      {
+       "op": 6612782,
+       "capMargin": 0.17678,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7054503,
+       "capMargin": 0.12179,
+       "error": null
+      },
+      {
+       "op": 7016266,
+       "capMargin": 0.12655,
+       "error": null
+      },
+      {
+       "op": 6650286,
+       "capMargin": 0.17211,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b transfer #27",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "3494986406396784676325541123855155013944174402146335137959983583733635568458",
+    "5779760416056162585284586802371199543130854266432290245258838140971215142923"
+   ],
+   "nq": 105,
+   "fills": [
+    0,
+    0,
+    351
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8790
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6999595,
+      "budget": 7623200,
+      "margin": 0.0818,
+      "capMargin": 0.12862,
+      "error": null
+     },
+     {
+      "op": 6940059,
+      "budget": 7624800,
+      "margin": 0.0898,
+      "capMargin": 0.13603,
+      "error": null
+     },
+     {
+      "op": 6605332,
+      "budget": 7064800,
+      "margin": 0.06504,
+      "capMargin": 0.1777,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7034923,
+      "budget": 7623200,
+      "margin": 0.07717,
+      "capMargin": 0.12423,
+      "error": null
+     },
+     {
+      "op": 6975387,
+      "budget": 7624800,
+      "margin": 0.08517,
+      "capMargin": 0.13164,
+      "error": null
+     },
+     {
+      "op": 6640404,
+      "budget": 7064800,
+      "margin": 0.06007,
+      "capMargin": 0.17334,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7016956,
+       "capMargin": 0.12646,
+       "error": null
+      },
+      {
+       "op": 6958809,
+       "capMargin": 0.1337,
+       "error": null
+      },
+      {
+       "op": 6617218,
+       "capMargin": 0.17623,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7054716,
+       "capMargin": 0.12176,
+       "error": null
+      },
+      {
+       "op": 6996569,
+       "capMargin": 0.129,
+       "error": null
+      },
+      {
+       "op": 6654722,
+       "capMargin": 0.17156,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b shield #28",
+   "pv": "827508907367",
+   "sign": "0",
+   "publicInputs": [
+    "76767121824434465701959358320163565887455488991730105228514619634841169328",
+    "7275634530170060831733034288765770999118106051745958319063597841564443740390"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    228
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8762
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 6996702,
+      "budget": 7623200,
+      "margin": 0.08218,
+      "capMargin": 0.12898,
+      "error": null
+     },
+     {
+      "op": 6964278,
+      "budget": 7624800,
+      "margin": 0.08663,
+      "capMargin": 0.13302,
+      "error": null
+     },
+     {
+      "op": 6583741,
+      "budget": 7042400,
+      "margin": 0.06513,
+      "capMargin": 0.18039,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7031902,
+      "budget": 7623200,
+      "margin": 0.07757,
+      "capMargin": 0.1246,
+      "error": null
+     },
+     {
+      "op": 6999478,
+      "budget": 7624800,
+      "margin": 0.08201,
+      "capMargin": 0.12864,
+      "error": null
+     },
+     {
+      "op": 6618685,
+      "budget": 7042400,
+      "margin": 0.06017,
+      "capMargin": 0.17604,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7016330,
+       "capMargin": 0.12654,
+       "error": null
+      },
+      {
+       "op": 6984687,
+       "capMargin": 0.13048,
+       "error": null
+      },
+      {
+       "op": 6596458,
+       "capMargin": 0.17881,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7054090,
+       "capMargin": 0.12184,
+       "error": null
+      },
+      {
+       "op": 7022447,
+       "capMargin": 0.12578,
+       "error": null
+      },
+      {
+       "op": 6633962,
+       "capMargin": 0.17414,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b unshield #29",
+   "pv": "222952155959",
+   "sign": "1",
+   "publicInputs": [
+    "11238247711357147529010054784169862505733598775136996752424930225565354766863",
+    "3398318248622103198974242633684665119795179090974541945610562738299734570191"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    123
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8849
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7005621,
+      "budget": 7623200,
+      "margin": 0.08101,
+      "capMargin": 0.12787,
+      "error": null
+     },
+     {
+      "op": 6959547,
+      "budget": 7624800,
+      "margin": 0.08725,
+      "capMargin": 0.13361,
+      "error": null
+     },
+     {
+      "op": 6649588,
+      "budget": 7112000,
+      "margin": 0.06502,
+      "capMargin": 0.1722,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7041077,
+      "budget": 7623200,
+      "margin": 0.07636,
+      "capMargin": 0.12346,
+      "error": null
+     },
+     {
+      "op": 6995003,
+      "budget": 7624800,
+      "margin": 0.0826,
+      "capMargin": 0.12919,
+      "error": null
+     },
+     {
+      "op": 6684788,
+      "budget": 7112000,
+      "margin": 0.06007,
+      "capMargin": 0.16781,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7021421,
+       "capMargin": 0.12591,
+       "error": null
+      },
+      {
+       "op": 6977077,
+       "capMargin": 0.13143,
+       "error": null
+      },
+      {
+       "op": 6659496,
+       "capMargin": 0.17096,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7059181,
+       "capMargin": 0.12121,
+       "error": null
+      },
+      {
+       "op": 7014837,
+       "capMargin": 0.12673,
+       "error": null
+      },
+      {
+       "op": 6697000,
+       "capMargin": 0.16629,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b transfer #30",
+   "pv": "0",
+   "sign": "0",
+   "publicInputs": [
+    "16457733678501112241880493269743357382128232384477985958000459599152217220962",
+    "208423347156132058202452387776477025773248452828526100746237589590976701612"
+   ],
+   "nq": 114,
+   "fills": [
+    0,
+    0,
+    124
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8850
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7004871,
+      "budget": 7623200,
+      "margin": 0.08111,
+      "capMargin": 0.12797,
+      "error": null
+     },
+     {
+      "op": 6972263,
+      "budget": 7624800,
+      "margin": 0.08558,
+      "capMargin": 0.13203,
+      "error": null
+     },
+     {
+      "op": 6649290,
+      "budget": 7112800,
+      "margin": 0.06517,
+      "capMargin": 0.17223,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7040327,
+      "budget": 7623200,
+      "margin": 0.07646,
+      "capMargin": 0.12355,
+      "error": null
+     },
+     {
+      "op": 7007719,
+      "budget": 7624800,
+      "margin": 0.08093,
+      "capMargin": 0.12761,
+      "error": null
+     },
+     {
+      "op": 6684490,
+      "budget": 7112800,
+      "margin": 0.06022,
+      "capMargin": 0.16785,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7021106,
+       "capMargin": 0.12595,
+       "error": null
+      },
+      {
+       "op": 6989655,
+       "capMargin": 0.12986,
+       "error": null
+      },
+      {
+       "op": 6660383,
+       "capMargin": 0.17085,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7058866,
+       "capMargin": 0.12124,
+       "error": null
+      },
+      {
+       "op": 7027415,
+       "capMargin": 0.12516,
+       "error": null
+      },
+      {
+       "op": 6697887,
+       "capMargin": 0.16618,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  },
+  {
+   "label": "sweep-3out-v1b shield #31",
+   "pv": "620910340646",
+   "sign": "0",
+   "publicInputs": [
+    "2235949804539388269250296374445031833176751920192726271507263405318527835547",
+    "8445830547546009317678790268009968696738011566079768093986723571035399536302"
+   ],
+   "nq": 108,
+   "fills": [
+    0,
+    0,
+    238
+   ],
+   "unlocking": [
+    9488,
+    9490,
+    8772
+   ],
+   "consensus": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7010267,
+      "budget": 7623200,
+      "margin": 0.0804,
+      "capMargin": 0.12729,
+      "error": null
+     },
+     {
+      "op": 6962902,
+      "budget": 7624800,
+      "margin": 0.08681,
+      "capMargin": 0.13319,
+      "error": null
+     },
+     {
+      "op": 6589547,
+      "budget": 7050400,
+      "margin": 0.06537,
+      "capMargin": 0.17967,
+      "error": null
+     }
+    ]
+   },
+   "standard": {
+    "accepted": true,
+    "inputs": [
+     {
+      "op": 7045467,
+      "budget": 7623200,
+      "margin": 0.07579,
+      "capMargin": 0.12291,
+      "error": null
+     },
+     {
+      "op": 6998102,
+      "budget": 7624800,
+      "margin": 0.08219,
+      "capMargin": 0.12881,
+      "error": null
+     },
+     {
+      "op": 6624491,
+      "budget": 7050400,
+      "margin": 0.06041,
+      "capMargin": 0.17532,
+      "error": null
+     }
+    ]
+   },
+   "cap": {
+    "consensus": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7029370,
+       "capMargin": 0.12492,
+       "error": null
+      },
+      {
+       "op": 6983162,
+       "capMargin": 0.13067,
+       "error": null
+      },
+      {
+       "op": 6603388,
+       "capMargin": 0.17795,
+       "error": null
+      }
+     ]
+    },
+    "standard": {
+     "accepted": true,
+     "inputs": [
+      {
+       "op": 7067130,
+       "capMargin": 0.12022,
+       "error": null
+      },
+      {
+       "op": 7020922,
+       "capMargin": 0.12597,
+       "error": null
+      },
+      {
+       "op": 6640892,
+       "capMargin": 0.17328,
+       "error": null
+      }
+     ]
+    }
+   },
+   "capRule": true
+  }
+ ]
+}

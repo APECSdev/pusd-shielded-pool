@@ -38,26 +38,38 @@ const IX = {
     REVERSEBYTES: 0xbc,
 };
 
-/* carrier: OP_RETURN OP_PUSHDATA1 <169> <payload> */
+/* carrier: OP_RETURN OP_PUSHDATA1 <169> <payload> (2-out) / <201> (3-out) */
 export const CARRIER_LEN = 169;
+export const CARRIER_LEN_3OUT = 201;
 export const STATE_INDEX = 2;   // role 2's own input index, fixed by the role dispatch
 const CARRIER_PREFIX = Buffer.from([0x6a, 0x4c, CARRIER_LEN]);
+const CARRIER_PREFIX_3OUT = Buffer.from([0x6a, 0x4c, CARRIER_LEN_3OUT]);
 
-/* the eight limbs, in the order the carrier stores them */
+/* the eight limbs, in the order the 2-out carrier stores them */
 export const CARRIER_FIELDS = ['nf0', 'nf1', 'cm0', 'cm1', 'newRoot', 'pv', 'sign'];
-export function carrierOf({ nf0, nf1, cm0, cm1, newRoot, pv, sign }) {
-    const b = Buffer.alloc(CARRIER_LEN);
-    const put = (v, off, len) => { let x = BigInt(v); for (let i = 0; i < len; i++) { b[off + i] = Number(x & 0xffn); x >>= 8n; } };
+export const CARRIER_FIELDS_3OUT = ['nf0', 'nf1', 'cm0', 'cm1', 'cm2', 'newRoot', 'pv', 'sign'];
+export function carrierOf({ nf0, nf1, cm0, cm1, cm2, newRoot, pv, sign }, outs = 2) {
+    const len = outs === 3 ? CARRIER_LEN_3OUT : CARRIER_LEN;
+    const b = Buffer.alloc(len);
+    const put = (v, off, l) => { let x = BigInt(v); for (let i = 0; i < l; i++) { b[off + i] = Number(x & 0xffn); x >>= 8n; } };
     put(nf0, 0, 32); put(nf1, 32, 32); put(cm0, 64, 32); put(cm1, 96, 32);
-    put(newRoot, 128, 32); put(pv, 160, 8); put(sign, 168, 1);
+    if (outs === 3) {
+        put(cm2, 128, 32); put(newRoot, 160, 32); put(pv, 192, 8); put(sign, 200, 1);
+    } else {
+        put(newRoot, 128, 32); put(pv, 160, 8); put(sign, 168, 1);
+    }
     return b;
 }
 export const carrierOutput = (payload) => Buffer.from([0x6a, 0x4c, payload.length, ...payload]);
 
-/* n1 = SHA256(preimage) with the top 3 bits of the big-endian digest cleared (the actionHash) */
-export function actionHashOf({ nf0, nf1, cm0, cm1, pv, sign, categoryDisplay, newRoot }) {
+/* n1 = SHA256(preimage) with the top 3 bits of the big-endian digest cleared (the actionHash).
+   2-out preimage: nf0|nf1|cm0|cm1|pvAbs|pvSign|assetCategory|newRoot        (256 bytes)
+   3-out preimage: nf0|nf1|cm0|cm1|cm2|pvAbs|pvSign|assetCategory|newRoot    (288 bytes) */
+export function actionHashOf({ nf0, nf1, cm0, cm1, cm2, pv, sign, categoryDisplay, newRoot }, outs = 2) {
     const be32 = (v) => { const b = Buffer.alloc(32); let x = BigInt(v); for (let i = 31; i >= 0 && x > 0n; i--) { b[i] = Number(x & 0xffn); x >>= 8n; } return b; };
-    const pre = Buffer.concat([be32(nf0), be32(nf1), be32(cm0), be32(cm1), be32(pv), be32(sign), Buffer.from(categoryDisplay, 'hex'), be32(newRoot)]);
+    const pre = outs === 3
+        ? Buffer.concat([be32(nf0), be32(nf1), be32(cm0), be32(cm1), be32(cm2), be32(pv), be32(sign), Buffer.from(categoryDisplay, 'hex'), be32(newRoot)])
+        : Buffer.concat([be32(nf0), be32(nf1), be32(cm0), be32(cm1), be32(pv), be32(sign), Buffer.from(categoryDisplay, 'hex'), be32(newRoot)]);
     const h = Buffer.from(sha(pre));
     h[0] &= 0x1f;
     return BigInt('0x' + h.toString('hex'));
@@ -73,8 +85,13 @@ export function covenantParams({ categoryOnChain }) {
     };
 }
 
-export function covenantHook(P) {
+export function covenantHook(P, outs = 2) {
     return (a) => {
+        /*  3-out variant: the carrier grows to 201 bytes (cm2) and the actionHash
+            preimage grows to 288 bytes. The 2-out default is byte-identical to the
+            deployed hook (regression: pool-hook.mjs must still build d71851a1…). */
+        const CARRIER_LEN = outs === 3 ? CARRIER_LEN_3OUT : 169;
+        const CARRIER_PREFIX = outs === 3 ? CARRIER_PREFIX_3OUT : Buffer.from([0x6a, 0x4c, 169]);
         /*  Capture the two public inputs FIRST, before this hook pushes anything. n0 and n1 sit
             deep in role 2's stack (below the STMT scalars), so picking them later — after the
             carrier splits have pushed a dozen items — computes a depth that no longer matches the
@@ -95,7 +112,7 @@ export function covenantHook(P) {
         a.pushBytes(P.catMutable).op(OP.EQUALVERIFY, 2);
         a.mark('p2');
 
-        /* ── 3. the carrier: output 0 is exactly OP_RETURN <169 bytes> ──────── */
+        /* ── 3. the carrier: output 0 is exactly OP_RETURN <169|201 bytes> ─── */
         a.push(0).op(IX.OUTBYTECODE, 1, 'ob');
         /*  OP_SIZE on the BCH-2026 VM is NON-POPPING: it leaves the operand and pushes its size.
             Model it exactly as the stock FILL local function does (script.mjs:75): pop 1, push 2
@@ -107,7 +124,7 @@ export function covenantHook(P) {
         a.pushBytes(CARRIER_PREFIX).op(OP.EQUALVERIFY, 2);
         a.mark('p3');
 
-        /* ── 4. split the payload: nf0 nf1 cm0 cm1 newRoot pv(8) sign(1) ───── */
+        /* ── 4. split the payload: nf0 nf1 cm0 cm1 [cm2] newRoot pv(8) sign(1) ─ */
         const take32 = (from, name) => {
             a.push(32).op(OP.SPLIT, 2, name, from);
         };
@@ -115,6 +132,7 @@ export function covenantHook(P) {
         take32('pl', 'nf1');
         take32('pl', 'cm0');
         take32('pl', 'cm1');
+        if (outs === 3) take32('pl', 'cm2');
         take32('pl', 'newRoot');
         a.push(8).op(OP.SPLIT, 2, 'pv8', 'pl');
         a.rename('pl', 'sign1');
@@ -173,20 +191,27 @@ export function covenantHook(P) {
             newMerkleRoot.reverse()). The nullifier fold in check 7 below stays on the
             RAW forms — the deployed covenant folds `old + nf0 + nf1` without reversal. */
         const rev = (name) => { a.pick(name).op(IX.REVERSEBYTES, 1, name + '_be'); };
-        rev('nf0'); rev('nf1'); rev('cm0'); rev('cm1'); rev('newRoot');
+        rev('nf0'); rev('nf1'); rev('cm0'); rev('cm1');
+        if (outs === 3) rev('cm2');
+        rev('newRoot');
         /*  be32(x) = REVERSEBYTES(NUM2BIN(x, 32)) — pv and sign are small VM numbers  */
         const be32 = (name) => { a.pick(name).push(32).op(OP.NUM2BIN, 2, name + '_le').op(IX.REVERSEBYTES, 1, name + '_be'); };
         be32('pv'); be32('sign');
-        /*  preimage = be(nf0) ‖ be(nf1) ‖ be(cm0) ‖ be(cm1) ‖ be32(pv) ‖ be32(sign) ‖ cat ‖ be(newRoot)  */
+        /*  preimage = be(nf0) ‖ be(nf1) ‖ be(cm0) ‖ be(cm1) [‖ be(cm2)] ‖ be32(pv) ‖ be32(sign) ‖ cat ‖ be(newRoot)  */
         a.pick('nf0_be').pick('nf1_be').op(OP.CAT, 2, 'a1');
         a.pick('cm0_be').pick('cm1_be').op(OP.CAT, 2, 'a2');
         a.pick('pv_be').pick('sign_be').op(OP.CAT, 2, 'a3');
         a.pushBytes(P.categoryDisplay).pick('newRoot_be').op(OP.CAT, 2, 'a4');
-        a.pick('a1').pick('a2').op(OP.CAT, 2, 'b1');
+        if (outs === 3) {
+            a.pick('a2').pick('cm2_be').op(OP.CAT, 2, 'a2c');
+            a.pick('a1').pick('a2c').op(OP.CAT, 2, 'b1');
+        } else {
+            a.pick('a1').pick('a2').op(OP.CAT, 2, 'b1');
+        }
         a.pick('a3').pick('a4').op(OP.CAT, 2, 'b2');
         a.pick('b1').pick('b2').op(OP.CAT, 2, 'pre');
         /*  OP_SIZE again — same non-popping VM as check 3: pre stays, presz lands on top. */
-        a.op(OP.SIZE, 1, 'pre', 'presz').push(256).op(OP.NUMEQUALVERIFY, 2);
+        a.op(OP.SIZE, 1, 'pre', 'presz').push(outs === 3 ? 288 : 256).op(OP.NUMEQUALVERIFY, 2);
         /*  digest, clear the top 3 bits of the big-endian first byte, reverse to LE, compare */
         a.pick('pre').op(OP.SHA256, 1, 'h');
         a.pick('h').push(1).op(OP.SPLIT, 2, 'h0', 'hrest');

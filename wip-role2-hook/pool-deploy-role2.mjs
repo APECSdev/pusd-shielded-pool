@@ -51,11 +51,13 @@ import { guardRedeem } from './minting-guard.mjs';
 import { p2sh32 } from './vm.mjs';
 
 const DRY = process.argv.includes('--dry');
+const OUTS = process.env.POOL_3OUT === '1' ? 3 : 2;
+const argOf = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 ? process.argv[i + 1] : d; };
 /* DEPOSIT-TAGGING REDEPLOY: no deploy-time fuel/deposit outputs — op 1 locks its own. */
 const SECRETS = process.argv.includes('--secrets')
     ? process.argv[process.argv.indexOf('--secrets') + 1]
     : '/home/apecs/.secrets/faucet-hot-wallet.json';
-const STATE_OUT = '/home/apecs/cov/role2-pool-state.json';
+const STATE_OUT = argOf('--state-out', '/home/apecs/cov/role2-pool-state.json');
 const STATE_FLOAT = 10_000n;                // sats riding on the state NFT (fee float)
 const SUPPLY = 100_000_000n;
 
@@ -148,7 +150,7 @@ console.log('anchor tx:  ' + anchorTxid + '  → THE NEW CATEGORY');
 
 /* ---- rebuild the program with the REAL category (the hook's ctor param) ---- */
 const catOnchain = hexToBin(CATEGORY).slice().reverse();
-setCovenant(covenantHook(covenantParams({ categoryOnChain: binToHex(catOnchain) })));
+setCovenant(covenantHook(covenantParams({ categoryOnChain: binToHex(catOnchain) }), OUTS));
 const prog = buildProgram();
 const programLocking = p2sh32(prog.R);
 const programLockingHex = binToHex(programLocking);
@@ -218,8 +220,9 @@ for (const [label, hex] of [['anchor', anchorHex], ['mint', mintHex], ['deploy',
 }
 
 /* ---- the state file (input to role2-op-witness.mjs + pool-op-role2.mjs) ---- */
+const GUARD_STATE = { adoptTxid: deployTxid, txid: deployTxid, vout: 1, sats: 1000, locking: binToHex(guardLockingBytes), redeemLength: guardRedeemBytes.length, K: GUARD_K, bornGuarded: true, policy: 'only possible spend: recreate the minting NFT at the guard + mint K NFT-only empty-commitment blanks to the operator; burn and FT-mint are consensus-impossible (minting-guard.mjs 14/14)' };
 const state = {
-    id: 'chipnet-role2-pool',
+    id: OUTS === 3 ? 'chipnet-role2-pool3-3out' : 'chipnet-role2-pool',
     network: 'chipnet',
     deployed: new Date().toISOString(),
     program: {
@@ -228,7 +231,7 @@ const state = {
         redeemHex: binToHex(prog.R),
         pieces: prog.pieces.map((p) => p.length),
         locking: programLockingHex,
-        vk: 'our solo-ceremony zkey (build/pool_final.zkey sha256 4a4e2543…)',
+        vk: OUTS === 3 ? 'our 1-of-1 demo setup (build3/pool3_final.zkey sha256 b0177dbe…)' : 'our solo-ceremony zkey (build/pool_final.zkey sha256 4a4e2543…)',
     },
     category: CATEGORY,
     anchorTxid, mintTxid, deployTxid,
@@ -238,7 +241,7 @@ const state = {
            role2-op-witness.mjs (prove) → pool-refill-role2.mjs (TAGGED lock) → pool-op-role2.mjs */
         actionInputs: [],
         mintingNFT: { txid: deployTxid, vout: 1, nft: 'minting' },
-        guard: { adoptTxid: deployTxid, txid: deployTxid, vout: 1, sats: 1000, locking: binToHex(guardLockingBytes), redeemLength: guardRedeemBytes.length, K: GUARD_K, bornGuarded: true, policy: 'only possible spend: recreate the minting NFT at the guard + mint K NFT-only empty-commitment blanks to the operator; burn and FT-mint are consensus-impossible (minting-guard.mjs 14/14)' },
+        guard: GUARD_STATE,
         supply: { txid: deployTxid, vout: 2, ftAmount: SUPPLY.toString() },
     },
     pool: {
@@ -250,6 +253,9 @@ const state = {
         notes: SEEDS.bootstrapNotes,
     },
     fundingAddress: address,
+    /* top-level alias: pool-tagbatch-role2.mjs reads state.guard (the adopt script writes it there);
+       a born-guarded deploy must expose the same shape. */
+    guard: GUARD_STATE,
 };
 writeFileSync(STATE_OUT, JSON.stringify(state, null, 2) + '\n');
 console.log('state:       ' + STATE_OUT);

@@ -1,6 +1,8 @@
 // role2-op-witness-3out.mjs — generate + prove the REAL pool-action witness for the
 // 3-output (v3) role-2 pool.
 //
+// Path: pusd-shielded-pool/role2-op-witness-3out.mjs
+//
 // role2-op-witness.mjs adapted to the measured 3-out circuit (build3/):
 //   - three output notes (cm[3], outValue[3], outOwnerPub[3], outRho[3], outR[3]);
 //   - the 9-field actionHash preimage:
@@ -19,6 +21,19 @@
 //   ~/bin/node role2-op-witness-3out.mjs --action transfer --in 2,3
 //   ~/bin/node role2-op-witness-3out.mjs --action unshield --amount N --in 2,3
 // State file + op out default to /home/apecs/cov/role2-pool3-state.json + role2-op3.json.
+//
+// --outs a,b,c overrides the default 40/30/30 split with explicit out-note values that
+// MUST sum to the conservation law's outSum. A zero value is legal (pool3.circom only
+// RangeChecks each outValue and constrains sumIn + signedPublic === sumOut), so
+// `--outs 400,20,0` expresses a 2-out flow through the 3-out circuit — the design's
+// "zero-value dummy third note". The tree still appends THREE leaves; the dummy costs a
+// leaf, not a note.
+//
+// --seed <tag> appends a tag to the out-note secret derivation. The default seed is
+// `role2-op3-<deployTxid>-<action>-<amount>`, so two actions with the same action/amount
+// would derive the SAME secrets; distinct out VALUES still give distinct commitments,
+// but identical values would duplicate a leaf. Pass --seed when in doubt; the duplicate
+// guard below refuses to prove a commitment that is already in the tree.
 import { buildPoseidon, buildBabyjub } from "circomlibjs";
 import * as snarkjs from "snarkjs";
 import { readFileSync, writeFileSync } from "fs";
@@ -28,6 +43,8 @@ const argOf = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 ? pro
 const ACTION = argOf("--action", "shield");
 const AMOUNT = BigInt(argOf("--amount", "1000000"));
 const IN_IDX = (argOf("--in", "0,1")).split(",").map(Number);
+const OUTS = argOf("--outs", "");
+const SEED = argOf("--seed", "");
 const STATE = argOf("--state", "/home/apecs/cov/role2-pool3-state.json");
 const OUT = argOf("--out", "/home/apecs/cov/role2-op3.json");
 const WASM = argOf("--wasm", "build3/pool3_js/pool3.wasm");
@@ -82,8 +99,15 @@ else throw new Error("unknown action " + ACTION);
 const inSum = inNotes.reduce((a, n) => a + n.value, 0n);
 const outSum = inSum + (sign ? -pv : pv);
 if (outSum < 0n) throw new Error(`underfunded unshield: notes hold ${inSum}, requested ${pv}`);
-/* the 3-out split: 40/30/30 (deterministic, recorded) — the note-management shape */
+/* the 3-out split: 40/30/30 (deterministic, recorded) — the note-management shape.
+   --outs a,b,c overrides it; the values must still satisfy the conservation law, and a
+   zero is legal (RangeCheck(0) passes) — that is the zero-value dummy third note. */
 const out0v = outSum * 2n / 5n, out1v = outSum * 3n / 10n, out2v = outSum - out0v - out1v;
+const split = OUTS ? OUTS.split(",").map((x) => BigInt(x.trim())) : [out0v, out1v, out2v];
+if (split.length !== 3) throw new Error("--outs needs exactly three comma-separated values");
+if (split.some((v) => v < 0n)) throw new Error("--outs values must be non-negative");
+const splitSum = split.reduce((a, v) => a + v, 0n);
+if (splitSum !== outSum) throw new Error(`--outs must sum to the conservation outSum ${outSum}, got ${splitSum}`);
 
 /* fresh out-note secrets (seeded — recorded in the op JSON so follow-up ops can spend them).
    Each note carries its own nullifier key nk with ownerPub = x(nk · G) on BabyJubJub — the
@@ -94,10 +118,12 @@ const rng = (seed) => { let c = 0; return () => BigInt("0x" + createHash("sha256
 const R = 21888242871839275222246405745257275088548364400416034343698204186575808495617n;
 const modr = (x) => ((x % R) + R) % R;
 const pubOf = (nk) => { const p = bbj.mulPointEscalar(bbj.Base8, nk); const x = BigInt(F.toObject(p[0])); if (x >= R) throw new Error("babyjub x >= field prime"); return x; };
-const rnd = rng(`role2-op3-${state.deployTxid}-${ACTION}-${AMOUNT}`);
-const outNotes = [0, 1, 2].map((i) => { const nk = modr(rnd()); const v = [out0v, out1v, out2v][i];
+const rnd = rng(`role2-op3-${state.deployTxid}-${ACTION}-${AMOUNT}${SEED ? "-" + SEED : ""}`);
+const outNotes = [0, 1, 2].map((i) => { const nk = modr(rnd()); const v = split[i];
     return { value: v, ownerPub: pubOf(nk), rho: modr(rnd()), r: modr(rnd()), nk }; });
 const cm = outNotes.map((n) => commit(n.value, n.ownerPub, n.rho, n.r));
+/* a duplicate leaf would be unspendable-by-index ambiguity; refuse before proving */
+cm.forEach((c, i) => { if (leaves.includes(c)) throw new Error(`out-note ${i} commitment is already a leaf — pass --seed to derive fresh secrets`); });
 
 /* the witness */
 const p0 = merklePath(leaves, IN_IDX[0]), p1 = merklePath(leaves, IN_IDX[1]);
@@ -115,7 +141,7 @@ const input = { merkleRoot: oldRoot.toString(), actionHash: actionHash.toString(
     outValue: outNotes.map((n) => n.value.toString()), outOwnerPub: outNotes.map((n) => n.ownerPub.toString()),
     outRho: outNotes.map((n) => n.rho.toString()), outR: outNotes.map((n) => n.r.toString()) };
 
-console.log(`${ACTION} pv=${pv} sign=${sign} · inSum=${inSum} → out ${out0v}+${out1v}+${out2v}`);
+console.log(`${ACTION} pv=${pv} sign=${sign} · inSum=${inSum} → out ${split[0]}+${split[1]}+${split[2]}${split.some((v) => v === 0n) ? " (zero-value dummy: a 2-out flow)" : ""}`);
 const t0 = Date.now();
 const { proof, publicSignals } = await snarkjs.groth16.fullProve(input, WASM, ZKEY);
 console.log(`proved in ${((Date.now() - t0) / 1000).toFixed(1)}s · n0 ${publicSignals[0].slice(0, 18)}… · n1 ${publicSignals[1].slice(0, 18)}…`);

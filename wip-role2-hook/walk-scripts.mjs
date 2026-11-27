@@ -169,7 +169,7 @@ function walkCore(a) {
 }
 
 /* ─── walkA — input 3: walk nf0 from the state's nullSetRoot to midRoot ── */
-export function buildWalkA(categoryOnChainHex) {
+export function buildWalkA(categoryOnChainHex, commit96 = false) {
     const catMutable = Buffer.concat([Buffer.from(categoryOnChainHex, 'hex'), Buffer.from([0x01])]);
     /* the witness items are already on the stack: [midRoot, blob] */
     const a = new Asm(['midRoot', 'blob']);
@@ -186,6 +186,10 @@ export function buildWalkA(categoryOnChainHex) {
     /* the anchor: the state commitment's second half = nullSetRoot */
     a.push(2).op(IX.UTXOTOKCOMMIT, 1, 'com');
     a.push(32).op(OP.SPLIT, 2, 'noteRoot', 'anchor').drop('noteRoot');
+    /* commit96 (the holdings variant): the state commitment is 96 B —
+       [noteRoot ‖ nullSetRoot ‖ balance32] — split off the balance tail so the
+       walk folds against the 32-B nullSetRoot exactly as in the 64-B form. */
+    if (commit96) a.push(32).op(OP.SPLIT, 2, 'anchor', 'anchorTail').drop('anchorTail');
     /* the walk accumulators (zeros32 = the empty slot; the marker = spent) */
     a.pushBytes(Buffer.alloc(32), 'curO');
     a.pushBytes(SPENT_MARKER, 'curN');
@@ -197,7 +201,7 @@ export function buildWalkA(categoryOnChainHex) {
 }
 
 /* ─── walkB — input 4: walk nf1 from midRoot (walkA's published datum) ─── */
-export function buildWalkB(categoryOnChainHex) {
+export function buildWalkB(categoryOnChainHex, commit96 = false) {
     const catMutable = Buffer.concat([Buffer.from(categoryOnChainHex, 'hex'), Buffer.from([0x01])]);
     const a = new Asm(['blob']);
     a.op(IX.TXVERSION, 0, 'tv').push(2).op(OP.NUMEQUALVERIFY, 2);
@@ -222,13 +226,16 @@ export function buildWalkB(categoryOnChainHex) {
     /* the target: out1's commitment second half = finalNullRoot */
     a.push(1).op(IX.OUTTOKCOMMIT, 1, 'o1c');
     a.push(32).op(OP.SPLIT, 2, 'nr1', 'target').drop('nr1');
+    /* commit96 (the holdings variant): out1's commitment is 96 B — split off the
+       balance tail (bytes 64..96) so the walk pins the 32-B finalNullRoot exactly. */
+    if (commit96) a.push(32).op(OP.SPLIT, 2, 'target', 'targetTail').drop('targetTail');
     walkCore(a);
     return Uint8Array.from(a.code);
 }
 
-export function buildWalkScripts(categoryOnChainHex) {
-    const walkA = buildWalkA(categoryOnChainHex);
-    const walkB = buildWalkB(categoryOnChainHex);
+export function buildWalkScripts(categoryOnChainHex, opts = {}) {
+    const walkA = buildWalkA(categoryOnChainHex, opts.commit96);
+    const walkB = buildWalkB(categoryOnChainHex, opts.commit96);
     return {
         walkA, walkB,
         walkAHash: sha(walkA),

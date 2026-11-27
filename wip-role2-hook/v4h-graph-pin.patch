@@ -1,0 +1,16 @@
+83c83,89
+<     s.emit(IX.TXINPUTCOUNT); s.st.push('n'); s.push(ND ? NROLES + 2 : NROLES).op(OP.NUMEQUALVERIFY, 2);
+---
+>     // v4h (POOL_HOLDINGS = the C architecture): inputs NROLES+2/NROLES+3 are the
+>     //   holdings/deposit pair — pinned to EACH OTHER by byte-compare (no hash: H pins
+>     //   the program by hash, the program must not pin H by hash — that would be
+>     //   circular; the byte-pin gives shape totality, H gives the theft guard).
+>     //   Stock builds (env unset) and v3.1 builds (ND only) are byte-identical.
+>     const HO = !!process.env.POOL_HOLDINGS;
+>     s.emit(IX.TXINPUTCOUNT); s.st.push('n'); s.push(ND ? NROLES + 2 + (HO ? 2 : 0) : NROLES).op(OP.NUMEQUALVERIFY, 2);
+88a95,99
+>     }
+>     if (HO) {
+>       s.push(NROLES + 2).op(IX.UTXOBYTECODE, 1, 'h5');
+>       s.push(NROLES + 3).op(IX.UTXOBYTECODE, 1, 'h6');
+>       s.op(OP.EQUALVERIFY, 2);

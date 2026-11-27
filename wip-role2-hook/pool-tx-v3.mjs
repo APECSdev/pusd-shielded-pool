@@ -28,7 +28,7 @@ import { createHash } from 'node:crypto';
 import { VMS, p2sh32 } from './vm.mjs';
 import { proveCore } from './protocol.mjs';
 import { unlockingsFor, MARGIN, UNLOCK_CAP } from './transaction.mjs';
-import { carrierOf } from './pool-hook.mjs';
+import { carrierOf, carrierOutput } from './pool-hook.mjs';
 import { fuelSourceOutputs, poolOutputs } from './pool-tx.mjs';
 import { walkAWitness, walkBWitness } from './walk-scripts.mjs';
 import { pushData } from './asm.mjs';
@@ -122,4 +122,94 @@ export function poolTransactionForV3(fx, prog, scenarioArgs, walkScripts, { marg
         fills = next.map((f, i) => (ok[i] ? fills[i] : Math.max(f, fills[i] + 1)));
     }
     throw new Error('v3 pool fill sizing did not converge');
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THE C ARCHITECTURE (holdings mode) — pool-tx-v3.mjs additions.
+   The ASSET (a category we do NOT own — e.g. real PUSD 2469acc5…) rides a
+   dedicated holdings input (5) / deposit slot (6), both locked to the H
+   covenant; the balance is the state commitment's THIRD field (96 B:
+   [noteRoot ‖ nullSetRoot ‖ balance32]); out2 recreates the holdings; the
+   unshield payout is out3. Everything above (the v3.1 exports) is untouched.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* the honest C scenario: the 96-B commitments carry the balance in the third field */
+export const scenarioV3H = ({ sc, n0, nullSet, balance = 1000n }) => {
+    const carr = carrierOf(sc, 3);
+    const tag = sha(carr.subarray(0, 64));
+    const newBal = balance + sc.pv - 2n * sc.sign * sc.pv;
+    const stateCommit = Buffer.concat([to32LE(n0), Buffer.from(nullSet.nullSetRootBefore, 'hex'), to32LE(balance)]);
+    const newCommit = Buffer.concat([to32LE(sc.newRoot), Buffer.from(nullSet.finalNullRoot, 'hex'), to32LE(newBal)]);
+    return { carr, newBal, tag, stateCommit, newCommit };
+};
+
+/* the 7-input source outputs for the honest C shape.
+   in5 = the holdings line (the prior action's out2 — Y-bare FT carrying the
+   committed balance; tokenless dust at genesis, balance = 0);
+   in6 = the deposit slot (Y-bare carrying exactly pv on a deposit; tokenless
+   otherwise). Both locked to H (theft-guarded; graph-pinned by hash). */
+export const v7SourceOutputs = (lock, walkLocks, hLocking, scenario, { sc, balance = 1000n, categoryDisplay, assetCategoryDisplay }) => {
+    const poolCat = new Uint8Array(categoryDisplay);
+    const assetCat = new Uint8Array(assetCategoryDisplay);
+    const fuel = (n) => ({ lockingBytecode: new Uint8Array(lock), valueSatoshis: 1000n, token: { category: poolCat, amount: 0n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.tag) } } });
+    const in5 = balance > 0n
+        ? { lockingBytecode: new Uint8Array(hLocking), valueSatoshis: 600n, token: { category: assetCat, amount: balance } }
+        : { lockingBytecode: new Uint8Array(hLocking), valueSatoshis: 600n };
+    const in6 = (sc.sign === 0n && sc.pv > 0n)
+        ? { lockingBytecode: new Uint8Array(hLocking), valueSatoshis: 600n, token: { category: assetCat, amount: sc.pv } }
+        : { lockingBytecode: new Uint8Array(hLocking), valueSatoshis: 600n };
+    return [
+        fuel(0), fuel(1),
+        { lockingBytecode: new Uint8Array(lock), valueSatoshis: 1000n, token: { category: poolCat, amount: 0n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } },
+        { lockingBytecode: new Uint8Array(walkLocks[0]), valueSatoshis: 300n },
+        { lockingBytecode: new Uint8Array(walkLocks[1]), valueSatoshis: 300n },
+        in5, in6,
+    ];
+};
+
+/* the C outputs: carrier · state (NFT-only, 96-B commitment) · holdings (Y-bare == newBal) · payout (unshield only, Y-bare == pv) */
+export const poolOutputsC = (prog, hLocking, scenario, { sc, categoryDisplay, assetCategoryDisplay }) => [
+    { lockingBytecode: new Uint8Array(carrierOutput(scenario.carr)), valueSatoshis: 0n },
+    { lockingBytecode: p2sh32(prog.R), valueSatoshis: 1000n, token: { category: new Uint8Array(categoryDisplay), amount: 0n, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.newCommit) } } },
+    { lockingBytecode: new Uint8Array(hLocking), valueSatoshis: 1000n, token: { category: new Uint8Array(assetCategoryDisplay), amount: scenario.newBal } },
+    ...(sc.sign === 1n ? [{ lockingBytecode: new Uint8Array([0x76, 0xa9, 0x14, ...new Uint8Array(20), 0x88, 0xac]), valueSatoshis: 546n, token: { category: new Uint8Array(assetCategoryDisplay), amount: sc.pv } }] : []),
+];
+
+/* the 7-input transaction inputs: the verifier unlockings, the walk witnesses,
+   then the two H redeem pushes (no witness — the H covenant is witness-free) */
+export const v7Inputs = (unlockings, walkW, hScript) => [
+    ...unlockings.map((u, n) => ({ outpointIndex: n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(u) })),
+    ...walkW.map((w, n) => ({ outpointIndex: unlockings.length + n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(w) })),
+    ...[hScript, hScript].map((h, n) => ({ outpointIndex: unlockings.length + walkW.length + n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: Uint8Array.from(pushData(Uint8Array.from(h))) })),
+];
+
+/* evaluate one input of the 7-input C shape (standard mode) */
+const evalInputC = (prog, unlockings, walkW, hScript, walkLocks, hLocking, i, scenario, args) => {
+    const lock = p2sh32(prog.R);
+    const inputs = v7Inputs(unlockings, walkW, hScript);
+    const sourceOutputs = v7SourceOutputs(lock, walkLocks, hLocking, scenario, args);
+    const outputs = poolOutputsC(prog, hLocking, scenario, args);
+    const st = VMS.standard.evaluate({ inputIndex: i, sourceOutputs, transaction: { version: 2, locktime: 0, inputs, outputs } });
+    const top = st.stack?.[st.stack.length - 1];
+    const ok = st.error === undefined && st.stack.length === 1 && top?.length === 1 && top[0] === 1;
+    return { accepted: ok, error: st.error, opCost: st.metrics.operationCost, budget: (41 + inputs[i].unlockingBytecode.length) * 800, length: inputs[i].unlockingBytecode.length };
+};
+
+/* the C replacement for transactionFor: sizes fills for inputs 0–2 against the
+   SEVEN-input pool shape (the walks + the H pair ride along at fixed sizes). */
+export function poolTransactionForC(fx, prog, scenarioArgs, walkScripts, hScript, hLocking, { margin = MARGIN, fills0 = [0, 0, 0], maxIter = 40, es } = {}) {
+    const core = proveCore(fx, es !== undefined ? { es } : {});
+    const scenario = scenarioV3H(scenarioArgs);
+    const walkW = walkWitnesses(scenarioArgs.nullSet, walkScripts[0], walkScripts[1]);
+    const walkLocks = walkV3(walkScripts[0], walkScripts[1]).lockings;
+    let fills = fills0.slice();
+    for (let it = 0; it < maxIter; it++) {
+        const { unlockings, pushes, z, H } = unlockingsFor(core, prog, fills);
+        const runs = [0, 1, 2].map((i) => evalInputC(prog, unlockings, walkW, hScript, walkLocks, hLocking, i, scenario, scenarioArgs));
+        const ok = runs.map((x, i) => x.opCost <= (1 - margin) * x.budget || x.length >= UNLOCK_CAP - 3);
+        if (ok.every(Boolean)) return { core, fills, pushes, unlockings, walkW, z, H, scenario, runs, locking: p2sh32(prog.R) };
+        const next = nextFills(runs, fills, unlockings, margin);
+        fills = next.map((f, i) => (ok[i] ? fills[i] : Math.max(f, fills[i] + 1)));
+    }
+    throw new Error('C pool fill sizing did not converge');
 }

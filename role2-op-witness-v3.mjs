@@ -133,7 +133,12 @@ function makeSmt(keyHexes) {
 
 /* ── the deployed pool state ── */
 const state = JSON.parse(readFileSync(STATE, "utf8"));
-const assetCategory = BigInt("0x" + state.category);
+/* v4h (the C architecture): the circuit's category witness is the ASSET (real PUSD
+   2469acc5…) — the category the actionHash binds and the one every fixture/sweep proof
+   was minted under (the whichcat probe, 2026-11-27). v3.1 states carry no assetCategory
+   and fall back to the pool category, which equals the asset there — byte-identical
+   behavior for every existing state file. */
+const assetCategory = BigInt("0x" + (state.assetCategory ?? state.category));
 const catHi = assetCategory >> 128n, catLo = assetCategory & ((1n << 128n) - 1n);
 const oldRoot = BigInt(state.pool.root);
 const leaves = state.pool.leaves.map(BigInt);

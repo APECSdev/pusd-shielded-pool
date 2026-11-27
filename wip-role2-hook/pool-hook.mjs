@@ -75,13 +75,19 @@ export function actionHashOf({ nf0, nf1, cm0, cm1, cm2, pv, sign, categoryDispla
     return BigInt('0x' + h.toString('hex'));
 }
 
-export function covenantParams({ categoryOnChain }) {
+export function covenantParams({ categoryOnChain, assetCategoryOnChain = null }) {
     const catOn = Buffer.from(categoryOnChain, 'hex');       // on-chain (reversed) order, 32 B
+    const assetOn = assetCategoryOnChain ? Buffer.from(assetCategoryOnChain, 'hex') : null;
     return {
         categoryOnChain: catOn,
         categoryDisplay: Buffer.from(catOn).reverse(),       // natural big-endian, for the preimage
         catMutable: Buffer.concat([catOn, Buffer.from([0x01])]),
         catBare: catOn,
+        ...(assetOn ? {
+            assetOnChain: assetOn,
+            assetDisplay: Buffer.from(assetOn).reverse(),   // the PUSD category, display order
+            assetBare: assetOn,                             // the bare-FT push (32-B reversed) — probe-verified
+        } : {}),
     };
 }
 
@@ -103,7 +109,22 @@ export function covenantParams({ categoryOnChain }) {
        (finalNullRoot) is pinned by walkB. Two scripts jointly pin the state.
    The carrier, the actionHash preimage (9 fields), nPublic 2: ALL UNCHANGED. */
 export function covenantHook(P, outs = 2, v3 = null) {
+    /*  holdings mode (the C architecture): pass v3.holdings = {} (truthy) with
+        P.assetBare set (covenantParams({ …, assetCategoryOnChain })). The state
+        commitment grows to 96 B — [noteRoot ‖ nullSetRoot ‖ balance32] — and the
+        ASSET (e.g. real PUSD, a category we do NOT own) rides a dedicated holdings
+        input (5) / deposit slot (6) pair, both locked to the H covenant (graph-pinned
+        by hash, theft-guarded by its full-shape pins). out2 recreates the holdings at
+        the same locking carrying exactly newBal; the unshield payout moves out2 → out3
+        in the ASSET's bare category; out1 stays NFT-only (amount 0). The balance
+        arithmetic is byte-identical — only its SOURCE moves: the authenticated third
+        field of the state commitment, chained exactly like the note root (each hook run
+        verifies out1[64..96) == to32LE(newBal)), so the holdings line is UNFORGEABLE —
+        an action that does not carry the full committed balance dies on consensus
+        token conservation. Absent v3.holdings, every byte below is the v3.1 build. */
+    if (v3?.holdings && !P.assetBare) throw new Error('holdings mode requires covenantParams({ assetCategoryOnChain })');
     return (a) => {
+        const H = v3?.holdings ?? null;
         /*  3-out variant: the carrier grows to 201 bytes (cm2) and the actionHash
             preimage grows to 288 bytes. The 2-out default is byte-identical to the
             deployed hook (regression: pool-hook.mjs must still build d71851a1…). */
@@ -204,6 +225,18 @@ export function covenantHook(P, outs = 2, v3 = null) {
         if (process.env.POOL_DEBUG) console.error('[hook] model stack top-> :', a.st.slice(-10).reverse().join(' | '));
         a.push(STATE_INDEX).op(IX.UTXOTOKCOMMIT, 1, 'com');
         a.pick('com').push(32).op(OP.SPLIT, 2, 'stored', 'oldNull');
+        if (H) {
+            /*  holdings: the commitment is 96 B — split the tail again:
+                [nullSetRoot ‖ balance32]. bal rides the STACK into check 8 (the
+                authenticated source — the UTXO's own FT is no longer the balance);
+                the nullSetRoot half stays walkA's domain. UTXOTOKAMT on a tokenless
+                UTXO pushes EMPTY (= 0) — probe-verified 2026-11-27. */
+            a.pick('oldNull').push(32).op(OP.SPLIT, 2, 'nullTail', 'bal64').drop('nullTail');
+            a.pick('bal64').op(OP.BIN2NUM, 1, 'bal');
+            /*  defense in depth: in holdings mode the state NFT is NFT-ONLY */
+            a.push(STATE_INDEX).op(IX.UTXOTOKAMT, 1, 'samt');
+            a.pick('samt').push(0).op(OP.NUMEQUALVERIFY, 2);
+        }
         /*  byte comparison, not numeric: a 32-byte push decodes as a NEGATIVE VM number when its
             top byte is >= 0x80, so NUMEQUAL would reject honest roots half the time. n0 is a
             number here, so render it to its canonical 32-byte LE form first. */
@@ -225,11 +258,17 @@ export function covenantHook(P, outs = 2, v3 = null) {
         /*  be32(x) = REVERSEBYTES(NUM2BIN(x, 32)) — pv and sign are small VM numbers  */
         const be32 = (name) => { a.pick(name).push(32).op(OP.NUM2BIN, 2, name + '_le').op(IX.REVERSEBYTES, 1, name + '_be'); };
         be32('pv'); be32('sign');
-        /*  preimage = be(nf0) ‖ be(nf1) ‖ be(cm0) ‖ be(cm1) [‖ be(cm2)] ‖ be32(pv) ‖ be32(sign) ‖ cat ‖ be(newRoot)  */
+        /*  preimage = be(nf0) ‖ be(nf1) ‖ be(cm0) ‖ be(cm1) [‖ be(cm2)] ‖ be32(pv) ‖ be32(sign) ‖ cat ‖ be(newRoot)
+            The category field is the CIRCUIT's witness category. v3.1: the pool's own
+            (pool == asset by design). Holdings mode: the ASSET's display form — the
+            circuit witness and every minted fixture/sweep proof bind the asset (the
+            2026-11-27 whichcat probe: our-v3-proofs + our-v3-mpc-proofs both bind
+            2469acc5…), so the hook MUST recompute with P.assetDisplay or honest
+            actions die at check 6. Caught in review: V4H-PIVOT-NITO-REVIEW §1. */
         a.pick('nf0_be').pick('nf1_be').op(OP.CAT, 2, 'a1');
         a.pick('cm0_be').pick('cm1_be').op(OP.CAT, 2, 'a2');
         a.pick('pv_be').pick('sign_be').op(OP.CAT, 2, 'a3');
-        a.pushBytes(P.categoryDisplay).pick('newRoot_be').op(OP.CAT, 2, 'a4');
+        a.pushBytes(H ? P.assetDisplay : P.categoryDisplay).pick('newRoot_be').op(OP.CAT, 2, 'a4');
         if (outs === 3) {
             a.pick('a2').pick('cm2_be').op(OP.CAT, 2, 'a2c');
             a.pick('a1').pick('a2c').op(OP.CAT, 2, 'b1');
@@ -263,12 +302,16 @@ export function covenantHook(P, outs = 2, v3 = null) {
             a.mark('p7');
         } else {
             /* the state commitment's second half is the WALK's domain — drop the
-               split tail so the exit-depth bookkeeping stays exact */
-            a.drop('oldNull');
+               split tail so the exit-depth bookkeeping stays exact. In holdings mode
+               the tail was consumed at check 5 (bal extracted; the rest is residue
+               the D0 exit loop drops by position). */
+            if (!H) a.drop('oldNull');
         }
 
         /* ── 8. newBalance == balance + pv - 2·sign·pv  (>= 0) ──────────────── */
-        a.push(STATE_INDEX).op(IX.UTXOTOKAMT, 1, 'bal');
+        /*  holdings mode: 'bal' is already on the stack from the state commitment's
+            third field (check 5) — the arithmetic below is byte-identical either way. */
+        if (!H) a.push(STATE_INDEX).op(IX.UTXOTOKAMT, 1, 'bal');
         a.pick('bal').pick('pv').op(OP.ADD, 2, 'sum');
         a.pick('sign').pick('pv').op(OP.MUL, 2, 'spv');
         a.pick('spv').push(2).op(OP.MUL, 2, 'spv2');
@@ -282,7 +325,7 @@ export function covenantHook(P, outs = 2, v3 = null) {
             unchecked extra output. Consensus token conservation already limits totals;
             this is defense in depth and makes the payout rules total. */
         a.op(IX.TXOUTPUTCOUNT, 0, 'oc');
-        a.push(2).pick('sign').op(OP.ADD, 2, 'exp');
+        a.push(H ? 3 : 2).pick('sign').op(OP.ADD, 2, 'exp');
         a.pick('oc').pick('exp').op(OP.NUMEQUALVERIFY, 2);
 
         /* ── 9. out1 = the new state, locked back to P2SH32(R) ──────────────── */
@@ -297,20 +340,44 @@ export function covenantHook(P, outs = 2, v3 = null) {
         } else {
             /*  v3: the commitment is noteRoot ‖ finalNullRoot. Role 2 pins the LENGTH
                 and the FIRST half (== the carrier's newRoot); walkB pins the second
-                half. OP_SIZE is non-popping: the operand returns under the size. */
-            a.op(OP.SIZE, 1, 'o1com', 'csz').push(64).op(OP.NUMEQUALVERIFY, 2);
+                half. OP_SIZE is non-popping: the operand returns under the size.
+                Holdings mode: 96 B — [noteRoot ‖ finalNullRoot ‖ balance32] — and the
+                third field must equal to32LE(newBal): the balance chain. */
+            a.op(OP.SIZE, 1, 'o1com', 'csz').push(H ? 96 : 64).op(OP.NUMEQUALVERIFY, 2);
             a.push(32).op(OP.SPLIT, 2, 'onr', 'nullTail');
             a.pick('onr').pick('newRoot').op(OP.EQUALVERIFY, 2);
+            if (H) {
+                a.pick('nullTail').push(32).op(OP.SPLIT, 2, 'nullSet2', 'balTail').drop('nullSet2');
+                a.pick('newBal').push(32).op(OP.NUM2BIN, 2, 'nb32');
+                a.pick('balTail').pick('nb32').op(OP.EQUALVERIFY, 2);
+            }
             a.drop('nullTail');
         }
         a.push(1).op(IX.OUTTOKAMT, 1, 'o1amt');
-        a.pick('o1amt').pick('newBal').op(OP.NUMEQUALVERIFY, 2);
+        if (H) a.pick('o1amt').push(0).op(OP.NUMEQUALVERIFY, 2);   /* the state is NFT-only */
+        else a.pick('o1amt').pick('newBal').op(OP.NUMEQUALVERIFY, 2);
         a.mark('p9');
 
-        /* ── 10. unshield: out2 pays pv in the bare category ───────────────── */
+        /* ── 9h. (holdings) out2 = the new holdings UTXO ──────────────────── */
+        /*  The ASSET's FT balance line: same locking as the current holdings input
+            (the chain — genesis funds it at H, every action recreates it at out2),
+            the asset's BARE category (the 32-B reversed push — probe-verified), and
+            exactly newBal. Conservation across 5/6 → 2/(3) is enforced by consensus
+            token rules; this pin is what makes the line unforgeable (see check 5). */
+        if (H) {
+            a.push(2).op(IX.OUTBYTECODE, 1, 'o2b');
+            a.push(5).op(IX.UTXOBYTECODE, 1, 'h5own');
+            a.pick('o2b').pick('h5own').op(OP.EQUALVERIFY, 2);
+            a.push(2).op(IX.OUTTOKCAT, 1, 'o2cat').pushBytes(P.assetBare).op(OP.EQUALVERIFY, 2);
+            a.push(2).op(IX.OUTTOKAMT, 1, 'o2amt');
+            a.pick('o2amt').pick('newBal').op(OP.NUMEQUALVERIFY, 2);
+            a.mark('p9h');
+        }
+
+        /* ── 10. unshield: the payout (out2; out3 in holdings mode) pays pv ──── */
         a.pick('sign').push(1).op(OP.NUMEQUAL, 2, 'un').op(OP.IF, 1);
-        a.push(2).op(IX.OUTTOKCAT, 1, 'o2cat').pushBytes(P.catBare).op(OP.EQUALVERIFY, 2);
-        a.push(2).op(IX.OUTTOKAMT, 1, 'o2amt').pick('pv').op(OP.NUMEQUALVERIFY, 2);
+        a.push(H ? 3 : 2).op(IX.OUTTOKCAT, 1, 'o2cat').pushBytes(H ? P.assetBare : P.catBare).op(OP.EQUALVERIFY, 2);
+        a.push(H ? 3 : 2).op(IX.OUTTOKAMT, 1, 'o2amt').pick('pv').op(OP.NUMEQUALVERIFY, 2);
         /*  o2cat / o2amt are consumed by their own VERIFY ops above, so nothing is left to drop
             here; the branch creates no residue. */
         a.op(OP.ENDIF, 0);

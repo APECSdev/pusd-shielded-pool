@@ -153,3 +153,46 @@ from the session start, tomorrow morning at the outside.** The user's 5 units
 are spent ONLY inside the atomic lock+action, ONLY after chipnet passes.
 
 — the Hush side, 2026-11-27 (session end).
+
+
+## 8. PATH A DISCOVERED AT SESSION END: THE OLD-GEN MAINNET POOL — REAL PUSD LINKS IN ~45 MIN
+
+`~/matrix/` (found by the home-wide txid hunt at session end) holds the COMPLETE
+2026-11-20 mainnet tooling: prep/genesis/deploy.mjs, op.mjs…op4.mjs (the 7-input
+covenant op builders), pool2/3/4.json (the state), wallet.mjs (the demo key), the
+covenant artifacts (pool3b.artifact.json = the deployed pool's artifact), and the
+verifier pipeline via /home/apecs/zkb/tools (op-meta.json = the live state record:
+merkleRoot 49bda9bd… → newMerkleRoot d5ec91ad… — VERIFIED to match the on-chain
+state NFT 4fda8a8b…:0's commitment, byte-for-byte, this session).
+
+THE OLD POOL IS ALIVE AND ITS OPS ARE NODE-PROVEN (its TRANSFER 4fda8a8b… confirmed
+on mainnet 2026-11-20; its holdings UTXO 4fda8a8b…:6 carries 100 base units of
+REAL 2469acc5… PUSD — verified on chain this session).
+
+**THE RUNBOOK (execute with fresh context; ~15 min/op):**
+1. Locate the witness-generation inputs on ~/zkb/tools (the input-*.json /
+   gen scripts of the 11-20 era; the note secrets for cm0/cm1 of op-meta.json
+   — the two 100-unit-split notes — plus the merkle paths against root d5ec91ad).
+2. **UNSHIELD FIRST** (does not need the user's new PUSD): witness (in-notes =
+   the two current notes, pv=30, sign=1) → snarkjs prove under build/pool_final.zkey
+   (the OLD 1-of-1 zkey, 4a4e2543…, on the VM; ~30 s) → produceTransaction
+   (VERIFIER_DIR=~/zkb/zk-verifier-bench) → build the 7-input tx (op4.mjs pattern)
+   → VM-eval every input both modes → broadcast → the UNSHIELD LINK (REAL PUSD
+   PAID OUT publicly from the pool's own 100 units).
+3. **SHIELD SECOND** (THE USER'S 5 REAL UNITS, f4b245097a06bd:0): witness (pv=5,
+   sign=0, the deposit class) → prove → build (the FT input = the user's UTXO;
+   the op carries it per the old-gen SHIELD pattern) → VM-eval → broadcast →
+   THE SHIELD LINK (the user's $0.05 enters the pool). **NEVER lock these units
+   anywhere except inside the action's own input — the old-gen ops take the FT
+   from a P2PKH input directly, no H-covenant, no pre-funding — THIS PATH HAS NO
+   FREEZING RISK.**
+4. TRANSFER = the existing confirmed 4fda8a8b… (already a mainnet link).
+5. Fill the three XXX in docs/BITCOIN-CASH-RESEARCH.md: SHIELD (new) · TRANSFER
+   (4fda8a8b) · UNSHIELD (new). HONEST LABELING: these are the earlier-generation
+   pool — the post already frames that generation as the prior mainnet demo; the
+   v4h links supersede/upgrade in the post when they land.
+
+WHY THIS PATH WAS NOT SEEN EARLIER: the 11-20 session's files were never in any
+grep scope (~/matrix was unknown until the home-wide hunt). The old pool's note
+secrets were feared lost — they are NOT: the op-meta + the tools are intact, and
+the on-chain state matches.

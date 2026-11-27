@@ -21,7 +21,8 @@
 //     only pins the first half by design) and walkB rejects — the two-script pin.
 //
 // Usage (VM, from the bench dir):
-//   BN_VK_FIXTURES=/home/apecs/cov/our-v3-proofs.json node pool-test-v3.mjs
+//   BN_VK_FIXTURES=/home/apecs/cov/our-v3.fixtures.json node pool-test-v3.mjs
+//   (the fixtures file — the {vk, fixtures} shape; our-v3-proofs.json is the raw proofs list)
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';

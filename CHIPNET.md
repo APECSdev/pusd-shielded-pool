@@ -24,7 +24,9 @@ Shielded pool for PUSD (ParyonUSD) on BCH **Chipnet** — the core of the
   operator as #0023). Download from the PSE S3 bucket; not committed (size).
 - **Phase 2**: currently a **disclosed 1-of-1 placeholder**
   (`setup.log`, `setup2.log`), to be replaced by a community MPC ceremony
-  before any mainnet value. Full text: nito.cash `apps/docs/private-payments/trusted-setup.md`.
+  before any mainnet value. Full text: nito.cash `apps/docs/private-payments/trusted-setup.md`
+  (the nito.cash docs site was DEPRECATED 2026-11-13 and `apps/docs` removed —
+  recover the file from nito.cash git history; it existed through commit 331631e).
 
 ## Layout
 

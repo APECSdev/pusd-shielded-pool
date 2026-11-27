@@ -196,3 +196,28 @@ WHY THIS PATH WAS NOT SEEN EARLIER: the 11-20 session's files were never in any
 grep scope (~/matrix was unknown until the home-wide hunt). The old pool's note
 secrets were feared lost — they are NOT: the op-meta + the tools are intact, and
 the on-chain state matches.
+
+
+## 9. FINAL PRE-EXECUTION NOTE (session end, post-GO): the note secrets ARE the fixed demo values
+
+The 11-20 mainnet ops ran on the UNCHANGED Nov-13 demo vector (`gen-demo-vector.mjs`
++ `demo-vector.json`, both mtime Nov 13): the TRANSFER 4fda8a8b spent the seeded
+tree's notes and created out-notes with the FIXED DEMO SECRETS, recorded verbatim
+in the gen script:
+- out0 = { value 70,  ownerPub 444, rho 2001, r 6001 }
+- out1 = { value 30,  ownerPub 555, rho 2002, r 6002 }
+- the current tree root = d5ec91ad… (op-meta.json newMerkleRoot; = the on-chain
+  state NFT commitment, verified). The tree = the seed notes (seed256.json,
+  ~/zkb/pusd-shielded-pool) + the two appended out-notes (op-meta cm0/cm1).
+- The old circuit takes nk as a free witness (the commitment does not bind it) —
+  the next op's gen picks the nullifier keys.
+- THE UNSHIELD GEN: adapt gen-demo-vector.mjs — in-notes = out0/out1 at their
+  indices in the d5ec91ad tree (paths from the reconstructed leaf list), pv=30,
+  sign=1; prove under build/pool_final.zkey (the Nov-13 solo zkey 4a4e2543…);
+  then op4.mjs's pattern with the covenant unlock (assetOnchain, nf0, nf1, cm0,
+  cm1, newRootLE, pv, sign) + the payout output. THE SHIELD GEN: pv=5, sign=0,
+  the user's f4b245097a06bd…:0 (5 units) as the FT-carrying input.
+- THE POST (user's binding order, twice): **DO NOT CHANGE ANY LANGUAGE OR
+  VERBIAGE** — ONLY fill the three XXX slots: SHIELDING (the new 5-unit op),
+  TRANSFER (the existing confirmed 4fda8a8b…), UNSHIELDING (the new payout op).
+  These links are TEMPORARY — replaced with the v4h lifecycle when it lands.

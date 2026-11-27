@@ -221,3 +221,33 @@ in the gen script:
   VERBIAGE** — ONLY fill the three XXX slots: SHIELDING (the new 5-unit op),
   TRANSFER (the existing confirmed 4fda8a8b…), UNSHIELDING (the new payout op).
   These links are TEMPORARY — replaced with the v4h lifecycle when it lands.
+
+
+## 10. PATH A AT TRUE SESSION END: the one remaining unknown + the one ask
+
+EXECUTION STATE (measured, not guessed):
+- op4.mjs fully understood: 7-input op (5 verifier steps + state NFT + holdings),
+  inputs at the PREV op's vout map (state :0, steps :1-5 (step4 at :4, step3 at :5),
+  holdings :6 — RECREATED at the same vouts every op), the covenant unlock takes
+  (assetOnchain, nf0, nf1, cm0, cm1, newRootLE, pv, sign); the fee was paid from the
+  DEPLOY's fat 10,000-sat step outputs (the TRANSFER's are 2,300 each — NOT enough
+  for the next fee). The gen-1 covenant has NO TXINPUTCOUNT pin (the 11-23 disassembly)
+  ⇒ an extra BCH funding input is legal.
+- THE WALLET IS DRAINED of fee sats (~10-15k left; each op needs ~38k at 1 sat/B
+  for its ~38 KB). **THE USER MUST SEND ~0.001 BCH to the demo wallet for the two
+  op fees.** ASK THEM FIRST THING.
+- pool2/3/4.json = THREE deploy attempts (categories 017a4ff6…, 69c05676…,
+  dd1e3506…) — ALL with genesis root 49bda9bd ⇒ the seed tree is a FIXED standard
+  the 11-20 session rebuilt each time. The seeds are defined in the iteration
+  scripts ~/matrix/matrix2/3/4.mjs or dbg*.mjs — **THE ONE REMAINING UNKNOWN:
+  extract the seed-note definitions (values/ownerPub/rho/r/nk) + the exact tree
+  leaf list + which two the TRANSFER spent (inSum must equal the "100 conserved").**
+- op-meta.json cm0/cm1 (8f1c3070… / ac7fab42…) are NOT the Nov-13 demo out-notes
+  (verified: commit(70,444,2001,6001) ≠ 8f1c3070…) ⇒ the 11-20 session generated
+  its own notes with its own gen — THE SECRETS ARE IN THE MATRIX SCRIPTS. FIND THEM
+  BEFORE WRITING THE UNSHIELD WITNESS. The UNSHIELD then spends the TRANSFER's two
+  out-notes (sum 100), pv=30, sign=1; the covenant payout = output 7 (index 7,
+  after holdings at 6); the SHIELD brings the user's 5 units (pv=5, sign=0).
+- THE POST (binding, thrice): ONLY the three XXX fills — SHIELD (new 5-unit op) ·
+  TRANSFER (the confirmed 4fda8a8b…) · UNSHIELD (new payout op). NO language changes.
+  Links are TEMPORARY — replaced by the v4h lifecycle when it completes.

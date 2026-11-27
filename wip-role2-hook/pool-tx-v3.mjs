@@ -4,14 +4,21 @@
 //   inputs  [fuel0-tagged, fuel1-tagged, state-NFT (role 2), walkA-data, walkB-data]
 //   source  outputs 0/1 = the tagged fuel pair (UNCHANGED — pool-tx.mjs fuelSourceOutputs),
 //           output 2 = the state NFT, commitment = noteRoot ‖ nullSetRoot (the second
-//           half is the SHA256-SMT root, NOT the old fold), outputs 3/4 = the RAW
-//           walkA/walkB lockings at dust value (the permissionless nullifier-data inputs;
-//           the walks are self-validating against the state at spend time).
+//           half is the SHA256-SMT root, NOT the old fold), outputs 3/4 = the walk
+//           scripts in P2SH32 form at dust value.
 //   out1's  commitment = newRoot ‖ finalNullRoot — role 2 pins the first half, walkB
 //           pins the second. The old fold check 7 is GONE; the SMT replaces it.
 //
-// The walk unlockings are FIXED SIZE (8,164 / 8,131 B — the sibling blob is
-// length-pinned at 254×32, there is no filler field), so the fill sizing covers
+// v3.1 (measured 2026-11-27): the walk UTXOs are P2SH32-WRAPPED. The committed raw
+// form (locking = the script) is a NON-STANDARD scriptPubKey — relay refuses the
+// creating tx ("scriptpubkey (code 64)", minimal-tx A/B confirmed on chipnet).
+// The wrap keeps the walk SCRIPTS byte-identical (they ride the unlocking as the
+// redeem push, exactly like the program's own inputs): the unlockings grow to
+// ~8,445 / ~8,425 B — still ~1.5 KB under the 10,000-B cap, which only the spike's
+// 11.6-KB unrolled form ever threatened. The hook 4w/graph pins hash the P2SH32
+// lockings (SHA256(UTXOBYTECODE(3)) — the source locking, whatever its form).
+//
+// The walk unlockings are FIXED SIZE (no filler field), so the fill sizing covers
 // inputs 0–2 exactly as pool-tx.mjs does; the walks ride along at their
 // witness-supplied sizes with self-funded budgets (41 + len) × 800.
 //
@@ -24,6 +31,14 @@ import { unlockingsFor, MARGIN, UNLOCK_CAP } from './transaction.mjs';
 import { carrierOf } from './pool-hook.mjs';
 import { fuelSourceOutputs, poolOutputs } from './pool-tx.mjs';
 import { walkAWitness, walkBWitness } from './walk-scripts.mjs';
+import { pushData } from './asm.mjs';
+
+/* the walk pins/lockings for the v3.1 wrap, derived from the raw scripts */
+export const walkV3 = (walkA, walkB) => {
+    const lockings = [Uint8Array.from(p2sh32(Uint8Array.from(walkA))), Uint8Array.from(p2sh32(Uint8Array.from(walkB)))];
+    const sha = (b) => createHash('sha256').update(Buffer.from(b)).digest();
+    return { lockings, hashes: [sha(lockings[0]), sha(lockings[1])] };
+};
 
 const sha = (b) => createHash('sha256').update(b).digest();
 const be32 = (v) => { const b = Buffer.alloc(32); let x = BigInt(v); for (let i = 31; i >= 0 && x > 0n; i--) { b[i] = Number(x & 0xffn); x >>= 8n; } return b; };
@@ -42,14 +57,17 @@ export const scenarioV3 = ({ sc, n0, nullSet, balance = 1000n, categoryDisplay }
     return { carr, newBal, tag, stateCommit, newCommit };
 };
 
-/* the walk unlockings for one record's nullSet data (sibsA/midRoot, sibsB) */
-export const walkWitnesses = (nullSet) => [
-    Uint8Array.from(walkAWitness(Buffer.from(nullSet.midRoot, 'hex'), nullSet.sibsA.map((h) => Buffer.from(h, 'hex')))),
-    Uint8Array.from(walkBWitness(nullSet.sibsB.map((h) => Buffer.from(h, 'hex')))),
+/* the walk unlockings for one record's nullSet data (sibsA/midRoot, sibsB) — the
+   redeem push (the walk script itself) rides the unlocking exactly like the
+   program inputs' R push: P2SH32 form, v3.1 */
+export const walkWitnesses = (nullSet, walkA, walkB) => [
+    Uint8Array.from([...walkAWitness(Buffer.from(nullSet.midRoot, 'hex'), nullSet.sibsA.map((h) => Buffer.from(h, 'hex'))), ...pushData(Uint8Array.from(walkA))]),
+    Uint8Array.from([...walkBWitness(nullSet.sibsB.map((h) => Buffer.from(h, 'hex'))), ...pushData(Uint8Array.from(walkB))]),
 ];
 
-/* the 5-input source outputs for the honest pool shape. walkLocks = [walkA, walkB]
-   (the RAW lockings); pass tampered values to express the 4w/GRAPH pin scenarios. */
+/* the 5-input source outputs for the honest pool shape. walkLocks = the walk
+   lockings in their ON-CHAIN form (P2SH32, v3.1); pass tampered values to express
+   the 4w/GRAPH pin scenarios. */
 export const v5SourceOutputs = (lock, walkLocks, scenario, { sc, balance = 1000n, categoryDisplay }) => [
     ...fuelSourceOutputs(lock, scenario, { sc, categoryDisplay }),
     { lockingBytecode: new Uint8Array(lock), valueSatoshis: 1000n, token: { category: new Uint8Array(categoryDisplay), amount: balance, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } },
@@ -87,11 +105,13 @@ const nextFills = (runs, fills, unlockings, margin) => runs.map((x, i) => {
 });
 
 /* pool-aware v3 replacement for transactionFor: sizes fills for inputs 0–2 against
-   the FIVE-input pool shape (the walks are fixed and ride along) */
-export function poolTransactionForV3(fx, prog, scenarioArgs, walkLocks, { margin = MARGIN, fills0 = [0, 0, 0], maxIter = 40, es } = {}) {
+   the FIVE-input pool shape (the walks are fixed and ride along). walkScripts =
+   [walkA, walkB] — the RAW scripts; the source lockings derive via the v3.1 wrap. */
+export function poolTransactionForV3(fx, prog, scenarioArgs, walkScripts, { margin = MARGIN, fills0 = [0, 0, 0], maxIter = 40, es } = {}) {
     const core = proveCore(fx, es !== undefined ? { es } : {});
     const scenario = scenarioV3(scenarioArgs);
-    const walkW = walkWitnesses(scenarioArgs.nullSet);
+    const walkW = walkWitnesses(scenarioArgs.nullSet, walkScripts[0], walkScripts[1]);
+    const walkLocks = walkV3(walkScripts[0], walkScripts[1]).lockings;
     let fills = fills0.slice();
     for (let it = 0; it < maxIter; it++) {
         const { unlockings, pushes, z, H } = unlockingsFor(core, prog, fills);

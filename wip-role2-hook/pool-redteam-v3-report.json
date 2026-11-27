@@ -1661,7 +1661,7 @@
     1,
     2
    ],
-   "reason": "3222; requested split index: 3887.",
+   "reason": "3216; requested split index: 3887.",
    "at": "input 0: unlocking/redeem"
   },
   {
@@ -1792,7 +1792,7 @@
    "rejectingInputs": [
     4
    ],
-   "reason": "Program failed an OP_VERIFY operation.",
+   "reason": "\"\".",
    "at": "input 4: walkB script"
   },
   {
@@ -1814,7 +1814,7 @@
    "rejectingInputs": [
     3
    ],
-   "reason": "OP_PUSHDATA_2 8128 0x0000000000000000000000000000000000000000000000000000000000000000f5a5fd42d16a203",
+   "reason": "OP_PUSHDATA_2 278 0xc2529dc0539d52ce214425a0e2ca5109d0261ec0a95d1cd6ffa3c389fb4ac0b5b50cb1a4afc5ac69",
    "at": "input 3: walkA script"
   },
   {
@@ -1825,7 +1825,7 @@
    "rejectingInputs": [
     4
    ],
-   "reason": "OP_PUSHDATA_2 8128 0x0000000000000000000000000000000000000000000000000000000000000000f5a5fd42d16a203",
+   "reason": "OP_PUSHDATA_2 291 0xc2529dc0549d52ce214425a0e2ca5109d0261ec0a95d1cd6ffa3c389fb4ac0b5b50cb1a4afc5ac69",
    "at": "input 4: walkB script"
   },
   {
@@ -1837,7 +1837,7 @@
     3,
     4
    ],
-   "reason": "9; requested depth: 9.",
+   "reason": "\"\".",
    "at": "input 3: walkA script"
   },
   {
@@ -1849,7 +1849,7 @@
     3,
     4
    ],
-   "reason": "Program failed an OP_VERIFY operation.",
+   "reason": "\"\".",
    "at": "input 3: walkA script"
   },
   {

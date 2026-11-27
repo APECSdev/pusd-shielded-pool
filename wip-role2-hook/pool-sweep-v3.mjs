@@ -11,7 +11,7 @@
 //     poolTransactionForV3 — inputs 0-2 sized, the walks fixed), targeting the
 //     standard-mode MARGIN (6%);
 //   - all FIVE inputs are evaluated in consensus AND standard mode: source outputs
-//     = tagged fuel + state NFT + the raw walk lockings, outputs = the honest
+//     = tagged fuel + state NFT + the walk scripts in P2SH32 form, outputs = the honest
 //     carrier / new state / payout — every input must be ACCEPTED;
 //   - every case is ALSO run with the verifier unlockings padded (zero filler) to
 //     exactly UNLOCK_CAP = 10,000 B (inputs 3/4 CANNOT be padded — their witness is
@@ -37,7 +37,7 @@ import {unlockingsFor, UNLOCK_CAP} from './transaction.mjs';
 import {VMS, p2sh32} from './vm.mjs';
 import {covenantHook, covenantParams, actionHashOf} from './pool-hook.mjs';
 import {poolOutputs} from './pool-tx.mjs';
-import {scenarioV3, poolTransactionForV3, walkWitnesses} from './pool-tx-v3.mjs';
+import {scenarioV3, poolTransactionForV3, walkWitnesses, walkV3} from './pool-tx-v3.mjs';
 import {buildWalkScripts} from './walk-scripts.mjs';
 
 const [shard, shards] = (process.env.SWEEP_SHARD ?? '0/1').split('/').map(Number);
@@ -52,19 +52,19 @@ assert.ok(outPath, 'usage: node pool-sweep-v3.mjs <out.json> [<minted-proofs.jso
 const CATEGORY_DISPLAY = Buffer.from('2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544', 'hex');
 const CATEGORY_ONCHAIN = Buffer.from(CATEGORY_DISPLAY).reverse().toString('hex');
 
-/* the v3 program: walk scripts + the graph pin + the v3 hook */
-const { walkA, walkB, walkAHash, walkBHash, sizes } = buildWalkScripts(CATEGORY_ONCHAIN);
+/* the v3.1 program: walk scripts (P2SH32-wrapped on chain — the raw form is
+   relay-nonstandard, measured 2026-11-27) + the graph pin + the v3 hook */
+const { walkA, walkB, sizes } = buildWalkScripts(CATEGORY_ONCHAIN);
+const { lockings: WALK_LOCKS, hashes: [walkAHash, walkBHash] } = walkV3(walkA, walkB);
 process.env.POOL_NULLDATA_HASHES = JSON.stringify([walkAHash.toString('hex'), walkBHash.toString('hex')]);
 setCovenant(covenantHook(covenantParams({ categoryOnChain: CATEGORY_ONCHAIN }), 3, { walkAHash, walkBHash }));
 const prog = buildProgram();
 const lock = p2sh32(prog.R); const LOCKS = [lock, lock, lock];
-const WALK_LOCKS = [walkA, walkB];
-/* drift guard: the committed v3 program (7,998 B, build.v3.json hooked-v3,
-   commit 1528993) — any silent change to the hook, the walk scripts or the graph
-   pin fails loudly here. */
-const CODE_PIN = 'd98c1d2ac828a909ba71bc94b719e2e21afcccc2d7565b8268ed8221d097b429';
-assert.equal(createHash('sha256').update(prog.code).digest('hex'), CODE_PIN, 'the v3 program code changed — re-derive code/R/locking, re-run the red team, and update this pin + the docs');
-console.log(`v3 program built · walkA ${sizes.walkA} B · walkB ${sizes.walkB} B · program ${prog.code.length} B · pin ok`);
+/* drift guard: the v3.1 program (the P2SH32-wrapped walk pins). Any silent change
+   to the hook, the walk scripts or the graph pin fails loudly here. */
+const CODE_PIN = '40a9599141686539edd5590ba03fe012701ea0cc2ec4aae6a9fb7749416db012';
+assert.equal(createHash('sha256').update(prog.code).digest('hex'), CODE_PIN, 'the v3.1 program code changed — re-derive code/R/locking, re-run the red team, and update this pin + the docs');
+console.log(`v3.1 program built · walkA ${sizes.walkA} B / walkB ${sizes.walkB} B scripts · P2SH32 walk lockings · program ${prog.code.length} B · pin ok`);
 
 const proofs = JSON.parse(readFileSync('/home/apecs/cov/our-v3-proofs.json', 'utf8'));
 const leToBig = (hex) => BigInt('0x' + Buffer.from(hex, 'hex').reverse().toString('hex') || '0');
@@ -89,8 +89,8 @@ function poolSpendAllV3(unlockings, walkW, mode, scenario, args) {
     ];
     const sourceOutputs = [...fuel,
         { lockingBytecode: new Uint8Array(lock), valueSatoshis: 1000n, token: { category: new Uint8Array(CATEGORY_DISPLAY), amount: args.balance, nft: { capability: 'mutable', commitment: new Uint8Array(scenario.stateCommit) } } },
-        { lockingBytecode: new Uint8Array(walkA), valueSatoshis: 300n },
-        { lockingBytecode: new Uint8Array(walkB), valueSatoshis: 300n }];
+        { lockingBytecode: new Uint8Array(WALK_LOCKS[0]), valueSatoshis: 300n },
+        { lockingBytecode: new Uint8Array(WALK_LOCKS[1]), valueSatoshis: 300n }];
     const outputs = poolOutputs(prog, scenario, args);
     const all = [...unlockings, ...walkW];
     return all.map((u, i) => {
@@ -120,7 +120,7 @@ const results = [];
 const meta = () => ({inputs: inPaths, shard: `${shard}/${shards}`, shape: 'v3 5-input (fuel0, fuel1, state, walkA, walkB)', balanceRule: 'per case: balance = 1000n + pv (an unshield must be funded; hook check 8 requires newBalance >= 0)', results});
 for (const [k, c] of cases.entries()) {
   if (k % shards !== shard) continue;
-  const T = poolTransactionForV3(c.fx, prog, c.args, WALK_LOCKS);
+  const T = poolTransactionForV3(c.fx, prog, c.args, [walkA, walkB]);
   const row = {label: c.label, pv: c.args.sc.pv.toString(), sign: c.args.sc.sign.toString(), publicInputs: c.fx.publicInputs, nq: T.core.nq, fills: T.fills, unlocking: [...T.unlockings.map((u) => u.length), ...T.walkW.map((w) => w.length)]};
   for (const mode of ['consensus', 'standard']) {
     const xs = poolSpendAllV3(T.unlockings, T.walkW, mode, T.scenario, c.args);

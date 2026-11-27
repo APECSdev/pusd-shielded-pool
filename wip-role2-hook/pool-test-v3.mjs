@@ -32,19 +32,23 @@ import { buildProgram, setCovenant } from './script.mjs';
 import { transactionFor } from './transaction.mjs';
 import { FIXTURES } from '../sound-si-gls/math.mjs';
 import { covenantHook, covenantParams, carrierOf, carrierOutput, actionHashOf } from './pool-hook.mjs';
-import { buildWalkScripts, walkAWitness, walkBWitness } from './walk-scripts.mjs';
+import { buildWalkScripts } from './walk-scripts.mjs';
+import { walkWitnesses, walkV3 } from './pool-tx-v3.mjs';
 
 const sha = (b) => createHash('sha256').update(b).digest();
 const CATEGORY_DISPLAY = Buffer.from('2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544', 'hex');
 const CATEGORY_ONCHAIN = Buffer.from(CATEGORY_DISPLAY).reverse();
 
-/* the v3 program: walk scripts + the graph pin + the v3 hook */
-const { walkA, walkB, walkAHash, walkBHash, sizes } = buildWalkScripts(CATEGORY_ONCHAIN.toString('hex'));
+/* the v3.1 program: walk scripts (P2SH32-wrapped on chain — the raw form is
+   relay-nonstandard, measured on chipnet 2026-11-27: "scriptpubkey (code 64)")
+   + the graph pin + the v3 hook. The 4w/graph pins hash the ON-CHAIN lockings. */
+const { walkA, walkB, sizes } = buildWalkScripts(CATEGORY_ONCHAIN.toString('hex'));
+const { lockings: WALK_LOCKS, hashes: [walkAHash, walkBHash] } = walkV3(walkA, walkB);
 process.env.POOL_NULLDATA_HASHES = JSON.stringify([walkAHash.toString('hex'), walkBHash.toString('hex')]);
 setCovenant(covenantHook(covenantParams({ categoryOnChain: CATEGORY_ONCHAIN.toString('hex') }), 3, { walkAHash, walkBHash }));
 const prog = buildProgram();
 const lock = p2sh32(prog.R);
-console.log(`v3 program built · walkA ${sizes.walkA} B · walkB ${sizes.walkB} B · program ${prog.code?.length ?? '?'} B`);
+console.log(`v3.1 program built · walkA ${sizes.walkA} B / walkB ${sizes.walkB} B scripts (P2SH32 on chain) · program ${prog.code?.length ?? '?'} B`);
 
 const proofs = JSON.parse(readFileSync('/home/apecs/cov/our-v3-proofs.json', 'utf8'));
 const leToBig = (hex) => BigInt('0x' + Buffer.from(hex, 'hex').reverse().toString('hex') || '0');
@@ -106,8 +110,8 @@ const run = (label, expect, { proofIdx, mutate = {}, txMutate = {}, evalInput = 
 
     const T = transactionFor(FIXTURES.fixtures[proofIdx], prog);
     const inputs = T.unlockings.map((u, n) => ({ outpointIndex: n, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(u) }));
-    inputs.push({ outpointIndex: 0, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(walkAWitness(midRoot, fx.sibsA.map((h) => Buffer.from(h, 'hex')))) });
-    if (!dropWalkB) inputs.push({ outpointIndex: 1, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(walkBWitness(fx.sibsB.map((h) => Buffer.from(h, 'hex')))) });
+    inputs.push({ outpointIndex: 0, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(walkWitnesses(fx, walkA, walkB)[0]) });
+    if (!dropWalkB) inputs.push({ outpointIndex: 1, outpointTransactionHash: new Uint8Array(32), sequenceNumber: 0xfffffffe, unlockingBytecode: new Uint8Array(walkWitnesses(fx, walkA, walkB)[1]) });
     const fuelOut = (n) => (tx['fuelNaked' + n]
         ? { lockingBytecode: lock, valueSatoshis: 1000n }
         : { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: tx['fuelCat' + n], amount: n === 0 && sc.sign === 0n ? sc.pv : 0n, nft: { capability: 'mutable', commitment: tx['fuelTag' + n] } } });
@@ -115,9 +119,9 @@ const run = (label, expect, { proofIdx, mutate = {}, txMutate = {}, evalInput = 
         fuelOut(0),
         fuelOut(1),
         { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: tx.sourceCategory, amount: balance, nft: { capability: 'mutable', commitment: tx.stateCommit } } },
-        { lockingBytecode: new Uint8Array(lock3 ?? walkA), valueSatoshis: 300n },
+        { lockingBytecode: new Uint8Array(lock3 ?? WALK_LOCKS[0]), valueSatoshis: 300n },
     ];
-    if (!dropWalkB) sourceOutputs.push({ lockingBytecode: new Uint8Array(lock4 ?? walkB), valueSatoshis: 300n });
+    if (!dropWalkB) sourceOutputs.push({ lockingBytecode: new Uint8Array(lock4 ?? WALK_LOCKS[1]), valueSatoshis: 300n });
     const outputs = [
         { lockingBytecode: new Uint8Array(carrierOutput(carrierOf(sc, 3))), valueSatoshis: 0n },
         { lockingBytecode: lock, valueSatoshis: 1000n, token: { category: tx.out1Category, amount: tx.out1Amount, nft: { capability: 'mutable', commitment: tx.newCommit } } },
@@ -189,7 +193,7 @@ R.push(run('REPLAY: nf0 already in the null set (walkA must reject)', false, { p
 R.push(run('state nullSetRoot half tampered (walkA must reject)', false, { proofIdx: 0, evalInput: 3, tamperStateNull: true }));
 R.push(run('new commitment finalNullRoot half tampered (walkB must reject; role 2 accepts by design)', false, { proofIdx: 0, evalInput: 4, tamperNewNull: true }));
 R.push(run('shape: input 4 dropped (4-input tx — GRAPH TXINPUTCOUNT pin)', false, { proofIdx: 0, dropWalkB: true }));
-R.push(run('shape: input 3 locked to walkB (4w hash pin)', false, { proofIdx: 0, lock3: walkB }));
+R.push(run('shape: input 3 locked to walkB (4w hash pin)', false, { proofIdx: 0, lock3: WALK_LOCKS[1] }));
 R.push(run('shape: input 4 locked to junk (4w hash pin)', false, { proofIdx: 0, lock4: Uint8Array.from([0x51]) }));
 
 console.log(`\n${R.filter(Boolean).length}/${R.length} match expectation`);

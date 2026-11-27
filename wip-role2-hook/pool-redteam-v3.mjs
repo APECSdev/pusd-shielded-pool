@@ -31,26 +31,27 @@ import {unlockingsFor, MARGIN} from './transaction.mjs';
 import {encodeUnlocking, VMS, p2sh32} from './vm.mjs';
 import {covenantHook, covenantParams} from './pool-hook.mjs';
 import {poolOutputs, fuelSourceOutputs} from './pool-tx.mjs';
-import {scenarioV3, poolTransactionForV3, walkWitnesses} from './pool-tx-v3.mjs';
+import {scenarioV3, poolTransactionForV3, walkWitnesses, walkV3} from './pool-tx-v3.mjs';
 import {buildWalkScripts} from './walk-scripts.mjs';
 
 const reportPath = process.argv[2] ?? 'pool-redteam-v3-report.json';
 const CATEGORY_DISPLAY = Buffer.from('2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544', 'hex');
 const CATEGORY_ONCHAIN = Buffer.from(CATEGORY_DISPLAY).reverse().toString('hex');
 
-/* the v3 program: walk scripts + the graph pin + the v3 hook */
-const { walkA, walkB, walkAHash, walkBHash, sizes } = buildWalkScripts(CATEGORY_ONCHAIN);
+/* the v3.1 program: walk scripts (P2SH32-wrapped on chain — the raw form is
+   relay-nonstandard, measured 2026-11-27) + the graph pin + the v3 hook */
+const { walkA, walkB, sizes } = buildWalkScripts(CATEGORY_ONCHAIN);
+const { lockings: WALK_LOCKS, hashes: [walkAHash, walkBHash] } = walkV3(walkA, walkB);
 process.env.POOL_NULLDATA_HASHES = JSON.stringify([walkAHash.toString('hex'), walkBHash.toString('hex')]);
 setCovenant(covenantHook(covenantParams({ categoryOnChain: CATEGORY_ONCHAIN }), 3, { walkAHash, walkBHash }));
 const prog = buildProgram();
 const lock = p2sh32(prog.R); const LOCKS = [lock, lock, lock];
-const WALK_LOCKS = [walkA, walkB];
-/* drift guard: the committed v3 program (7,998 B, build.v3.json hooked-v3,
-   commit 1528993) — any silent change to the hook, the walk scripts or the graph
-   pin fails loudly here. */
-const CODE_PIN = 'd98c1d2ac828a909ba71bc94b719e2e21afcccc2d7565b8268ed8221d097b429';
-assert.equal(createHash('sha256').update(prog.code).digest('hex'), CODE_PIN, 'the v3 program code changed — re-derive code/R/locking, re-run the gates, and update this pin + the docs');
-console.log(`v3 program built · walkA ${sizes.walkA} B · walkB ${sizes.walkB} B · program ${prog.code.length} B · pin ok`);
+/* drift guard: the v3.1 program (the P2SH32-wrapped walk pins — re-derived when the
+   wrap landed). Any silent change to the hook, the walk scripts or the graph pin
+   fails loudly here. */
+const CODE_PIN = '40a9599141686539edd5590ba03fe012701ea0cc2ec4aae6a9fb7749416db012';
+assert.equal(createHash('sha256').update(prog.code).digest('hex'), CODE_PIN, 'the v3.1 program code changed — re-derive code/R/locking, re-run the gates, and update this pin + the docs');
+console.log(`v3.1 program built · walkA ${sizes.walkA} B / walkB ${sizes.walkB} B scripts · P2SH32 walk lockings · program ${prog.code.length} B · pin ok`);
 
 const proofs = JSON.parse(readFileSync('/home/apecs/cov/our-v3-proofs.json', 'utf8'));
 const leToBig = (hex) => BigInt('0x' + Buffer.from(hex, 'hex').reverse().toString('hex') || '0');
@@ -60,8 +61,8 @@ const scenarioArgsOf = (i) => {
 };
 
 const fx0 = FIXTURES.fixtures[0], fx1 = FIXTURES.fixtures[1];
-const T0 = poolTransactionForV3(fx0, prog, scenarioArgsOf(0), WALK_LOCKS);
-const T1 = poolTransactionForV3(fx1, prog, scenarioArgsOf(1), WALK_LOCKS);
+const T0 = poolTransactionForV3(fx0, prog, scenarioArgsOf(0), [walkA, walkB]);
+const T1 = poolTransactionForV3(fx1, prog, scenarioArgsOf(1), [walkA, walkB]);
 const scenario0 = T0.scenario;
 const fills = T0.fills;
 /* the honest walk witnesses of the tx's OWN carrier/state (fixture 0's nullSet data
@@ -303,17 +304,18 @@ for (const [label, mix] of [['input 0 from proof 1', [1, 0, 0]], ['input 1 from 
   { const w = Buffer.from(wB); add('walkB witness truncated (blob length pin)', 'walk-witness', T0.unlockings, {walkW: [wA, w.subarray(0, w.length - 40)]}); }
   add('walk witnesses swapped between inputs 3 and 4', 'walk-witness', T0.unlockings, {walkW: [wB, wA]});
   add('walkA unlocking replaced by an OP_TRUE-sized junk push', 'walk-witness', T0.unlockings, {walkW: [Buffer.from([0x51]), wB]});
-  { const w1 = walkWitnesses(ns1); add('walk witnesses from ANOTHER action (fixture 1 null-set data)', 'walk-staple', T0.unlockings, {walkW: w1.map((x) => Buffer.from(x))}); }
-  /* locking tampering — the hook 4w hash pins + the graph pins must reject */
-  add('walk lockings swapped between inputs 3 and 4 (4w/graph pins)', 'walk-locking', T0.unlockings, {walkLocks: [walkB, walkA]});
-  add('input 3 locked to junk (4w/graph pins)', 'walk-locking', T0.unlockings, {walkLocks: [Uint8Array.from([0x51]), walkB]});
-  add('input 4 locked to junk (4w/graph pins)', 'walk-locking', T0.unlockings, {walkLocks: [walkA, Uint8Array.from([0x51])]});
+  { const w1 = walkWitnesses(ns1, walkA, walkB); add('walk witnesses from ANOTHER action (fixture 1 null-set data)', 'walk-staple', T0.unlockings, {walkW: w1.map((x) => Buffer.from(x))}); }
+  /* locking tampering — the hook 4w hash pins + the graph pins must reject
+     (the lockings are the P2SH32 forms, v3.1) */
+  add('walk lockings swapped between inputs 3 and 4 (4w/graph pins)', 'walk-locking', T0.unlockings, {walkLocks: [WALK_LOCKS[1], WALK_LOCKS[0]]});
+  add('input 3 locked to junk (4w/graph pins)', 'walk-locking', T0.unlockings, {walkLocks: [Uint8Array.from([0x51]), WALK_LOCKS[1]]});
+  add('input 4 locked to junk (4w/graph pins)', 'walk-locking', T0.unlockings, {walkLocks: [WALK_LOCKS[0], Uint8Array.from([0x51])]});
   add('both walk lockings junk (4w/graph pins)', 'walk-locking', T0.unlockings, {walkLocks: [Uint8Array.from([0x51]), Uint8Array.from([0x51])]});
   /* shape tampering — the GRAPH's TXINPUTCOUNT==5 pin (the walk source outputs
      follow the witness count so the harness rejects at the pins, not by throwing) */
-  add('walk input 4 dropped (4-input tx — graph pin)', 'walk-shape', T0.unlockings, {walkW: [wA], walkLocks: [walkA]});
-  add('walk input 3 dropped (4-input tx — graph pin)', 'walk-shape', T0.unlockings, {walkW: [wB], walkLocks: [walkB]});
-  add('walkB duplicated as a 6th input (6-input tx — graph pin)', 'walk-shape', T0.unlockings, {walkW: [wA, wB, wB], walkLocks: [walkA, walkB, walkB]});
+  add('walk input 4 dropped (4-input tx — graph pin)', 'walk-shape', T0.unlockings, {walkW: [wA], walkLocks: [WALK_LOCKS[0]]});
+  add('walk input 3 dropped (4-input tx — graph pin)', 'walk-shape', T0.unlockings, {walkW: [wB], walkLocks: [WALK_LOCKS[1]]});
+  add('walkB duplicated as a 6th input (6-input tx — graph pin)', 'walk-shape', T0.unlockings, {walkW: [wA, wB, wB], walkLocks: [WALK_LOCKS[0], WALK_LOCKS[1], WALK_LOCKS[1]]});
   /* the R2 mechanism, stopped at consensus level: nf0 already in the set — the state's
      stored nullSetRoot is planted at the post-nf0 root (midRoot), so walkA's 0-walk of
      nf0 against a non-empty slot must fail the anchor pin */
@@ -379,7 +381,7 @@ for (const x of runs) {
   const nV = x.unlockings.length;
   let at = null;
   if (first >= 0) {
-    if (first >= nV) at = `input ${first}: ${Buffer.from(x.walkLocks[first - nV]).equals(Buffer.from(walkA)) ? 'walkA' : Buffer.from(x.walkLocks[first - nV]).equals(Buffer.from(walkB)) ? 'walkB' : 'walk'} script`;
+    if (first >= nV) at = `input ${first}: ${Buffer.from(x.walkLocks[first - nV]).equals(Buffer.from(WALK_LOCKS[0])) ? 'walkA' : Buffer.from(x.walkLocks[first - nV]).equals(Buffer.from(WALK_LOCKS[1])) ? 'walkB' : 'walk'} script`;
     else if (Buffer.from(x.locks[first]).equals(Buffer.from(lock))) at = `input ${first}: ${guardOf(x.locks, x.unlockings, x.walkW, x.walkLocks, first, scenario)}`;
     else at = `input ${first} (foreign)`;
   }
@@ -391,7 +393,7 @@ for (const x of runs) {
 const controls = [['fixture 0 (v3 pool-sized witness, 5 inputs)', LOCKS, T0.unlockings, T0.walkW, WALK_LOCKS]];
 { const es = W.es.map((e) => e.slice()); let done = false; for (const v of LATTICE) for (const sg of [1n, -1n]) { const e2 = W.es[0].map((x, i) => x + sg * v[i]); if (!done && e2.every((x) => x >= -GLS_OFFSET && x < GLS_OFFSET)) { es[0] = e2; done = true; } }
   assert.ok(done);
-  const t = poolTransactionForV3(fx0, prog, scenarioArgsOf(0), WALK_LOCKS, {es}); controls.push(['fixture 0, lattice-shifted GLS decomposition', LOCKS, t.unlockings, t.walkW, WALK_LOCKS]); }
+  const t = poolTransactionForV3(fx0, prog, scenarioArgsOf(0), [walkA, walkB], {es}); controls.push(['fixture 0, lattice-shifted GLS decomposition', LOCKS, t.unlockings, t.walkW, WALK_LOCKS]); }
 for (const [label, locks, u, walkW, walkLocks] of controls) for (const m of ['consensus', 'standard']) assert.ok(poolSpendAllV3(locks, u, walkW, walkLocks, m).every((y) => y.accepted), 'control rejected: ' + label + ' ' + m);
 const kinds = [...new Set(runs.map((x) => x.kind))];
 console.log(`runs ${runs.length}, accepted ${acceptedAny}; kinds: ${kinds.join(', ')}; positive controls accepted: ${controls.map((c) => c[0]).join('; ')}`);

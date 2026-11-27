@@ -85,7 +85,24 @@ export function covenantParams({ categoryOnChain }) {
     };
 }
 
-export function covenantHook(P, outs = 2) {
+/* The v3 nullifier-set variant: pass v3 = { walkAHash, walkBHash } (the SHA256
+   digests of the deployed walkA/walkB lockings — wip-role2-hook/walk-scripts.mjs).
+   Changes vs the deployed hook (all v3-only; the 2-out/3-out paths stay
+   byte-identical):
+     - check 4w (NEW): inputs 3/4 are the nullifier-data inputs — their lockings
+       are pinned by SHA256 hash (UTXOBYTECODE(3) == walkA, (4) == walkB as
+       digests; the raw scripts are ~280 B, hashing keeps the hook small);
+     - check 7 (the nullifier FOLD) is REMOVED — it was the broken mechanism
+       (R2-NULLIFIER-DOUBLING): a fold cannot detect reuse. The SHA256 SMT
+       verified by the walk scripts replaces it (walkA proves nf0's slot empty
+       against the state's nullSetRoot and emits midRoot; walkB proves nf1's
+       slot empty against midRoot and pins finalNullRoot into out1's commitment
+       second half);
+     - check 10: role 2 verifies the new state commitment's LENGTH (64) and its
+       FIRST half (== the carrier's newRoot — the note root); the SECOND half
+       (finalNullRoot) is pinned by walkB. Two scripts jointly pin the state.
+   The carrier, the actionHash preimage (9 fields), nPublic 2: ALL UNCHANGED. */
+export function covenantHook(P, outs = 2, v3 = null) {
     return (a) => {
         /*  3-out variant: the carrier grows to 201 bytes (cm2) and the actionHash
             preimage grows to 288 bytes. The 2-out default is byte-identical to the
@@ -172,6 +189,17 @@ export function covenantHook(P, outs = 2) {
         }
         a.mark('p4g');
 
+        /* ── 4w. (v3) the nullifier-data inputs' lockings are the walk scripts ── */
+        if (v3) {
+            /*  SHA256(UTXOBYTECODE(j)) == walkXHash for j = 3, 4  */
+            for (const [j, h] of [[3, v3.walkAHash], [4, v3.walkBHash]]) {
+                a.push(j).op(IX.UTXOBYTECODE, 1, 'wl' + j);
+                a.pick('wl' + j).op(OP.SHA256, 1, 'wh' + j);
+                a.pushBytes(h).op(OP.EQUALVERIFY, 2);
+            }
+            a.mark('p4w');
+        }
+
         /* ── 5. n0 == the stored merkle root (active input's commitment[0..32)) ── */
         if (process.env.POOL_DEBUG) console.error('[hook] model stack top-> :', a.st.slice(-10).reverse().join(' | '));
         a.push(STATE_INDEX).op(IX.UTXOTOKCOMMIT, 1, 'com');
@@ -223,10 +251,21 @@ export function covenantHook(P, outs = 2) {
         a.mark('p6');
 
         /* ── 7. newNull == SHA256(oldNull ‖ nf0 ‖ nf1) ──────────────────────── */
-        a.pick('oldNull').pick('nf0').op(OP.CAT, 2, 'n1a');
-        a.pick('n1a').pick('nf1').op(OP.CAT, 2, 'n1b');
-        a.pick('n1b').op(OP.SHA256, 1, 'newNull');
-        a.mark('p7');
+        /*  v3: REMOVED — the fold cannot stop a double-spend (R2-NULLIFIER-DOUBLING).
+            The hook-level SMT (the walk scripts at inputs 3/4, pinned at 4w) replaces
+            it: walkA emits midRoot from the state's nullSetRoot, walkB pins
+            finalNullRoot into out1's commitment. In the non-v3 paths the fold stays
+            exactly as deployed (regression: 2-out builds d71851a1…, 3-out 628207b1…). */
+        if (!v3) {
+            a.pick('oldNull').pick('nf0').op(OP.CAT, 2, 'n1a');
+            a.pick('n1a').pick('nf1').op(OP.CAT, 2, 'n1b');
+            a.pick('n1b').op(OP.SHA256, 1, 'newNull');
+            a.mark('p7');
+        } else {
+            /* the state commitment's second half is the WALK's domain — drop the
+               split tail so the exit-depth bookkeeping stays exact */
+            a.drop('oldNull');
+        }
 
         /* ── 8. newBalance == balance + pv - 2·sign·pv  (>= 0) ──────────────── */
         a.push(STATE_INDEX).op(IX.UTXOTOKAMT, 1, 'bal');
@@ -251,9 +290,19 @@ export function covenantHook(P, outs = 2) {
         a.push(STATE_INDEX).op(IX.UTXOBYTECODE, 1, 'own');
         a.pick('o1b').pick('own').op(OP.EQUALVERIFY, 2);
         a.push(1).op(IX.OUTTOKCAT, 1, 'o1cat').pushBytes(P.catMutable).op(OP.EQUALVERIFY, 2);
-        a.pick('newRoot').pick('newNull').op(OP.CAT, 2, 'newCom');
         a.push(1).op(IX.OUTTOKCOMMIT, 1, 'o1com');
-        a.pick('o1com').pick('newCom').op(OP.EQUALVERIFY, 2);
+        if (!v3) {
+            a.pick('newRoot').pick('newNull').op(OP.CAT, 2, 'newCom');
+            a.pick('o1com').pick('newCom').op(OP.EQUALVERIFY, 2);
+        } else {
+            /*  v3: the commitment is noteRoot ‖ finalNullRoot. Role 2 pins the LENGTH
+                and the FIRST half (== the carrier's newRoot); walkB pins the second
+                half. OP_SIZE is non-popping: the operand returns under the size. */
+            a.op(OP.SIZE, 1, 'o1com', 'csz').push(64).op(OP.NUMEQUALVERIFY, 2);
+            a.push(32).op(OP.SPLIT, 2, 'onr', 'nullTail');
+            a.pick('onr').pick('newRoot').op(OP.EQUALVERIFY, 2);
+            a.drop('nullTail');
+        }
         a.push(1).op(IX.OUTTOKAMT, 1, 'o1amt');
         a.pick('o1amt').pick('newBal').op(OP.NUMEQUALVERIFY, 2);
         a.mark('p9');

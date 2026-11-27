@@ -1,0 +1,38 @@
+v3-graph-pin.patch — the bench generator-source edit for the v3 nullifier-data inputs.
+Applied to chunked/bn254/bn-native-sound/script.mjs (the assembled-shared-program
+generator source; the pre-v3 copy is kept as script.mjs.pre-v3 on the VM). Stock
+builds (POOL_NULLDATA_HASHES unset) are byte-identical: the change is inert without
+the env. Reproduce: patch -p1 < v3-graph-pin.patch from the bench dir (paths in
+this file are relative to chunked/bn254/bn-native-sound/).
+
+This is the layer-3 edit class of the v4 generalize precedent (witness-carried
+shared-program fragments are invisible to byte comparison — the generator source
+is the review artifact, docs/POOL-HANDOFF-2026-11-23-NITO-COVENANT0.md §the
+hidden dispatch): the graph's shape pin moves from TXINPUTCOUNT==NROLES to
+NROLES+2 exactly when the v3 build composes the walk inputs, and the two
+nullifier-data lockings are pinned by SHA256 hash inside the GRAPH local (the
+role-2 hook pins them again at check 4w — belt and braces, matching how the
+covenant-sibling fix doubled its pins).
+
+--- a/script.mjs
++++ b/script.mjs
+@@ -75,10 +75,18 @@
+   a.defLocal('FILL', 1, 1, (s) => { s.op(OP.SIZE, 1, 'in0', 'fs').pick('fs', 'c').push(F_MAX + 1).op(OP.LESSTHAN, 2, 'ok').op(OP.VERIFY, 1)
+     .push(0, 'z0').pick('fs', 'c').op(OP.NUM2BIN, 2, 'zz').roll('in0').op(OP.EQUALVERIFY, 2).invoke('PLEN', ['len']); });
+   // GRAPH: exactly NROLES inputs, every spent output has this input's locking bytecode
++  // v3 (POOL_NULLDATA_HASHES = JSON [walkAHash, walkBHash] hex): NROLES+2 inputs —
++  //   the two nullifier-data inputs (indices NROLES, NROLES+1) carry the walkA/walkB
++  //   RAW lockings, pinned here by SHA256 hash. Stock builds (env unset) are unchanged.
+   a.defLocal('GRAPH', 0, 0, (s) => {
+-    s.emit(IX.TXINPUTCOUNT); s.st.push('n'); s.push(NROLES).op(OP.NUMEQUALVERIFY, 2);
++    const ND = process.env.POOL_NULLDATA_HASHES ? JSON.parse(process.env.POOL_NULLDATA_HASHES) : null;
++    s.emit(IX.TXINPUTCOUNT); s.st.push('n'); s.push(ND ? NROLES + 2 : NROLES).op(OP.NUMEQUALVERIFY, 2);
+     s.emit(IX.INPUTINDEX); s.st.push('ix'); s.op(IX.UTXOBYTECODE, 1, 'mine');
+     for (let j = 0; j < NROLES; j++) { s.push(j).op(IX.UTXOBYTECODE, 1, 'u'); (j < NROLES - 1 ? s.pick('mine') : s.roll('mine')); s.op(OP.EQUALVERIFY, 2); }
++    if (ND) for (let i = 0; i < ND.length; i++) {
++      s.push(NROLES + i).op(IX.UTXOBYTECODE, 1, 'u'); s.op(OP.SHA256, 1, 'uh');
++      s.pushBytes(Buffer.from(ND[i], 'hex')).op(OP.EQUALVERIFY, 2);
++    }
+   });
+   // TRANS: [DG, ZT] -> [rho, z]: h0 = SHA256(TAG || DG), rho_raw = SHA256(h0 || "rho"), z_raw = SHA256(h0 || rho_raw || ZT),
+   // rho, z = BIN2NUM(raw || 0x00) mod p, z != 0

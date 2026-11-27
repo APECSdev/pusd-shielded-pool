@@ -1,0 +1,9 @@
+{
+ "category": "0631da2b91b7b04d83eecc9b6d764998f2c5b22495fbd34f896141d30e7ee169",
+ "deploy": "d122ababa767e9b0d878c43f305a13ad891c2099f20890967ae1f49ba6366fcd",
+ "poolLocking": "aa20c654d3e8e7ac8b4229dec4d0948aa8bafe1baad73edda3dd2aa21ab01bcd9d2587",
+ "rootLE": "72936d2a6142d272cd22c7a058671d26c5f57e2bcfe7b08206ee2c47d28b232a",
+ "units": "1",
+ "pusdChangeVout": 7,
+ "pusdChangeValue": "82300"
+}

@@ -1,0 +1,109 @@
+// pool5.cash — the pool3b covenant with the vestigial v1 balance checks removed
+// (pool "dd1e3506" fix, 2026-11-27; compiled with the mr-zwets fork, optimizeFor=opcost).
+//
+// Two-category shielded pool covenant (Gate-5 form): ONE constructor argument
+// (the pool's own state-NFT category). The shielded ASSET category is a RUNTIME
+// argument (publicCategory), bound to the proof through the actionHash — so the
+// same covenant + circuit + verifying key work for any CashToken category.
+//
+// WHY THE REMOVAL: pool3b inherited the v1 state-path balance arithmetic
+// (newBalance = currentBalance + pv − 2·isUnshield·pv on the state NFT's
+// tokenAmount). In the v1 layout the state UTXO carried the pool's own-category
+// FT balance, so tokenAmount WAS the balance. In the pool3b layout the state
+// NFT carries tokenAmount 0 STRUCTURALLY (no pool-category FT exists; the
+// minting NFT is consumed at deploy) and the real balance lives in the holdings
+// leg (input 6 / output 6, enforced below) — so those four lines made every
+// pv≠0 op impossible (SHIELD: 0 ≠ pv; UNSHIELD: 0 − pv < 0). Conservation is
+// enforced by the holdings leg + the proof's in-circuit conservation + the
+// actionHash binding; the state path keeps the root/nullifier/commitment/
+// actionHash checks in full.
+//
+// Layout (this build):
+//   inputs : 0 = pool state (NFT), 1..5 = Groth16 verifier steps (genesis at 4),
+//            6 = asset holdings (bare FT, no NFT)
+//   outputs: 0 = new pool state, 1..5 = step refunds, 6 = new asset holdings,
+//            7 = public payout (unshield only)
+//
+// The proof's public inputs are read from the verifier genesis witness:
+//   n0 (merkleRoot)  at unlocking byte offset 1825 (1824 = push opcode)
+//   n1 (actionHash)  at unlocking byte offset 1792 (1791 = push opcode)
+pragma cashscript ^0.14.0;
+
+contract AssetPool(
+    bytes32 poolCategory     // state-NFT category (on-chain byte order)
+) {
+    function spend(
+        bytes32 publicCategory,  // shielded asset category (on-chain byte order)
+        bytes32 nf0,
+        bytes32 nf1,
+        bytes32 cm0,
+        bytes32 cm1,
+        bytes32 newMerkleRoot,
+        int publicValueAbs,
+        int isUnshield
+    ) {
+        require(tx.version == 2);
+        int i = this.activeInputIndex;
+
+        if (tx.inputs[i].tokenCategory == poolCategory + 0x01) {
+            // ── state path ──────────────────────────────────────────────────
+            bytes storedRoot = tx.inputs[i].nftCommitment.split(32)[0];
+            bytes provenRoot = tx.inputs[3].unlockingBytecode.split(1825)[1].split(32)[0];
+            require(provenRoot == storedRoot);
+
+            bytes oldNullifierHash = tx.inputs[i].nftCommitment.split(32)[1];
+            bytes32 newNullifierHash = sha256(oldNullifierHash + nf0 + nf1);
+            bytes newCommitment = newMerkleRoot + newNullifierHash;
+
+            require(tx.outputs[0].lockingBytecode == tx.inputs[i].lockingBytecode);
+            require(tx.outputs[0].tokenCategory == poolCategory + 0x01);
+            require(tx.outputs[0].nftCommitment == newCommitment);
+
+            bytes32 actionHashBE = sha256(
+                nf0.reverse()
+                + nf1.reverse()
+                + cm0.reverse()
+                + cm1.reverse()
+                + toPaddedBytes(publicValueAbs, 32).reverse()
+                + toPaddedBytes(isUnshield, 32).reverse()
+                + publicCategory.reverse()
+                + newMerkleRoot.reverse()
+            );
+            bytes actionHashLE = (
+                (actionHashBE.split(1)[0] & 0x1f) + actionHashBE.split(1)[1]
+            ).reverse();
+            bytes provenActionHash = tx.inputs[3].unlockingBytecode.split(1792)[1].split(32)[0];
+            require(provenActionHash == actionHashLE);
+        } else {
+            // ── holdings path ───────────────────────────────────────────────
+            require(tx.inputs[i].tokenCategory == publicCategory);
+            int held = tx.inputs[i].tokenAmount;
+            int newHoldings = held + publicValueAbs - (2 * isUnshield * publicValueAbs);
+            require(newHoldings >= 0);
+
+            require(tx.outputs[6].lockingBytecode == tx.inputs[i].lockingBytecode);
+            require(tx.outputs[6].tokenCategory == publicCategory);
+            require(tx.outputs[6].tokenAmount == newHoldings);
+
+            if (isUnshield == 1) {
+                require(tx.outputs[7].tokenCategory == publicCategory);
+                require(tx.outputs[7].tokenAmount == publicValueAbs);
+            }
+        }
+    }
+
+    function init(bytes32 seededRoot) {
+        require(tx.version == 2);
+        int i = this.activeInputIndex;
+        require(tx.inputs[i].tokenCategory == poolCategory + 0x01);
+
+        bytes32 EMPTY_ROOT_LE = 0x3e1f1922dfb671d3f912f7ea461e0a88ee848fdde12b6c18ab1ad2c56ae73421;
+        bytes32 NULL_HASH = 0x0000000000000000000000000000000000000000000000000000000000000000;
+        require(tx.inputs[i].nftCommitment == EMPTY_ROOT_LE + NULL_HASH);
+
+        require(tx.outputs[0].lockingBytecode == tx.inputs[i].lockingBytecode);
+        require(tx.outputs[0].tokenCategory == poolCategory + 0x01);
+        require(tx.outputs[0].tokenAmount == tx.inputs[i].tokenAmount);
+        require(tx.outputs[0].nftCommitment == seededRoot + NULL_HASH);
+    }
+}

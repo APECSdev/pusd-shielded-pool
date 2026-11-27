@@ -1,0 +1,33 @@
+{
+ "seed": {
+  "rootLE": "72936d2a6142d272cd22c7a058671d26c5f57e2bcfe7b08206ee2c47d28b232a",
+  "leaves": [
+   "07251fd7de02915e3240bab658c6c7486b04ccfb841aef69ccfcbf6a5356db19",
+   "00bffb8b3fec07a907201d9f883cf4847d997fab9645761cd7c9ff2491708f29"
+  ]
+ },
+ "shield": {
+  "merkleRoot": "72936d2a6142d272cd22c7a058671d26c5f57e2bcfe7b08206ee2c47d28b232a",
+  "nf0": "5fce2d08dc0ec12a6e368ae2d2895e1b953d3c9b84e2fee22b975070a4c7d70c",
+  "nf1": "2e811c0eb7e5da0887f38546ef1e29f99b83b2c620be965967a1c9b0975e0409",
+  "cm0": "fa1c7d3fd2ecc4a6ecdfbc977da40b95c5effe9577ea0ad88f57134dedce742f",
+  "cm1": "87620cc3bf657cbb41c5529da472d7f38d2d3947f318673fb17c682f1da1342a",
+  "newMerkleRoot": "f34be68900bb793b40f59d948106fd7067785bba83c9c7bd58d2bd5e788e591f",
+  "actionHash": "5d0de4bece1b9b6f7266c9e9a6d5d7fcea35e2143c938834682b9c75813db917",
+  "publicValueAbs": "4",
+  "publicValueSign": "0",
+  "isUnshield": "0"
+ },
+ "unshield": {
+  "merkleRoot": "f34be68900bb793b40f59d948106fd7067785bba83c9c7bd58d2bd5e788e591f",
+  "nf0": "67fc5211233f327413d204b48325777f886b49a4b8d9464a5192d2cc3dab6f0d",
+  "nf1": "fe9889c549475231d6008674179fe9682f11558434d812cc80bd011a06789d29",
+  "cm0": "8b540f09260628bfa88d8bf82a78903cc2c39ce26d069258630b45201b666929",
+  "cm1": "7edd66ef464fae577747aff46a0494b0374cd6325ef54bf6f83fbabd0f786b15",
+  "newMerkleRoot": "b008fd311072860610320a04d12f6aa48c6382bebf4311612d4707c2ec5e2320",
+  "actionHash": "6fc4643108cd158a178f6af4d315417673a0d448f09de09d7bbb5fde9e11811b",
+  "publicValueAbs": "2",
+  "publicValueSign": "1",
+  "isUnshield": "1"
+ }
+}

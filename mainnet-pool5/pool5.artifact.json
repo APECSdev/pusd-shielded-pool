@@ -1,0 +1,68 @@
+{
+  "contractName": "AssetPool",
+  "constructorInputs": [
+    { "name": "poolCategory", "type": "bytes32" }
+  ],
+  "abi": [
+    {
+      "name": "spend",
+      "inputs": [
+        { "name": "publicCategory", "type": "bytes32" },
+        { "name": "nf0", "type": "bytes32" },
+        { "name": "nf1", "type": "bytes32" },
+        { "name": "cm0", "type": "bytes32" },
+        { "name": "cm1", "type": "bytes32" },
+        { "name": "newMerkleRoot", "type": "bytes32" },
+        { "name": "publicValueAbs", "type": "int" },
+        { "name": "isUnshield", "type": "int" }
+      ]
+    },
+    {
+      "name": "init",
+      "inputs": [
+        { "name": "seededRoot", "type": "bytes32" }
+      ]
+    }
+  ],
+  "bytecode": "OP_OVER OP_0 OP_NUMEQUAL OP_IF OP_ROT OP_SIZE 20 OP_EQUALVERIFY OP_3 OP_ROLL OP_SIZE 20 OP_EQUALVERIFY OP_4 OP_ROLL OP_SIZE 20 OP_EQUALVERIFY OP_5 OP_ROLL OP_SIZE 20 OP_EQUALVERIFY OP_6 OP_ROLL OP_SIZE 20 OP_EQUALVERIFY OP_7 OP_ROLL OP_SIZE 20 OP_EQUALVERIFY OP_TXVERSION OP_2 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_DUP OP_UTXOTOKENCATEGORY OP_8 OP_PICK OP_1 OP_CAT OP_EQUAL OP_IF OP_DUP OP_UTXOTOKENCOMMITMENT 20 OP_SPLIT OP_DROP OP_3 OP_INPUTBYTECODE 2107 OP_SPLIT OP_NIP 20 OP_SPLIT OP_DROP OP_2DUP OP_EQUALVERIFY OP_2 OP_PICK OP_UTXOTOKENCOMMITMENT 20 OP_SPLIT OP_NIP OP_DUP OP_9 OP_PICK OP_CAT OP_8 OP_PICK OP_CAT OP_SHA256 OP_5 OP_PICK OP_OVER OP_CAT OP_0 OP_OUTPUTBYTECODE OP_6 OP_PICK OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCATEGORY OP_13 OP_PICK OP_1 OP_CAT OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_10 OP_PICK OP_REVERSEBYTES OP_10 OP_PICK OP_REVERSEBYTES OP_CAT OP_9 OP_PICK OP_REVERSEBYTES OP_CAT OP_8 OP_PICK OP_REVERSEBYTES OP_CAT OP_15 OP_PICK 20 OP_NUM2BIN OP_REVERSEBYTES OP_CAT OP_16 OP_PICK 20 OP_NUM2BIN OP_REVERSEBYTES OP_CAT OP_12 OP_PICK OP_REVERSEBYTES OP_CAT OP_7 OP_PICK OP_REVERSEBYTES OP_CAT OP_SHA256 OP_DUP OP_1 OP_SPLIT OP_DROP 1f OP_AND OP_OVER OP_1 OP_SPLIT OP_NIP OP_CAT OP_REVERSEBYTES OP_3 OP_INPUTBYTECODE 0007 OP_SPLIT OP_NIP 20 OP_SPLIT OP_DROP OP_2DUP OP_EQUALVERIFY OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_ELSE OP_DUP OP_UTXOTOKENCATEGORY OP_7 OP_PICK OP_EQUALVERIFY OP_DUP OP_UTXOTOKENAMOUNT OP_DUP OP_11 OP_PICK OP_ADD OP_2 OP_13 OP_PICK OP_MUL OP_12 OP_PICK OP_MUL OP_SUB OP_DUP OP_0 OP_GREATERTHANOREQUAL OP_VERIFY OP_6 OP_OUTPUTBYTECODE OP_3 OP_PICK OP_UTXOBYTECODE OP_EQUALVERIFY OP_6 OP_OUTPUTTOKENCATEGORY OP_9 OP_PICK OP_EQUALVERIFY OP_6 OP_OUTPUTTOKENAMOUNT OP_OVER OP_NUMEQUALVERIFY OP_12 OP_PICK OP_1 OP_NUMEQUAL OP_IF OP_7 OP_OUTPUTTOKENCATEGORY OP_9 OP_PICK OP_EQUALVERIFY OP_7 OP_OUTPUTTOKENAMOUNT OP_12 OP_PICK OP_NUMEQUALVERIFY OP_ENDIF OP_2DROP OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_1 OP_ELSE OP_SWAP OP_1 OP_NUMEQUALVERIFY OP_SWAP OP_SIZE 20 OP_EQUALVERIFY OP_TXVERSION OP_2 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_DUP OP_UTXOTOKENCATEGORY OP_3 OP_PICK OP_1 OP_CAT OP_EQUALVERIFY 3e1f1922dfb671d3f912f7ea461e0a88ee848fdde12b6c18ab1ad2c56ae73421 0000000000000000000000000000000000000000000000000000000000000000 OP_2 OP_PICK OP_UTXOTOKENCOMMITMENT OP_ROT OP_2 OP_PICK OP_CAT OP_EQUALVERIFY OP_0 OP_OUTPUTBYTECODE OP_2 OP_PICK OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCATEGORY OP_4 OP_ROLL OP_1 OP_CAT OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENAMOUNT OP_ROT OP_UTXOTOKENAMOUNT OP_NUMEQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_ROT OP_ROT OP_CAT OP_EQUAL OP_ENDIF",
+  "source": "// pool5.cash — the pool3b covenant with the vestigial v1 balance checks removed\n// (pool \"dd1e3506\" fix, 2026-11-27; compiled with the mr-zwets fork, optimizeFor=opcost).\n//\n// Two-category shielded pool covenant (Gate-5 form): ONE constructor argument\n// (the pool's own state-NFT category). The shielded ASSET category is a RUNTIME\n// argument (publicCategory), bound to the proof through the actionHash — so the\n// same covenant + circuit + verifying key work for any CashToken category.\n//\n// WHY THE REMOVAL: pool3b inherited the v1 state-path balance arithmetic\n// (newBalance = currentBalance + pv − 2·isUnshield·pv on the state NFT's\n// tokenAmount). In the v1 layout the state UTXO carried the pool's own-category\n// FT balance, so tokenAmount WAS the balance. In the pool3b layout the state\n// NFT carries tokenAmount 0 STRUCTURALLY (no pool-category FT exists; the\n// minting NFT is consumed at deploy) and the real balance lives in the holdings\n// leg (input 6 / output 6, enforced below) — so those four lines made every\n// pv≠0 op impossible (SHIELD: 0 ≠ pv; UNSHIELD: 0 − pv < 0). Conservation is\n// enforced by the holdings leg + the proof's in-circuit conservation + the\n// actionHash binding; the state path keeps the root/nullifier/commitment/\n// actionHash checks in full.\n//\n// Layout (this build):\n//   inputs : 0 = pool state (NFT), 1..5 = Groth16 verifier steps (genesis at 4),\n//            6 = asset holdings (bare FT, no NFT)\n//   outputs: 0 = new pool state, 1..5 = step refunds, 6 = new asset holdings,\n//            7 = public payout (unshield only)\n//\n// The proof's public inputs are read from the verifier genesis witness:\n//   n0 (merkleRoot)  at unlocking byte offset 1825 (1824 = push opcode)\n//   n1 (actionHash)  at unlocking byte offset 1792 (1791 = push opcode)\npragma cashscript ^0.14.0;\n\ncontract AssetPool(\n    bytes32 poolCategory     // state-NFT category (on-chain byte order)\n) {\n    function spend(\n        bytes32 publicCategory,  // shielded asset category (on-chain byte order)\n        bytes32 nf0,\n        bytes32 nf1,\n        bytes32 cm0,\n        bytes32 cm1,\n        bytes32 newMerkleRoot,\n        int publicValueAbs,\n        int isUnshield\n    ) {\n        require(tx.version == 2);\n        int i = this.activeInputIndex;\n\n        if (tx.inputs[i].tokenCategory == poolCategory + 0x01) {\n            // ── state path ──────────────────────────────────────────────────\n            bytes storedRoot = tx.inputs[i].nftCommitment.split(32)[0];\n            bytes provenRoot = tx.inputs[3].unlockingBytecode.split(1825)[1].split(32)[0];\n            require(provenRoot == storedRoot);\n\n            bytes oldNullifierHash = tx.inputs[i].nftCommitment.split(32)[1];\n            bytes32 newNullifierHash = sha256(oldNullifierHash + nf0 + nf1);\n            bytes newCommitment = newMerkleRoot + newNullifierHash;\n\n            require(tx.outputs[0].lockingBytecode == tx.inputs[i].lockingBytecode);\n            require(tx.outputs[0].tokenCategory == poolCategory + 0x01);\n            require(tx.outputs[0].nftCommitment == newCommitment);\n\n            bytes32 actionHashBE = sha256(\n                nf0.reverse()\n                + nf1.reverse()\n                + cm0.reverse()\n                + cm1.reverse()\n                + toPaddedBytes(publicValueAbs, 32).reverse()\n                + toPaddedBytes(isUnshield, 32).reverse()\n                + publicCategory.reverse()\n                + newMerkleRoot.reverse()\n            );\n            bytes actionHashLE = (\n                (actionHashBE.split(1)[0] & 0x1f) + actionHashBE.split(1)[1]\n            ).reverse();\n            bytes provenActionHash = tx.inputs[3].unlockingBytecode.split(1792)[1].split(32)[0];\n            require(provenActionHash == actionHashLE);\n        } else {\n            // ── holdings path ───────────────────────────────────────────────\n            require(tx.inputs[i].tokenCategory == publicCategory);\n            int held = tx.inputs[i].tokenAmount;\n            int newHoldings = held + publicValueAbs - (2 * isUnshield * publicValueAbs);\n            require(newHoldings >= 0);\n\n            require(tx.outputs[6].lockingBytecode == tx.inputs[i].lockingBytecode);\n            require(tx.outputs[6].tokenCategory == publicCategory);\n            require(tx.outputs[6].tokenAmount == newHoldings);\n\n            if (isUnshield == 1) {\n                require(tx.outputs[7].tokenCategory == publicCategory);\n                require(tx.outputs[7].tokenAmount == publicValueAbs);\n            }\n        }\n    }\n\n    function init(bytes32 seededRoot) {\n        require(tx.version == 2);\n        int i = this.activeInputIndex;\n        require(tx.inputs[i].tokenCategory == poolCategory + 0x01);\n\n        bytes32 EMPTY_ROOT_LE = 0x3e1f1922dfb671d3f912f7ea461e0a88ee848fdde12b6c18ab1ad2c56ae73421;\n        bytes32 NULL_HASH = 0x0000000000000000000000000000000000000000000000000000000000000000;\n        require(tx.inputs[i].nftCommitment == EMPTY_ROOT_LE + NULL_HASH);\n\n        require(tx.outputs[0].lockingBytecode == tx.inputs[i].lockingBytecode);\n        require(tx.outputs[0].tokenCategory == poolCategory + 0x01);\n        require(tx.outputs[0].tokenAmount == tx.inputs[i].tokenAmount);\n        require(tx.outputs[0].nftCommitment == seededRoot + NULL_HASH);\n    }\n}\n",
+  "fingerprint": "f34677a2adcf76ea8314a4ace76e77969cf175008b2def032de11512f7f0a2da",
+  "debug": {
+    "bytecode": "78009c637b82012088537a82012088547a82012088557a82012088567a82012088577a82012088c2529dc076ce5879517e876376cf01207f7553ca0221077f7701207f756e885279cf01207f777659797e58797ea85579787e00cd5679c78800d15d79517e8800d278885a79bc5a79bc7e5979bc7e5879bc7e5f79012080bc7e6079012080bc7e5c79bc7e5779bc7ea876517f75011f8478517f777ebc53ca0200077f7701207f756e886d6d6d6d6776ce57798876d0765b7993525d79955c7995947600a26956cd5379c78856d159798856d3789d5c79519c6357d159798857d35c799d686d686d6d6d6d6d7551677c519d7c82012088c2529dc076ce5379517e88203e1f1922dfb671d3f912f7ea461e0a88ee848fdde12b6c18ab1ad2c56ae734212000000000000000000000000000000000000000000000000000000000000000005279cf7b52797e8800cd5279c78800d1547a517e8800d37bd09d00d27b7b7e8768",
+    "sourceMap": "35:4:93:5;;;;36:8:36:30;;;;37::37:19;;;;;38::38;;;;;39::39;;;;;40::40;;;;;41::41:29;;;;;45:16:45:26;:30::31;:8::33:1;46:16:46:37:0;48:22:48:23;:12::38:1;:42::54:0;;:57::61;:42:::1;:12;:63:77:9:0;50:41:50:42;:31::57:1;:64::66:0;:31::67:1;:::70;51:41:51:42:0;:31::61:1;:68::72:0;:31::73:1;:::76;:83::85:0;:31::86:1;:::89;52:20:52:44:0;:12::46:1;54:47:54:48:0;;:37::63:1;:70::72:0;:37::73:1;:::76;55:46:55:62:0;:65::68;;:46:::1;:71::74:0;;:46:::1;:39::75;56:34:56:47:0;;:50::66;:34:::1;58:31:58:32:0;:20::49:1;:63::64:0;;:53::81:1;:12::83;59:31:59:32:0;:20::47:1;:51::63:0;;:66::70;:51:::1;:12::72;60:31:60:32:0;:20::47:1;:51::64:0;:12::66:1;63:16:63:19:0;;:::29:1;64:18:64:21:0;;:::31:1;63:16;65:18:65:21:0;;:::31:1;63:16;66:18:66:21:0;;:::31:1;63:16;67:32:67:46:0;;:48::50;:18::51:1;:::61;63:16;68:32:68:42:0;;:44::46;:18::47:1;:::57;63:16;69:18:69:32:0;;:::42:1;63:16;70:18:70:31:0;;:::41:1;63:16;62:35:71:13;73:17:73:29:0;:36::37;:17::38:1;:::41;:44::48:0;:17:::1;:52::64:0;:71::72;:52::73:1;:::76;:16;72:33:74:23;75:47:75:48:0;:37::67:1;:74::78:0;:37::79:1;:::82;:89::91:0;:37::92:1;:::95;76:20:76:52:0;:12::54:1;48:63:77:9;;;;77:15:92::0;79:30:79:31;:20::46:1;:50::64:0;;:12::66:1;80:33:80:34:0;:23::47:1;81:30:81:34:0;:37::51;;:30:::1;:55::56:0;:59::69;;:55:::1;:72::86:0;;:55:::1;:30::87;82:20:82:31:0;:35::36;:20:::1;:12::38;84:31:84:32:0;:20::49:1;:63::64:0;;:53::81:1;:12::83;85:31:85:32:0;:20::47:1;:51::65:0;;:12::67:1;86:31:86:32:0;:20::45:1;:49::60:0;:12::62:1;88:16:88:26:0;;:30::31;:16:::1;:33:91:13:0;89:35:89:36;:24::51:1;:55::69:0;;:16::71:1;90:35:90:36:0;:24::49:1;:53::67:0;;:16::69:1;88:33:91:13;77:15:92:9;;44:6:93:5;;;;;;;35:4;95::108::0;;;:18:95:36;;;;96:16:96:26;:30::31;:8::33:1;97:16:97:37:0;98:26:98:27;:16::42:1;:46::58:0;;:61::65;:46:::1;:8::67;100:32:100:98:0;101:28:101:94;102:26:102:27;;:16::42:1;:46::59:0;:62::71;;:46:::1;:8::73;104:27:104:28:0;:16::45:1;:59::60:0;;:49::77:1;:8::79;105:27:105:28:0;:16::43:1;:47::59:0;;:62::66;:47:::1;:8::68;106:27:106:28:0;:16::41:1;:55::56:0;:45::69:1;:8::71;107:27:107:28:0;:16::43:1;:47::57:0;:60::69;:47:::1;:8::71;32:0:109:1",
+    "logs": [],
+    "requires": [
+      { "ip": 36, "line": 45 },
+      { "ip": 60, "line": 52 },
+      { "ip": 84, "line": 58 },
+      { "ip": 91, "line": 59 },
+      { "ip": 95, "line": 60 },
+      { "ip": 153, "line": 76 },
+      { "ip": 163, "line": 79 },
+      { "ip": 181, "line": 82 },
+      { "ip": 187, "line": 84 },
+      { "ip": 192, "line": 85 },
+      { "ip": 196, "line": 86 },
+      { "ip": 206, "line": 89 },
+      { "ip": 211, "line": 90 },
+      { "ip": 232, "line": 96 },
+      { "ip": 240, "line": 98 },
+      { "ip": 250, "line": 102 },
+      { "ip": 256, "line": 104 },
+      { "ip": 263, "line": 105 },
+      { "ip": 268, "line": 106 },
+      { "ip": 275, "line": 107 }
+    ],
+    "sourceTags": "4:7:pv;8:12:pv;13:17:pv;18:22:pv;23:27:pv;28:32:pv;153:156:sc;212:212:sc;225:228:pv"
+  },
+  "compiler": {
+    "name": "cashc",
+    "version": "0.14.0",
+    "options": {
+      "enforceFunctionParameterTypes": true,
+      "enforceLocktimeGuard": true,
+      "optimizeFor": "opcost"
+    }
+  },
+  "updatedAt": "2026-11-27T19:07:15.176Z"
+}

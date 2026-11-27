@@ -20,14 +20,17 @@ import { FIXTURES } from '../sound-si-gls/math.mjs';
 import { VMS, p2sh32, spendAll } from './vm.mjs';
 import { covenantHook, covenantParams, carrierOf, carrierOutput } from './pool-hook.mjs';
 import { buildWalkScripts, walkAWitness, walkBWitness } from './walk-scripts.mjs';
+import { walkV3, walkWitnesses } from './pool-tx-v3.mjs';
 
 const sha = (b) => createHash('sha256').update(Buffer.from(b)).digest('hex');
 const hex = (b) => Buffer.from(b).toString('hex');
 const CATEGORY_DISPLAY = Buffer.from('2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544', 'hex');
 const CATEGORY_ONCHAIN = Buffer.from(CATEGORY_DISPLAY).reverse().toString('hex');
 
-/* the walk scripts + the graph pin env */
-const { walkA, walkB, walkAHash, walkBHash, sizes } = buildWalkScripts(CATEGORY_ONCHAIN);
+/* the walk scripts + the graph pin env — v3.1: the pins hash the P2SH32
+   WRAP lockings (the raw form is relay-nonstandard, measured on chain) */
+const { walkA, walkB, sizes } = buildWalkScripts(CATEGORY_ONCHAIN);
+const { lockings: WALK_LOCKS, hashes: [walkAHash, walkBHash] } = walkV3(walkA, walkB);
 process.env.POOL_NULLDATA_HASHES = JSON.stringify([walkAHash.toString('hex'), walkBHash.toString('hex')]);
 
 /* the PLAIN program under the pool4 VK (module-level COVENANT empty until setCovenant) */
@@ -52,8 +55,8 @@ const fx = proofs[0].nullSet;
    pool-test-v3.mjs, which is the full hooked acceptance of record). */
 const T = transactionFor(FIXTURES.fixtures[0], plain);
 const unlockings = [...T.unlockings,
-    walkAWitness(Buffer.from(fx.midRoot, 'hex'), fx.sibsA.map((h) => Buffer.from(h, 'hex'))),
-    walkBWitness(fx.sibsB.map((h) => Buffer.from(h, 'hex')))];
+    walkWitnesses(fx, walkA, walkB)[0],
+    walkWitnesses(fx, walkA, walkB)[1]];
 const carr = carrierOf(sc, 3);
 const stateCommit = Buffer.concat([Buffer.from(be32le(n0)), Buffer.from(fx.nullSetRootBefore, 'hex')]);
 const newCommit = Buffer.concat([Buffer.from(be32le(sc.newRoot)), Buffer.from(fx.finalNullRoot, 'hex')]);
@@ -61,8 +64,8 @@ const fuel = (n) => ({ lockingBytecode: p2sh32(hooked.R), valueSatoshis: 1000n, 
 const sourceOutputs = [
     fuel(0), fuel(1),
     { lockingBytecode: p2sh32(hooked.R), valueSatoshis: 1000n, token: { category: new Uint8Array(CATEGORY_DISPLAY), amount: 1000n, nft: { capability: 'mutable', commitment: new Uint8Array(stateCommit) } } },
-    { lockingBytecode: new Uint8Array(walkA), valueSatoshis: 300n },
-    { lockingBytecode: new Uint8Array(walkB), valueSatoshis: 300n },
+    { lockingBytecode: new Uint8Array(WALK_LOCKS[0]), valueSatoshis: 300n },
+    { lockingBytecode: new Uint8Array(WALK_LOCKS[1]), valueSatoshis: 300n },
 ];
 const outputs = [
     { lockingBytecode: new Uint8Array(carrierOutput(carr)), valueSatoshis: 0n },
@@ -93,8 +96,9 @@ const out = {
     plain: record('plain', plain),
     hooked: record('hooked-v3', hooked),
     walk: { walkABytes: sizes.walkA, walkASha256: walkAHash.toString('hex'), walkBBytes: sizes.walkB, walkBSha256: walkBHash.toString('hex'),
-        walkAUnlocking: walkAWitness(Buffer.from(fx.midRoot, 'hex'), fx.sibsA.map((h) => Buffer.from(h, 'hex'))).length,
-        walkBUnlocking: walkBWitness(fx.sibsB.map((h) => Buffer.from(h, 'hex'))).length },
+        walkALocking32: hex(WALK_LOCKS[0]), walkBLocking32: hex(WALK_LOCKS[1]),
+        walkAUnlocking: walkWitnesses(fx, walkA, walkB)[0].length,
+        walkBUnlocking: walkWitnesses(fx, walkA, walkB)[1].length },
     shape: { inputs: 5, walkInputs: [3, 4], carrierBytes: 204, stateCommitmentBytes: 64 },
 };
 writeFileSync(process.env.OUT ?? 'build.v3.json', JSON.stringify(out, null, 2));

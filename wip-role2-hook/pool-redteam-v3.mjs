@@ -49,7 +49,7 @@ const lock = p2sh32(prog.R); const LOCKS = [lock, lock, lock];
 /* drift guard: the v3.1 program (the P2SH32-wrapped walk pins — re-derived when the
    wrap landed). Any silent change to the hook, the walk scripts or the graph pin
    fails loudly here. */
-const CODE_PIN = '40a9599141686539edd5590ba03fe012701ea0cc2ec4aae6a9fb7749416db012';
+const CODE_PIN = '0023d1ea433cf633502ad507d37cc0cce991b4742027ed86d9cebd3c44155ab6';
 assert.equal(createHash('sha256').update(prog.code).digest('hex'), CODE_PIN, 'the v3.1 program code changed — re-derive code/R/locking, re-run the gates, and update this pin + the docs');
 console.log(`v3.1 program built · walkA ${sizes.walkA} B / walkB ${sizes.walkB} B scripts · P2SH32 walk lockings · program ${prog.code.length} B · pin ok`);
 

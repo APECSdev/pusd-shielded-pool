@@ -79,7 +79,8 @@ const scenarioArgsOf = (rec) => {
     const c = rec.covenant;
     const sc = { nf0: leToBig(c.nf0), nf1: leToBig(c.nf1), cm0: leToBig(c.cm0), cm1: leToBig(c.cm1), cm2: leToBig(c.cm2), newRoot: leToBig(c.newMerkleRoot), pv: BigInt(c.publicValueAbs), sign: BigInt(c.isUnshield) };
     const n0 = BigInt(rec.publicSignals[0]);
-    assert.equal(actionHashOf({ ...sc, categoryDisplay: CATEGORY_DISPLAY.toString('hex') }, 3).toString(), BigInt(rec.publicSignals[1]).toString(), 'actionHash mismatch — record is not self-consistent');
+    /* the actionHash binds the ASSET category (the circuit witness) — not the pool's */
+    assert.equal(actionHashOf({ ...sc, categoryDisplay: ASSET_DISPLAY.toString('hex') }, 3).toString(), BigInt(rec.publicSignals[1]).toString(), 'actionHash mismatch — record is not self-consistent');
     assert.ok(rec.nullSet && rec.nullSet.sibsA?.length === 254 && rec.nullSet.sibsB?.length === 254, 'record carries no v3 nullSet walk data');
     return { sc, n0, nullSet: rec.nullSet, categoryDisplay: CATEGORY_DISPLAY, assetCategoryDisplay: ASSET_DISPLAY, balance: 1000n + sc.pv, outs: 3 };
 };

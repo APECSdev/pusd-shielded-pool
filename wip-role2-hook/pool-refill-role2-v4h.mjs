@@ -91,14 +91,16 @@ if (blanks.length < 2) throw new Error(`only ${blanks.length} tag blank(s) at th
 const plain = utxos.filter((u) => !u.token_data).sort((a, b) => b.value - a.value);
 if (plain.length === 0) throw new Error('no plain wallet UTXO for the fuel sats');
 let supply = null;
-if (IS_DEPOSIT) {
+const NO_SLOT = process.argv.includes('--no-deposit-slot');
+if (IS_DEPOSIT && !NO_SLOT) {
     const tokenUtxos = utxos.filter((u) => u.token_data?.category === state.assetCategory && !u.token_data.nft && BigInt(u.token_data.amount) >= pv);
     if (tokenUtxos.length === 0) throw new Error('no ASSET FT UTXO at the wallet for the requested deposit (the user must pre-send their PUSD here)');
     supply = tokenUtxos.sort((a, b) => BigInt(b.token_data.amount) - BigInt(a.token_data.amount))[0];
 }
 
 const nH = GENESIS ? 2n : 1n; /* in5 + in6 at genesis; only in6 after */
-const fixed = 2n * FUEL_PER + 2n * WALK_PER + nH * H_PER + (supply && BigInt(supply.token_data.amount) - pv > 0n ? 1000n : 0n);
+/* (with --no-deposit-slot the in6 output is omitted: fixed counts the FUNDED slots) */
+const fixed = 2n * FUEL_PER + 2n * WALK_PER + ((GENESIS ? 2n : 1n) - ((IS_DEPOSIT && NO_SLOT) ? 1n : 0n)) * H_PER + (supply && BigInt(supply.token_data.amount) - pv > 0n ? 1000n : 0n);
 const inSats = BigInt(plain[0].value) + BigInt(blanks[0].value) + BigInt(blanks[1].value) + (supply ? BigInt(supply.value) : 0n);
 if (inSats < fixed + 2000n + 400n) throw new Error(`wallet UTXOs too small for the v4h lock: have ${inSats}, fixed ${fixed} + fees`);
 
@@ -118,18 +120,23 @@ const tx = {
         /* out2/out3: the walk-data pair */
         { lockingBytecode: new Uint8Array(walkALocking), valueSatoshis: WALK_PER },
         { lockingBytecode: new Uint8Array(walkBLocking), valueSatoshis: WALK_PER },
-        /* out4: in6 — the deposit slot at H (the ASSET FT on a deposit; tokenless otherwise) */
-        { lockingBytecode: new Uint8Array(hLocking), valueSatoshis: H_PER, ...(IS_DEPOSIT ? { token: { category: ASSET_BYTES, amount: pv } } : {}) },
+        /* out4: in6 — the deposit slot at H (the ASSET FT on a deposit; tokenless
+           otherwise). With --no-deposit-slot the slot is PRE-FUNDED elsewhere (an
+           H-locked deposit UTXO already on chain) and this lock omits it. */
+        ...((IS_DEPOSIT && NO_SLOT) ? [] : [{ lockingBytecode: new Uint8Array(hLocking), valueSatoshis: H_PER, ...(IS_DEPOSIT ? { token: { category: ASSET_BYTES, amount: pv } } : {}) }]),
         /* BCH change */
         { lockingBytecode: fundLocking, valueSatoshis: 0n },
     ],
 };
-let changeIdx = 5;
+let changeIdx = (IS_DEPOSIT && NO_SLOT) ? 4 : 5;
 if (GENESIS) {
-    /* out5: in5 — the genesis holdings slot at H, tokenless dust (the first action's
-       DEPOSIT rides in6; in5 becomes the holdings line the action recreates at out2) */
+    /* in5 — the genesis holdings slot at H, tokenless dust (the first action's
+       DEPOSIT rides in6; in5 becomes the holdings line the action recreates at out2).
+       The change sits BELOW it: pushing in5 shifts the change's index by one. */
     tx.outputs.push({ lockingBytecode: new Uint8Array(hLocking), valueSatoshis: H_PER });
-    changeIdx = 6;
+    /* the change sits BELOW in5 (the literal holds it before this push): its index
+       DOES NOT MOVE — incrementing it pointed the value-assignment at in5, leaving
+       the change at 0n = dust (the 2026-11-27 mainnet "dust (code 64)" chase). */
 }
 if (supply && BigInt(supply.token_data.amount) - pv > 0n) tx.outputs.push({ lockingBytecode: fundLocking, valueSatoshis: 1000n, token: { category: ASSET_BYTES, amount: BigInt(supply.token_data.amount) - pv } }); /* a zero-amount FT change output would be invalid — skip if nothing remains */
 tx.outputs[changeIdx].valueSatoshis = inSats - fixed - probeFee(tx);
@@ -156,6 +163,12 @@ if (typeof decoded === 'string') throw new Error('lock does not decode: ' + deco
 const txid = txidOf(tx);
 console.log(`lock tx ${txid} · ${hex.length / 2}B · fuel ${FUEL_PER}×2 + walks ${WALK_PER}×2 + H pair${IS_DEPOSIT ? ` (in6 carries the ${pv} ASSET deposit)` : ''}`);
 
+if (process.argv.includes('--dump')) {
+    for (const [i, o] of tx.outputs.entries()) console.log(`out${i}: ${o.valueSatoshis} sats${o.token ? " token cat=" + Buffer.from(o.token.category).toString("hex").slice(0, 10) + " amt=" + o.token.amount + (o.token.nft ? " NFT" : "") : ""} lockingLen=${o.lockingBytecode.length}`);
+    console.log('inputs:', tx.inputs.map((i) => i.outpointIndex).join(","));
+    console.log('HEX:', hex.slice(0, 120) + "…");
+    process.exit(0);
+}
 console.log('broadcasting…');
 console.log('RESULT: ' + await rpc('blockchain.transaction.broadcast', [hex]));
 state.outpoints.actionInputs = [
@@ -163,8 +176,8 @@ state.outpoints.actionInputs = [
     { txid, vout: 1, sats: Number(FUEL_PER), tag },
     { txid, vout: 2, sats: Number(WALK_PER), walk: 'A' },
     { txid, vout: 3, sats: Number(WALK_PER), walk: 'B' },
-    { txid, vout: 4, sats: Number(H_PER), slot: 'in6', ...(IS_DEPOSIT ? { ftAmount: pv.toString() } : {}) },
-    ...(GENESIS ? [{ txid, vout: 5, sats: Number(H_PER), slot: 'in5' }] : []),
+    ...((IS_DEPOSIT && NO_SLOT) ? [] : [{ txid, vout: 4, sats: Number(H_PER), slot: 'in6', ...(IS_DEPOSIT ? { ftAmount: pv.toString() } : {}) }]),
+    ...(GENESIS ? [{ txid, vout: (IS_DEPOSIT && NO_SLOT) ? 4 : 5, sats: Number(H_PER), slot: 'in5' }] : []),
 ];
 writeFileSync(STATE, JSON.stringify(state, null, 2) + '\n');
 console.log('state updated: actionInputs = 2 fuel + 2 walks + in6' + (GENESIS ? ' + in5 (genesis)' : '') + ' of ' + txid.slice(0, 16) + '…');

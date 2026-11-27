@@ -26,7 +26,7 @@ import { binToHex, cashAddressToLockingBytecode, decodeTransaction, encodeTransa
 import { buildProgram, setCovenant } from './script.mjs';
 import { pushData } from './asm.mjs';
 import { covenantHook, covenantParams, actionHashOf, carrierOutput } from './pool-hook.mjs';
-import { scenarioV3H, walkWitnesses, walkV3 } from './pool-tx-v3.mjs';
+import { scenarioV3H, poolTransactionForC, walkWitnesses, walkV3 } from './pool-tx-v3.mjs';
 import { buildWalkScripts } from './walk-scripts.mjs';
 import { buildHoldingsCovenant } from './holdings-covenant.mjs';
 import { VMS, p2sh32 } from './vm.mjs';
@@ -35,6 +35,7 @@ const argOf = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 ? pro
 const NETWORK = argOf('--network', 'chipnet');
 if (NETWORK !== 'mainnet' && NETWORK !== 'chipnet') throw new Error('--network must be mainnet|chipnet');
 const ELECTRUM_HOST = argOf('--electrum', NETWORK === 'mainnet' ? 'bch.soul-dev.com' : 'chipnet.bch.ninja');
+const ELECTRUM_PORT = Number(argOf('--port', '50002'));
 const STATE = argOf('--state', NETWORK === 'mainnet' ? '/home/apecs/cov/role2-pool4-state.mainnet-v4h.json' : '/home/apecs/cov/role2-pool4-state.v4h.json');
 const OP = argOf('--op', '/home/apecs/cov/role2-op4.json');
 const NO_BROADCAST = process.argv.includes('--no-broadcast');
@@ -42,7 +43,7 @@ const STATE_FLOAT = 10_000n;
 const HOLDINGS_SATS = 1_000n;
 
 const rpc = (method, params) => new Promise((res, rej) => {
-    const sock = tls.connect(50002, ELECTRUM_HOST, { timeout: 15000 });
+    const sock = tls.connect(ELECTRUM_PORT, ELECTRUM_HOST, { timeout: 15000, ...(process.env.TLS_INSECURE ? { rejectUnauthorized: false } : {}) });
     let buf = '';
     sock.on('secureConnect', () => sock.write(JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }) + '\n'));
     sock.on('data', (d) => { buf += d.toString(); const line = buf.split('\n')[0];
@@ -172,7 +173,9 @@ console.log(`tx ${txid} · ${hex.length / 2}B · fee ${fee} sats (${Number(fee) 
 assert.ok(fee >= BigInt(hex.length / 2), `fee below 1 sat/B — underfunded lock: need ${hex.length / 2}, have ${fee} (raise --fuel-per)`);
 
 /* ---- broadcast + confirm ---- */
-if (NO_BROADCAST) { console.log('--no-broadcast — op assembled and VM-accepted, nothing sent.'); process.exit(0); }
+if (NO_BROADCAST) { console.log('--no-broadcast — op assembled and VM-accepted, nothing sent.');
+  if (process.env.DUMP_HEX) { writeFileSync(process.env.DUMP_HEX, hex + "\n"); console.log('hex written to ' + process.env.DUMP_HEX); }
+  process.exit(0); }
 console.log('broadcasting…');
 console.log('RESULT: ' + await rpc('blockchain.transaction.broadcast', [hex]));
 

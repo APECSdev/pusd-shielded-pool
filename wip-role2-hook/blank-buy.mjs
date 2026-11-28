@@ -12,7 +12,7 @@
 //
 // Usage (VM, from chunked/bn254/bn-native-sound/):
 //   node blank-buy.mjs --key /home/apecs/cov/stranger-demo-key.json
-//        [--state …] [--vending-utxo <txid:vout>] [--dry]
+//        [--state …] [--vending-utxo <txid:vout>] [--electrum <host>] [--dry]
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import tls from 'node:tls';
@@ -27,6 +27,7 @@ import { vendingRedeem, vendingLockingOf } from './blank-vending.mjs';
 
 const argOf = (n, d) => { const i = process.argv.indexOf(n); return i >= 0 ? process.argv[i + 1] : d; };
 const STATE = argOf('--state', '/home/apecs/cov/role2-pool-state.json');
+const ELECTRUM_HOST = argOf('--electrum', 'chipnet.bch.ninja');
 const KEYFILE = argOf('--key', null);
 const PICK = argOf('--vending-utxo', null);
 const DRY = process.argv.includes('--dry');
@@ -34,7 +35,7 @@ if (!KEYFILE) throw new Error('--key <file> is required — whose key buys is th
 
 /* electrum raw TLS JSON-RPC; chipnet.bch.ninja:50002 — Fulcrum 2.1.3, live-verified */
 const rpc = (method, params) => new Promise((res, rej) => {
-    const sock = tls.connect(50002, 'chipnet.bch.ninja', { timeout: 15000 });
+    const sock = tls.connect(50002, ELECTRUM_HOST, { timeout: 15000 });
     let buf = '';
     sock.on('secureConnect', () => sock.write(JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }) + '\n'));
     sock.on('data', (d) => { buf += d.toString(); const line = buf.split('\n')[0];

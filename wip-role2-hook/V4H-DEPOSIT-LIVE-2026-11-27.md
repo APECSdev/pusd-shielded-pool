@@ -90,4 +90,42 @@ The post-MPC gates passed (sweep **69/0** merged into
    3 shielded in the pool5 old-gen demo pool — the v4h deposit path can absorb the 2
    wallet units in a follow-up deposit op (pv=2) per the user's direction.
 
+## UPDATE (later the same evening): THE FULL LIFECYCLE IS LIVE ON MAINNET + THE CHIPNET REHEARSAL PASSED
+
+**The mandatory chipnet dress rehearsal ran FIRST** (the standing user order; funded by the
+chipnet.bch.ninja faucet — 200,000 sats to wallet A via its PoW claim API, tx `62d01ca9…`;
+the faucet-claim harness is committed in `mainnet-pool5/`):
+
+- chipnet v4h pool `654d3230…` (deploy `7648c6ca…`, program 8,078 B sha256 `65a3f215…`,
+  born-guarded K=16, asset = the chipnet `e56c0a85…` FT, ZERO user value):
+  DEPOSIT `5fca6027…` (pv=1,000, balance 0 → 1,000) → TRANSFER `df6e80c0…` (pv=0) →
+  UNSHIELD `6c930969…` (pv=200 paid out publicly, balance → 800) — **all three CONFIRMED
+  with merkle proofs**.
+
+**The rehearsal reproduced the off-by-one on chipnet** — the same `OP_EQUALVERIFY`
+rejection — which allowed fixing it AT THE SOURCE: `pool-refill-role2-v4h.mjs` line 180
+wrote the genesis in5 slot at `vout (NO_SLOT ? 4 : 5)` when the real layout is
+`(NO_SLOT ? 5 : 6)` (the change output sits BELOW in5 in both shapes). The mainnet state
+had been hand-fixed earlier; the tool fix makes every future genesis lock correct.
+Backups: `pool-refill-role2-v4h.mjs.bak-in5vout`.
+
+**The mainnet lifecycle then completed under the user's $1:**
+
+| leg | txid | facts |
+|---|---|---|
+| DEPOSIT | `5b54fb9783806fca229953dd2b3505e2d0cb5927f795611c45d1715dec48316f` | pv=100, balance 0→100, 46,079 B, fee 1.19 sat/B |
+| TRANSFER | `63ccd3db592c07c7677deb08e297080ca2e26ed356f7ff9d1158e115778add1b` | pv=0, ASSET 100→100, 46,083 B, fee 1.02 sat/B (lean fuel 21,000) |
+| UNSHIELD | `d8a93aa2b6250a8d37d3f9ea587a8ae5a1a61e4f662a4f9f56316bc1d4b8b4f6` | **pv=10 REAL PUSD paid out publicly** (out3 = 1,000 sats + 10 FT), balance → 90, fee 1.003 sat/B |
+
+Final mainnet state: balance 90 (~$0.90 of the user's PUSD shielded), notes 5, nullSet
+6 keys, holdings at `d8a93aa2…:2` (90 FT).
+
+**M2 is PUBLISHED**: `role2-proving-assets-v3-v1` (all 5 assets; the 120.8 MB zkey
+round-trip re-downloaded and sha256-verified byte-exact `de7875e3…`).
+
+**New fee landmines (mainnet, measured):** the node's dust floor for token-bearing P2PKH
+outputs is 1,000 sats (a 600-sat payout died `dust (code 64)`); the action's 1 sat/B
+floor interacts with the lock budget — the unshield needed `STATE_FLOAT_SATS=9700`
+(payout sats are unpinned by the hook; the state float shave is the clean lever).
+
 — the Hush side, 2026-11-27 (evening session)

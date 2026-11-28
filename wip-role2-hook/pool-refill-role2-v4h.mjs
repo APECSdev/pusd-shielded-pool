@@ -95,7 +95,7 @@ const NO_SLOT = process.argv.includes('--no-deposit-slot');
 if (IS_DEPOSIT && !NO_SLOT) {
     const tokenUtxos = utxos.filter((u) => u.token_data?.category === state.assetCategory && !u.token_data.nft && BigInt(u.token_data.amount) >= pv);
     if (tokenUtxos.length === 0) throw new Error('no ASSET FT UTXO at the wallet for the requested deposit (the user must pre-send their PUSD here)');
-    supply = tokenUtxos.sort((a, b) => BigInt(b.token_data.amount) - BigInt(a.token_data.amount))[0];
+    supply = tokenUtxos.sort((a, b) => Number(BigInt(b.token_data.amount) - BigInt(a.token_data.amount)))[0]; /* BigInt sort comparators throw — Number() (amounts are small) */
 }
 
 const nH = GENESIS ? 2n : 1n; /* in5 + in6 at genesis; only in6 after */
@@ -177,7 +177,7 @@ state.outpoints.actionInputs = [
     { txid, vout: 2, sats: Number(WALK_PER), walk: 'A' },
     { txid, vout: 3, sats: Number(WALK_PER), walk: 'B' },
     ...((IS_DEPOSIT && NO_SLOT) ? [] : [{ txid, vout: 4, sats: Number(H_PER), slot: 'in6', ...(IS_DEPOSIT ? { ftAmount: pv.toString() } : {}) }]),
-    ...(GENESIS ? [{ txid, vout: (IS_DEPOSIT && NO_SLOT) ? 4 : 5, sats: Number(H_PER), slot: 'in5' }] : []),
+    ...(GENESIS ? [{ txid, vout: (IS_DEPOSIT && NO_SLOT) ? 5 : 6, sats: Number(H_PER), slot: 'in5' }] : []),
 ];
 writeFileSync(STATE, JSON.stringify(state, null, 2) + '\n');
 console.log('state updated: actionInputs = 2 fuel + 2 walks + in6' + (GENESIS ? ' + in5 (genesis)' : '') + ' of ' + txid.slice(0, 16) + '…');
